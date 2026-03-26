@@ -1,0 +1,66 @@
+<section class="ct_login_main">
+    <div class="ct_login_left_content">
+        <div>
+            <div class="ct_login_logo ct_mb_35 ct_cursor_pointer">
+                <img routerLink="/" src="/img/logo.svg" alt="">
+            </div>
+            <div class="text-center mx-auto" style="max-width: 373px;">
+                <h4 class="ct_fs_44 ct_text_clr_f9f9f9 ct_mb_20 ct_ff_Matter_Light">One Login, Everything in Flow</h4>
+                <p class="ct_text_clr_f9f9f9 ct_fs_18 mb-0">Everything you need to plan, prioritize, and execute – your
+                    way.</p>
+            </div>
+        </div>
+        <div class="ct_login_bottom_img mt-auto">
+            <img src="/img/login_bottom_img.png" alt="">
+        </div>
+    </div>
+    <div class="ct_login_right_content">
+        <div class="text-center ct_mb_30 ct_pe_90 ct_login_title">
+            <h2 class="ct_fs_35 ct_mb_10 ct_ff_Matter_Medium">Verify your email</h2>
+            <p class="ct_text_clr_5E6168 mb-0 ct_fs_20 mx-auto" style="max-width: 326px;">Enter the code sent to your
+                email to verify your login.</p>
+        </div>
+        <form [formGroup]="Form" class="ct_login_scroll w-100 ct_pe_90">
+
+            <!-- <div class="ct_login_inputs">
+                <input type="number" placeholder="0" class="form-control ct_input">
+                <input type="number" placeholder="0" class="form-control ct_input">
+                <input type="number" placeholder="0" class="form-control ct_input">
+                <input type="number" placeholder="0" class="form-control ct_input">
+            </div> -->
+
+            <nz-flex nzVertical [nzGap]="20">
+                <nz-flex nzVertical>
+                    <nz-input-otp formControlName="otp" [nzLength]="4" [nzSize]="'default'">
+                    </nz-input-otp>
+                    <span class="ct_text_red mt-2 text-center">
+                        {{ validationErrorService.getErrorMessage('OTP', Form.get('otp')) }}
+                    </span>
+                </nz-flex>
+            </nz-flex>
+
+
+            <div class="ct_mt_35">
+                <button type="button" (click)="onSubmit()" class="ct_2d_purple_btn w-100">Verify OTP
+                </button>
+            </div>
+            <p class="mb-0 text-center ct_fs_14 ct_mt_15">Didn’t receive the OTP? <a class="ct_text_purple"
+                    (click)="resendOtp()">Resend
+                    Code</a></p>
+        </form>
+    </div>
+
+</section>
+
+<!-- <a routerLink="/individual/dashboard">Go to Join Team</a> -->
+
+<div class="ct_loader_main" *ngIf="loading || isLoadingResend">
+    <div class="loader-con">
+        <div style="--i: 0;" class="pfile"></div>
+        <div style="--i: 1;" class="pfile"></div>
+        <div class="pfile" style="--i: 2;"></div>
+        <div class="pfile" style="--i: 3;"></div>
+        <div class="pfile" style="--i: 4;"></div>
+        <div class="pfile" style="--i: 5;"></div>
+    </div>
+</div>

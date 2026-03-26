@@ -1,0 +1,51 @@
+.ct_trial_modal {
+    border-radius: 12px;
+    padding: 10px;
+}
+
+.ct_plan_box {
+    border: 1px solid #eee;
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 10px;
+    background: #fafafa;
+}
+
+.ct_price {
+    font-size: 20px;
+    font-weight: 600;
+    color: #8050e9;
+}
+
+.ct_outline_btn {
+    border: 1px solid #8050e9;
+    color: #8050e9;
+    border-radius: 6px;
+}
+
+.ct_outline_btn:hover {
+    background: #8050e9;
+    color: #fff;
+}
+
+.ct_orange_btn {
+    background: #8050e9;
+    color: #fff;
+    border-radius: 6px;
+    padding: 13px 30px;
+}
+
+.ct_orange_btn:hover {
+    background: none;
+    border-color: #8050e9;
+    color: #8050e9;
+}
+
+.pricing-list {
+    list-style: disc;
+    padding: 0;
+    margin-top: 10px;
+    margin-bottom: 0px;
+    padding-left: 20px;
+    text-align: left;
+}

@@ -1,0 +1,169 @@
+<header>
+    <div class="d-flex align-items-center gap-2">
+        <i class="fa-solid fa-bars me-3 ct_fs_18 ct_menu_bar"></i>
+    </div>
+    @if(needsPlanPurchase){
+    <div class="ct_header_cta">
+        <a class="ct_header_cta_btn" routerLink="/pricing-plan">
+            <span class="ct_header_cta_badge">Upgrade</span>
+            <span class="ct_header_cta_text">Purchase Plan</span>
+            <!-- <i class="fa-solid fa-arrow-right"></i> -->
+        </a>
+    </div>
+    }
+    <div class="d-flex align-items-center gap-3">
+        <div class="ct_border_right_1 dropdown">
+            <a href="javascript:void(0)" class="ct_notification_icon" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <svg width="19" height="24" viewBox="0 0 19 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M9.44444 23.0208C10.7431 23.0208 11.8056 21.9583 11.8056 20.6597H7.08333C7.08333 21.9583 8.13403 23.0208 9.44444 23.0208ZM16.5278 15.9375V10.0347C16.5278 6.41042 14.5917 3.37639 11.2153 2.57361V1.77083C11.2153 0.790972 10.4243 0 9.44444 0C8.46458 0 7.67361 0.790972 7.67361 1.77083V2.57361C4.28542 3.37639 2.36111 6.39861 2.36111 10.0347V15.9375L0 18.2986V19.4792H18.8889V18.2986L16.5278 15.9375Z"
+                        fill="#787885" />
+                </svg>
+                @if(unread_count > 0){
+                <span>{{unread_count}}</span>
+                }
+            </a>
+            <div class="dropdown-menu ct_notification_dropdown" aria-labelledby="dropdownMenuButton1">
+                <div class="d-flex align-items-center justify-content-between gap-2 ct_mb_30">
+                    <h4 class="mb-0 ct_fs_20 ct_fw_600">Notifications</h4>
+                    <!-- <p class="mb-0 ct_text_purple ct_ff_Matter_SemiBold ct_fs_14">Mark as read</p> -->
+                    @if(unread_count > 0){
+                    <p (click)="markNotificationAsRead()"
+                        class="mb-0 ct_text_purple ct_ff_Matter_SemiBold ct_fs_14 ct_cursor_pointer">Mark as read</p>
+                    }
+                </div>
+
+                <div class="notification-content ct_custom_scroll">
+                    <div>
+                        <div class="d-flex align-items-start justify-content-between gap-2"
+                            *ngFor="let item of notifications">
+                            <div class="mb-2">
+                                <h6 class="ct_fs_16 ct_ff_Matter_SemiBold mb-0">{{item.title}}</h6>
+                                <p class="ct_fs_14 mb-1 ct_text_clr_4B5563">{{item.body}}</p>
+                            </div>
+                            <div class="text-center d-flex gap-2 flex-nowrap">
+                                <p class="ct_fs_12 ct_text_929292 ct_ff_Matter_Medium mb-0 ct_white_nowrap">
+                                    {{ getTimeAgo(item.created_at) }}</p>
+                                @if(item.is_read == 0){
+                                <span class="ct_dot_8 mt-2"></span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="ct_no_recod_found_bg" *ngIf="notifications?.length == 0">
+                            <p class="text-center mb-0 ct_fs_20">No notifications found</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ct_right_dropdown dropdown">
+            <button id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                <div class="d-flex align-items-center gap-2">
+                    <img [src]="userData?.profile_image ? userData?.profile_image : '/img/no_pro.png'" alt=""
+                        class="ct_img_50">
+                    <div class="text-start">
+                        <!-- <p class="mb-0 ct_fw_500">Alice Johnson</p> -->
+                        <small class="ct_text_2c2c2d ct_fs_18 ct_ff_Matter_Medium">Welcome,
+                            {{userData?.full_name}}</small>
+                        @if(isBronze){
+                        <div class="d-flex align-items-center gap-2">
+                            <small class="ct_text_787885 ct_fs_12">
+                                Bronze Plan
+                                @if(trialDaysRemaining !== null){
+                                • {{trialDaysRemaining}} days left
+                                }
+                            </small>
+                            <a class="ct_text_purple ct_fs_12 ct_ff_Matter_Medium"
+                                routerLink="/pricing-plan">Upgrade</a>
+                        </div>
+                        } @else if (isTrial){
+                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                            <div class="">
+                                <span class=""></span>
+                                <span>{{trialDaysRemaining ?? 0}}-Day Free Trial</span>
+                            </div>
+                            <a class="ct_text_purple ct_fs_12 ct_ff_Matter_Medium" routerLink="/pricing-plan">Purchase
+                                plan</a>
+                        </div>
+                        } @else if (isGold){
+                        <div class="d-flex align-items-center gap-2">
+                            <small class="ct_text_787885 ct_fs_12">
+                                Gold Plan
+                                @if(trialDaysRemaining !== null){
+                                • {{trialDaysRemaining}} days left
+                                }
+                            </small>
+                        </div>
+                        }
+                    </div>
+                </div>
+                <i class="fa-solid fa-angle-down ms-auto"></i>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                @if(planService.isBronze()){
+                <li><a class="dropdown-item" routerLink="/individual/edit-profile">Edit Profile</a></li>
+                <li><a class="dropdown-item" routerLink="/individual/change-password">Change Password</a></li>
+                } @else {
+                <li><a class="dropdown-item" routerLink="/team/edit-profile">Edit Profile</a></li>
+                <li><a class="dropdown-item" routerLink="/team/change-password">Change Password</a></li>
+                }
+
+                <!-- @if(userType == 'individual'){
+                <li><a class="dropdown-item" routerLink="/individual/edit-profile">Edit Profile</a></li>
+                <li><a class="dropdown-item" routerLink="/individual/change-password">Change Password</a></li>
+                } -->
+                <!-- @if(userType == 'team'){
+                <li><a class="dropdown-item" routerLink="/team/edit-profile">Edit Profile</a></li>
+                <li><a class="dropdown-item" routerLink="/team/change-password">Change Password</a></li>
+                } -->
+                <!-- @if(userType == 'invited'){
+                <li><a class="dropdown-item" routerLink="/invited/edit-profile">Edit Profile</a></li>
+                <li><a class="dropdown-item" routerLink="/invited/change-password">Change Password</a></li>
+                } -->
+
+                <li><a class="dropdown-item" href="javascript:void(0)" data-bs-toggle="modal"
+                        data-bs-target="#ct_logout_modal_post">Log out</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+<!--Log out Modal -->
+<div class="modal fade" id="ct_logout_modal_post" tabindex="-1" aria-labelledby="ct_delete_postLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content ct_border_radius_20">
+            <div class="modal-header pb-0 border-0">
+                <button type="button" class="btn-close ct_close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body pb-5 px-4">
+                <div class="ct_delete_post_modal">
+                    <figure>
+                        <figcaption>
+                            <h4 class="ct_fs_28 ct_ff_Matter_Medium">
+                                You are about to log out
+                            </h4>
+                            <p class="mb-0 ct_fs_18 ct_text_929292">
+                                Are you sure you want to log out?
+                            </p>
+                        </figcaption>
+                    </figure>
+                    <div class="d-flex justify-content-center border-0 gap-3 ct_modal_footer ct_mt_30">
+                        <button type="button" class="ct_purple_btn ct_h_40 w-100 ct_ff_Matter_Medium"
+                            data-bs-dismiss="modal" #closeModal>
+                            No, Cancel
+                        </button>
+                        <a (click)="logout()"
+                            class="ct_border_radius_10 ct_h_40 ct_black_btn ct_light_red_btn w-100 ct_ff_Matter_Medium text-center">Yes,
+                            Log out</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

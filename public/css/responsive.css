@@ -1,0 +1,286 @@
+@media screen and (min-width:1400px) {
+  .ct_login_bottom_img img {
+    max-width: 483px;
+  }
+
+  .ct_fs_55 {
+    font-size: 48px;
+  }
+}
+
+@media screen and (max-width:1199px) {
+  .ct_login_right_content {
+    padding-left: 30px;
+  }
+
+  .ct_pe_90 {
+    padding-right: 30px;
+  }
+
+  .ct_flex_col_1199 {
+    flex-direction: column;
+    align-items: start !important;
+  }
+
+  .ct_w_100_1199 {
+    width: 100%;
+  }
+
+  .ct_grid_3_1199 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+}
+
+@media screen and (max-width:991px) {
+  .ct_fs_44 {
+    font-size: 34px;
+  }
+
+  .ct_fs_35 {
+    font-size: 30px;
+  }
+
+  .ct_icon_77 {
+    width: 60px;
+    height: 60px;
+  }
+
+  .ct_icon_w_50 {
+    width: 30px;
+    height: 30px;
+  }
+
+  .ct_fs_55 {
+    font-size: 40px;
+  }
+
+  .ct_login_main {
+    grid-template-columns: auto;
+  }
+
+  .ct_login_bottom_img {
+    display: none;
+  }
+
+  .ct_login_left_content {
+    padding: 30px 73px 30px;
+    border-bottom-right-radius: 183px;
+    border-top-right-radius: 0px;
+  }
+
+  .ct_login_right_content {
+    padding: 30px;
+  }
+
+  .ct_login_logo {
+    margin-bottom: 0px;
+    text-align: center;
+  }
+
+  .ct_login_title {
+    display: none;
+  }
+
+  .ct_login_left_content {
+    position: sticky;
+    top: 0px;
+    z-index: 9;
+  }
+
+  .ct_select_role_main_div,
+  .ct_login_scroll {
+    max-height: unset;
+
+  }
+
+
+  .ct_side_bar {
+    left: -100%;
+    padding-top: 40px;
+  }
+
+  .ct_right_panel {
+    margin-left: 0px;
+    width: 100%;
+  }
+
+  .ct_show .ct_side_bar {
+    left: 0px;
+  }
+
+  .ct_show .ct_side_bar {
+    left: 0px;
+  }
+
+  .ct_close_sidebar {
+    position: absolute;
+    display: block;
+    right: 15px;
+    top: 0px;
+    font-size: 22px;
+    transition: 0.4s ease all;
+  }
+
+  .ct_close_sidebar:hover {
+    transform: rotate(360deg);
+  }
+
+  .ct_menu_bar {
+    display: block;
+  }
+
+  .ct_flex_col_991 {
+    flex-direction: column;
+    align-items: start !important;
+  }
+
+  .ct_w_100_991 {
+    width: 100%;
+  }
+}
+
+
+@media screen and (max-width:767px) {
+  .ct_fs_32 {
+    font-size: 24px;
+  }
+
+  .ct_fs_46 {
+    font-size: 32px;
+  }
+
+  .ct_feature_grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .ct_fs_35 {
+    font-size: 26px;
+  }
+
+  .ct_fs_22 {
+    font-size: 20px;
+  }
+
+  .ct_fs_20 {
+    font-size: 18px;
+  }
+
+  .ct_fs_18 {
+    font-size: 16px;
+  }
+
+  .ct_fs_28 {
+    font-size: 22px;
+  }
+
+  .ct_px_30 {
+    padding-inline: 15px;
+  }
+
+  .ct_flex_col_767 {
+    flex-direction: column;
+    align-items: start !important;
+  }
+
+  .ct_w_100_767 {
+    width: 100%;
+  }
+
+  .ct_grid_3_1199 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .ct_team_card .ct_team_card_body {
+    padding: 20px 15px;
+  }
+
+  .ct_fs_50 {
+    font-size: 32px;
+  }
+
+  .ct_plan_visually_bg {
+    padding-inline: 20px;
+  }
+
+  .ct_footer_right_img {
+    display: none;
+  }
+}
+
+@media screen and (max-width:575px) {
+  .ct_img_50 {
+    width: 30px;
+    height: 30px;
+  }
+
+  .ct_fs_18 {
+    font-size: 16px;
+  }
+
+  .ct_flex_col_575 {
+    flex-direction: column;
+    align-items: start !important;
+  }
+
+  .ct_notification_dropdown {
+    width: 280px;
+  }
+
+  .ct_feature_grid {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .ct_white_bg {
+    padding: 15px;
+  }
+
+  .ct_w_100_575 {
+    width: 100%;
+  }
+
+  .ct_grid_3_1199 {
+    grid-template-columns: repeat(1, 1fr);
+
+  }
+
+  .ct_pe_36 {
+    padding-left: 15px;
+  }
+
+  .ct_icon_53 {
+    width: 35px;
+    height: 35px;
+
+  }
+
+  .ct_icon_53 img {
+    width: 20px;
+  }
+
+  .ct_fs_35 {
+    font-size: 22px;
+  }
+
+  .ct_back_icon {
+    font-size: 16px;
+
+  }
+
+  .ct_custom_tabs {
+    flex-direction: column;
+  }
+
+  .ct_custom_tabs .nav-link,
+  .ct_custom_tabs li {
+    width: 100%;
+  }
+
+  .ct_custom_tabs.nav-pills .nav-link {
+
+    background-color: #eeeeee85;
+  }
+}

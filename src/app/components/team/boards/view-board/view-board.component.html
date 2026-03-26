@@ -1,0 +1,441 @@
+<div class="ct_inner_header_bg ct_mt_30 ct_px_30 ct_d_align_center justify-content-between gap-3 mb-4">
+    <div class="d-flex align-items-center justify-content-between gap-3">
+        <h4 class="ct_fs_35 mb-0 ct_ff_Matter_Medium d-flex align-items-center gap-2">
+            <a class="ct_back_icon me-1" (click)="backClicked()"><i
+                    class="fa-solid fa-chevron-left"></i></a>{{boardName}}
+        </h4>
+    </div>
+    <!-- <div class="ct_d_align_center gap-2">
+
+        <div class="ct_d_align_center gap-3">
+            <p class="ct_fs_20 ct_ff_Matter_Medium ct_text_clr_4B5563 mb-0 ct_white_nowrap">
+                Completed
+            </p>
+
+            <div class="d-flex align-items-center gap-2 ">
+                <div class="ct_radio-container ct_radio-container_w_18  ms-auto">
+                    <label class="ct_radio-button">
+                        <input type="radio" name="role" value="show" [(ngModel)]="taskVisibility"
+                            (change)="filterList()">
+                        <span class="ct_radio-checkmark"></span>
+                    </label>
+                </div>
+                <p class="mb-0">Show</p>
+            </div>
+            <div class="d-flex align-items-center gap-2 ">
+                <div class="ct_radio-container ct_radio-container_w_18  ms-auto">
+                    <label class="ct_radio-button">
+                        <input type="radio" name="role" value="hide" [(ngModel)]="taskVisibility"
+                            (change)="filterList()">
+                        <span class="ct_radio-checkmark"></span>
+                    </label>
+                </div>
+                <p class="mb-0">Hide</p>
+            </div>
+        </div>
+
+    </div> -->
+</div>
+<div class="ct_mt_30 ct_px_30 pb-4">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="d-flex align-items-center gap-3 justify-content-between ct_flex_col_767">
+                    <div class="ct_search_box_bg ct_flex_1 ct_w_100_767 ct_flex_col_575">
+                        <div class="form-group ct_search_input position-relative ct_flex_1 ct_w_100_767">
+                            <input type="text" class="form-control ct_input ct_input_ps_50 ct_h_48"
+                                placeholder="Search..." [(ngModel)]="searchText" (input)="filterList()" />
+                            <img src="/img/search_icon.svg" class="ct_input_icon_left" />
+                        </div>
+                        <div class="ct_w_100_767">
+                            <select class="form-control ct_input ct_grey_select" [(ngModel)]="selectedPriority"
+                                (change)="filterList()">
+                                <option value="">All</option>
+                                <option value="P1">P1</option>
+                                <option value="P2">P2</option>
+                                <option value="P3">P3</option>
+                                <option value="P4">P4</option>
+                            </select>
+                        </div>
+                        <div class="ct_w_100_575">
+                            <select class="form-control ct_input ct_grey_select ct_w_100_575"
+                                [(ngModel)]="taskVisibility" (change)="filterList()">
+                                <option value="">All Tasks</option>
+                                <option value="show">Completed Tasks</option>
+                                <option value="hide">Pending Tasks</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- @if (userType == 'team') { -->
+                    <div class="ct_w_100_767">
+                        <button class="ct_purple_btn ct_h_60 ct_w_100_767" data-bs-target="#ct_add_create_modal"
+                            data-bs-toggle="modal">
+                            <img src="/img/plus-circle.svg" alt="" class="me-2">Create Task
+                        </button>
+                    </div>
+                    <!-- } -->
+
+                </div>
+
+                <div class="row ct_mt_20">
+                    <div class="col-xl-4 col-lg-6 mb-4" *ngFor="let phase of filteredData">
+                        <!-- Phase Header -->
+                        <div class="ct_task_design_card">
+                            <div class="ct_task_design_header" style="border-color: #0066CCB2;">
+                                <h4 class="mb-0 ct_fs_22 ct_ff_Matter_Medium">
+                                    {{ phase.phase_name }}
+                                </h4>
+                                <div class="ct_icon_32_grey ct_ff_Matter_SemiBold">
+                                    {{ phase.tasks.length }}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Drop zone -->
+                        <div class="ct_task_design_body ct_custom_scroll" cdkDropList [id]="'phase-' + phase.phase_id"
+                            [cdkDropListData]="phase.tasks" [cdkDropListConnectedTo]="connectedDropLists"
+                            (cdkDropListDropped)="drop($event, phase)">
+                            <p *ngIf="!phase.tasks.length" class="text-muted ct_fs_14 text-center ct_fw_600">
+                                Drop tasks here
+                            </p>
+                            <!-- Draggable Task -->
+                            <div *ngFor="let task of phase.tasks" cdkDrag class="ct_task_design_inner_card"
+                                (click)="openTask(task)">
+                                <div>
+                                    <div class="d-flex align-items-start gap-3">
+                                        <img src="/img/ic_round-label-important.svg" class="mt-1">
+                                        <div class="ct_flex_1">
+                                            <div class="ct_d_align_center gap-2 justify-content-between mb-2 ">
+                                                <h6 class="ct_fs_16 ct_ff_Matter_Medium mb-0">{{ task.title }}
+                                                    @if(task.isNotesExists){
+                                                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M8.83665 7.49999L12.4592 8.47049M8.2539 9.67349L10.4274 10.2555M15.2379 9.48524C14.7842 11.1765 14.5576 12.0225 14.0439 12.5707C13.6385 13.0036 13.1139 13.3066 12.5364 13.4415C12.4639 13.4585 12.3902 13.4715 12.3152 13.4805C11.6289 13.5652 10.7912 13.341 9.26715 12.933C7.5759 12.4792 6.7299 12.2527 6.18165 11.739C5.74865 11.3334 5.44563 10.8085 5.3109 10.2307C5.1399 9.49874 5.3664 8.65349 5.82015 6.96224L6.2079 5.51324L6.3909 4.83449C6.73215 3.58499 6.96165 2.89724 7.4019 2.427C7.80739 1.99439 8.33197 1.69165 8.9094 1.557C9.6414 1.386 10.4874 1.6125 12.1794 2.06625C13.8699 2.51925 14.7159 2.74574 15.2642 3.25874C15.6973 3.66454 16.0003 4.18968 16.1349 4.76774C16.2556 5.28524 16.1777 5.85974 15.9617 6.74999"
+                                                            stroke="#128A50" stroke-width="1.125"
+                                                            stroke-linecap="round" />
+                                                        <path
+                                                            d="M2.45385 12.4855C2.90685 14.1767 3.1341 15.0227 3.64785 15.571C4.05324 16.0039 4.57783 16.3069 5.15535 16.4417C5.88735 16.612 6.73335 16.3855 8.42535 15.9325C10.1159 15.4795 10.9619 15.253 11.5101 14.7392C11.8788 14.3939 12.1543 13.961 12.3111 13.4807M6.38685 4.83398C6.12335 4.90248 5.8321 4.97998 5.5131 5.06648C3.82185 5.51948 2.97585 5.74598 2.4276 6.25898C1.99447 6.66478 1.69144 7.18992 1.55685 7.76798C1.4361 8.28548 1.5141 8.85998 1.7301 9.75023"
+                                                            stroke="#128A50" stroke-width="1.125" stroke-linecap="round"
+                                                            stroke-linejoin="round" />
+                                                    </svg>
+                                                    }
+                                                </h6>
+                                                <span class="ct_custom_badge ct_white_nowrap px-3 ct_ff_Matter_SemiBold"
+                                                    [ngStyle]="getPriorityStyle(task.priority)">
+                                                    {{ task.priority }}
+                                                </span>
+                                            </div>
+                                            <p class="ct_para_scroll ct_custom_scroll ct_fs_12 mb-0 ct_text_clr_636E72">
+                                                {{ task.description }}</p>
+                                            <div
+                                                class="d-flex align-items-center justify-content-between gap-2 mt-2 flex-wrap ">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <img src="/img/deadline_icon.svg">
+                                                    <p class="mb-0 ct_text_787885 ct_fs_14 ct_white_nowrap text-start">
+                                                        Created
+                                                        on:
+                                                    </p>
+                                                </div>
+                                                <p class="mb-0 ct_ff_Matter_Medium ct_fs_14 ct_white_nowrap ">{{
+                                                    task.created_at |
+                                                    date:'dd MMM yyyy'}} </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="ct_no_recod_found_bg" *ngIf="filteredData.length == 0">
+                            <p class="text-center mb-0 ct_fs_20">No task found</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add user  board Modal S -->
+<div class="modal fade ct_custom_modal modal-lg" id="ct_add_create_modal" tabindex="-1"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header p-0 border-0">
+                <div class="d-flex align-items-center gap-2">
+                    <img src="img/modal_star.png" alt="" class="ct_flex_shrink_0" />
+                    <div>
+                        <h1 class="modal-title ct_fs_20 ct_ff_Matter_SemiBold mb-0" id="exampleModalLabel">
+                            Create New Task
+                        </h1>
+                        <p class="mb-0 ct_fs_14 ct_text_clr_4B5563 ct_text_op_08">
+                            Add a new task to your board and start tracking progress
+                        </p>
+                    </div>
+                </div>
+                <button type="button" class="btn-close ct_close_modal" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body p-0 ct_mt_20">
+                <form [formGroup]="Form">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group ct_mb_22">
+                                <label class="ct_fs_18 ct_ff_Matter_Medium mb-2">Task Title </label>
+                                <input type="text" class="form-control ct_input" placeholder="Enter task title"
+                                    formControlName="title" />
+                                <div *ngIf="Form.controls['title'].invalid && Form.controls['title'].touched"
+                                    class="err_msg">
+                                    <div *ngIf="Form.controls['title'].errors?.['required']">Please enter
+                                        task title.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group ct_mb_22">
+                                <label class="ct_fs_18 ct_ff_Matter_Medium mb-2">Description </label>
+                                <textarea class="form-control ct_input h-auto" rows="2" placeholder="Enter Description"
+                                    formControlName="description"></textarea>
+                                <div *ngIf="Form.controls['description'].invalid && Form.controls['description'].touched"
+                                    class="err_msg">
+                                    <div *ngIf="Form.controls['description'].errors?.['required']">Please enter
+                                        description.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group ct_mb_22">
+                                <label class="ct_fs_18 ct_ff_Matter_Medium mb-2">Estimated Hours </label>
+                                <input type="text" class="form-control ct_input" placeholder="Enter estimated hours"
+                                    formControlName="estimatedHours" [maxlength]="4" />
+                                <div *ngIf="Form.controls['estimatedHours'].invalid && Form.controls['estimatedHours'].touched"
+                                    class="err_msg">
+
+                                    <div *ngIf="Form.controls['estimatedHours'].errors?.['required']">
+                                        Please enter estimated hours.
+                                    </div>
+
+                                    <div *ngIf="!Form.controls['estimatedHours'].errors?.['required']
+              && Form.controls['estimatedHours'].errors?.['pattern']">
+                                        Only numbers are allowed.
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group ct_mb_22">
+                                <label class="ct_fs_18 ct_ff_Matter_Medium mb-2">Estimated Minutes </label>
+                                <input type="text" class="form-control ct_input" placeholder="Enter estimated minutes"
+                                    formControlName="estimatedMinutes" />
+                                <div *ngIf="Form.controls['estimatedMinutes'].invalid && Form.controls['estimatedMinutes'].touched"
+                                    class="err_msg">
+                                    <div *ngIf="Form.controls['estimatedMinutes'].errors?.['required']">
+                                        Please enter estimated minutes.
+                                    </div>
+                                    <div *ngIf="!Form.controls['estimatedMinutes'].errors?.['required']
+        && Form.controls['estimatedMinutes'].errors?.['pattern']">
+                                        Only numbers are allowed.
+                                    </div>
+                                    <div *ngIf="!Form.controls['estimatedMinutes'].errors?.['required']
+        && !Form.controls['estimatedMinutes'].errors?.['pattern']
+        && (Form.controls['estimatedMinutes'].errors?.['min']
+            || Form.controls['estimatedMinutes'].errors?.['max'])">
+                                        Estimated minutes must be between 0 and 60.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="col-md-12">
+                            <div class="form-group ct_mb_22">
+                                <label class="ct_fs_18 ct_ff_Matter_Medium mb-2">Select Team</label>
+                                <select class="form-control ct_input" formControlName="selectedTeamId"
+                                    (change)="onTeamChange($event)">
+                                    <option value="" disabled>Select Team</option>
+                                    <option *ngFor="let agent of teamList" [value]="agent.id">
+                                        {{ agent.team_name }}
+                                    </option>
+                                </select>
+
+                                <div *ngIf="Form.controls['selectedTeamId'].invalid && Form.controls['selectedTeamId'].touched"
+                                    class="err_msg">
+                                    Please select a team.
+                                </div>
+
+                            </div>
+                        </div> -->
+
+                        <!-- Assign Member -->
+                        <div class="col-md-12">
+                            <div class="form-group ct_mb_22">
+                                <label class="ct_fs_18 ct_ff_Matter_Medium mb-2">Assign Member</label>
+                                <select class="form-control ct_input" formControlName="memberId">
+                                    <option value="" disabled>Select Member</option>
+                                    <option *ngFor="let member of teamMembersList" [value]="member.user_id">
+                                        {{ member.full_name }}
+                                    </option>
+                                </select>
+                                <div *ngIf="Form.controls['memberId'].invalid && Form.controls['memberId'].touched"
+                                    class="err_msg">
+                                    Please select a member.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group ct_mb_22">
+                                <label class="ct_fs_18 ct_ff_Matter_Medium mb-2">Priority</label>
+                                <select class="form-control ct_input" formControlName="priority">
+                                    <option value="" disabled>Select Priority</option>
+                                    <option value="P1">P1</option>
+                                    <option value="P2">P2</option>
+                                    <option value="P3">P3</option>
+                                    <option value="P4">P4</option>
+                                </select>
+                                <div *ngIf="Form.controls['priority'].invalid && Form.controls['priority'].touched"
+                                    class="err_msg">
+                                    Please select priority.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="ct_fs_18 ct_ff_Matter_Medium mb-2">Phase</label>
+                            <div class="form-group ct_mb_22">
+                                <select class="form-control ct_input" formControlName="phaseId">
+                                    <option value="" disabled>Select Phase</option>
+                                    <option *ngFor="let member of phaseList" [value]="member.phase_id">
+                                        {{ member.phase_name }}
+                                    </option>
+                                </select>
+                                <div *ngIf="Form.controls['phaseId'].invalid && Form.controls['phaseId'].touched"
+                                    class="err_msg">
+                                    Please select a phase.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group ct_mb_22">
+                                <label class="ct_fs_18 ct_ff_Matter_Medium mb-2">Start Date</label>
+                                <input type="date" class="form-control ct_input" formControlName="startDate"
+                                    [min]="minDate" />
+                                <div class="err_msg"
+                                    *ngIf="Form.get('from')?.touched && Form.get('startDate')?.hasError('required')">
+                                    From date is required.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group ct_mb_22">
+                                <label class="ct_fs_18 ct_ff_Matter_Medium mb-2">Due Date</label>
+                                <input type="date" class="form-control ct_input" formControlName="endDate"
+                                    [min]="Form.get('startDate')?.value" />
+                                <div class="err_msg"
+                                    *ngIf="Form.errors?.['dateInvalid'] && (Form.get('endDate')?.touched || Form.get('startDate')?.touched)">
+                                    Due-date must be greater than Start-date.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="ct_para_scroll ct_custom_scroll">
+                                <div class="ct_Members_info_sort gap-2 ct_d_align_center ct_mb_15 ct_light_grey_bg">
+                                    <div class="ct_d_align_center gap-3">
+                                        <img src="img/lucide_lock.svg" alt="" class=" ct_flex_shrink_0">
+                                        <div>
+                                            <h5 class="ct_fs_16 mb-1 ct_ff_Matter_Medium text-truncate"
+                                                style="max-width: 100px">
+                                                Private Task
+                                            </h5>
+                                            <p class="ct_fs_14 ct_text_787885 mb-0 text-truncate"
+                                                style="max-width: 120px">
+                                                Only visible to you
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="ms-auto">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" formControlName="isPrivate">
+                                            <div class="toggle-switch-background">
+                                                <div class="toggle-switch-handle"></div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div
+                                    class="ct_Members_info_sort gap-2 ct_d_align_center ct_mb_15 ct_light_grey_bg ct_mt_15">
+                                    <div class="ct_d_align_center gap-3">
+                                        <img src="img/octicon_goal-24.svg" alt="" class=" ct_flex_shrink_0">
+                                        <div>
+                                            <h5 class="ct_fs_16 mb-1 ct_ff_Matter_Medium text-truncate"
+                                                style="max-width: 150px">
+                                                Goal Relevant
+                                            </h5>
+                                            <p class="ct_fs_14 ct_text_787885 mb-0 text-truncate"
+                                                style="max-width: 120px">
+                                                Related to goal
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="ms-auto">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" formControlName="isGoalRevelant">
+                                            <div class="toggle-switch-background">
+                                                <div class="toggle-switch-handle"></div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div
+                                    class="ct_Members_info_sort gap-2 ct_d_align_center ct_mb_15 ct_light_grey_bg ct_mt_15">
+                                    <div class="ct_d_align_center gap-3">
+                                        <img src="img/urgent.svg" alt="" class=" ct_flex_shrink_0">
+                                        <div>
+                                            <h5 class="ct_fs_16 mb-1 ct_ff_Matter_Medium text-truncate"
+                                                style="max-width: 150px">
+                                                Mark as Urgent
+                                            </h5>
+                                            <p class="ct_fs_14 ct_text_787885 mb-0 text-truncate">
+                                                Requires immediate attention
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="ms-auto">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" formControlName="is_urgent">
+                                            <div class="toggle-switch-background">
+                                                <div class="toggle-switch-handle"></div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="modal-footer border-0 p-0 ct_mt_44">
+                    <button #closeModalAdd type="button" class="ct_outline_btn ct_ff_Matter_Medium"
+                        data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+                    <button type="button" class="ct_purple_btn ct_ff_Matter_Medium" (click)="onSubmit()">
+                        Create Task
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--  Add user Modal E -->
+
+<div class="ct_loader_main" *ngIf="loading">
+    <div class="loader-con">
+        <div style="--i: 0;" class="pfile"></div>
+        <div style="--i: 1;" class="pfile"></div>
+        <div class="pfile" style="--i: 2;"></div>
+        <div class="pfile" style="--i: 3;"></div>
+        <div class="pfile" style="--i: 4;"></div>
+        <div class="pfile" style="--i: 5;"></div>
+    </div>
+</div>

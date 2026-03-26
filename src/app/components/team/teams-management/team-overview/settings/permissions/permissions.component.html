@@ -1,0 +1,58 @@
+<div class="ct_inner_header_bg ct_mt_30 ct_px_30 ct_d_align_center justify-content-between gap-3  mb-4">
+    <div class="d-flex align-items-center justify-content-between gap-3">
+        <h4 class="ct_fs_35 mb-0 ct_ff_Matter_Medium d-flex align-items-center gap-2"><a (click)="backClicked()"
+                class="ct_back_icon me-1"><i class="fa-solid fa-chevron-left"></i></a>Manage permissions</h4>
+    </div>
+</div>
+<div class=" ct_mt_30 ct_px_30 pb-4">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table class="table ct_custom_table">
+                        <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Permission Name</th>
+                                <th>Allow Permission</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let permission of permissions; index as i">
+                                <td>{{ i + 1 }}</td>
+                                <td>{{ permission.name }}</td>
+                                <td>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox"
+                                            [checked]="isPermissionSelected(permission.permission_id)"
+                                            (change)="togglePermission(permission.permission_id, $event)" />
+                                        <div class="toggle-switch-background">
+                                            <div class="toggle-switch-handle"></div>
+                                        </div>
+                                    </label>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="d-flex justify-content-end mt-3">
+                    <button class="ct_purple_btn ct_h_48" (click)="submitPermissions()"
+                        [disabled]="saving">
+                        {{ saving ? 'Saving...' : 'Submit' }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="ct_loader_main" *ngIf="loading">
+    <div class="loader-con">
+        <div style="--i: 0;" class="pfile"></div>
+        <div style="--i: 1;" class="pfile"></div>
+        <div class="pfile" style="--i: 2;"></div>
+        <div class="pfile" style="--i: 3;"></div>
+        <div class="pfile" style="--i: 4;"></div>
+        <div class="pfile" style="--i: 5;"></div>
+    </div>
+</div>

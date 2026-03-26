@@ -1,0 +1,112 @@
+<section class="ct_login_main">
+    <div class="ct_login_left_content">
+        <div>
+            <div class="ct_login_logo ct_mb_35 ct_cursor_pointer">
+                <img routerLink="/" src="/img/logo.svg" alt="">
+            </div>
+            <div class="text-center mx-auto" style="max-width: 373px;">
+                <h4 class="ct_fs_44 ct_text_clr_f9f9f9 ct_mb_20 ct_ff_Matter_Light">One Login, Everything in Flow</h4>
+                <p class="ct_text_clr_f9f9f9 ct_fs_18 mb-0">Everything you need to plan, prioritize, and execute – your way.</p>
+            </div>
+        </div>
+        <div class="ct_login_bottom_img mt-auto">
+            <img src="/img/login_bottom_img.png" alt="">
+        </div>
+    </div>
+    <div class="ct_login_right_content">
+        <div class="text-center ct_mb_30 ct_pe_90 ct_login_title">
+            <h2 class="ct_fs_35 ct_mb_10 ct_ff_Matter_Medium">Create Team </h2>
+            <p class="ct_text_clr_5E6168 mb-0 ct_fs_20 mx-auto">This will be the home for your team’s projects.</p>
+        </div>
+
+        <form [formGroup]="Form" class="w-100">
+
+            <div #scrollContainer class="ct_login_scroll ct_custom_scroll ct_pe_90">
+                <div class="form-group ct_mb_15">
+                    <label class="ct_fs_18 ct_mb_10">Team Name</label>
+                    <div class="position-relative">
+                        <img src="/img/user_icon.svg" class="ct_input_icon_left" />
+                        <input type="text" class="form-control ct_input ct_input_ps_50" formControlName="teamName"
+                            placeholder="Enter team name" />
+                    </div>
+
+                    <div *ngIf="Form.get('teamName')?.touched && Form.get('teamName')?.invalid" class="err_msg">
+                        <div class="ct_fs_14 mt-1">Team Name is required.</div>
+                    </div>
+                </div>
+
+                <div formArrayName="members">
+                    <div *ngFor="let m of members.controls; let i = index" [formGroupName]="i"
+                        class="ct_member_block ct_mb_15">
+
+                        <div class="d-flex align-items-center gap-2 justify-content-between ct_mb_10">
+                            <label class="ct_fs_18 d-flex align-items-center gap-2 ct_ff_Matter_Medium">Member <span
+                                    class="ct_member_count_no">{{ i + 1 }}</span></label>
+                            <button type="button" class="ct_2d_purple_btn ct_icon_30 ct_remove_btn_red"
+                                *ngIf="members.length > 1" (click)="removeMember(i)">
+                                <i class="fa-solid fa-trash-can ct_fs_14"></i>
+                            </button>
+                        </div>
+
+                        <div class="form-group ct_mb_15">
+                            <label class="ct_fs_18 ct_mb_10">Invite by Email</label>
+                            <div class="position-relative">
+                                <img src="/img/email_icon.svg" class="ct_input_icon_left" />
+                                <input type="email" class="form-control ct_input ct_input_ps_50" formControlName="email"
+                                    placeholder="Enter email" />
+                            </div>
+                            <div *ngIf="m.get('email')?.invalid && m.get('email')?.touched" class="err_msg">
+                                <div *ngIf="m.get('email')?.errors?.['required']" class="ct_fs_14 mt-1">Email is
+                                    required.</div>
+                                <div *ngIf="m.get('email')?.errors?.['email']" class="ct_fs_14 mt-1">Invalid email
+                                    format.</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group ct_mb_15">
+                            <label class="ct_fs_18 ct_mb_10">Designation</label>
+                            <div class="position-relative">
+                                <img src="/img/company_icon.svg" class="ct_input_icon_left" />
+                                <input type="text" class="form-control ct_input ct_input_ps_50"
+                                    placeholder="Enter designation" formControlName="designation">
+                            </div>
+                            <div *ngIf="m.get('designation')?.invalid && m.get('designation')?.touched" class="err_msg">
+                                <div class="ct_fs_14 mt-1">Designation is required.</div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <button type="button" class="ct_2d_purple_btn ct_icon_30 ms-auto" (click)="addMember()"
+                    [disabled]="members.length >= 5">
+                    +
+                </button>
+
+            </div>
+
+            <div class="ct_mt_35 ct_pe_90">
+                <button type="button" (click)="submitForm()" class="ct_2d_purple_btn w-100">
+                    Send Invitation
+                </button>
+            </div>
+
+        </form>
+
+
+    </div>
+
+</section>
+
+<!-- <a routerLink="/team/dashboard">Go to Join Team</a> -->
+
+<div class="ct_loader_main" *ngIf="loading">
+    <div class="loader-con">
+        <div style="--i: 0;" class="pfile"></div>
+        <div style="--i: 1;" class="pfile"></div>
+        <div class="pfile" style="--i: 2;"></div>
+        <div class="pfile" style="--i: 3;"></div>
+        <div class="pfile" style="--i: 4;"></div>
+        <div class="pfile" style="--i: 5;"></div>
+    </div>
+</div>

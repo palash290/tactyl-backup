@@ -1,0 +1,23 @@
+.ct_radio-container_w_18 .ct_radio-checkmark {
+    display: inline-block;
+    position: relative;
+    width: 18px;
+    height: 18px;
+    margin-right: 10px;
+    border: 2px solid #C0BEBE;
+    border-radius: 50%;
+    margin-right: 0px;
+}
+
+.ct_radio-container_w_18 .ct_radio-checkmark:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background-color: var(--purple);
+    transition: all 0.2s ease-in-out;
+}

@@ -1,0 +1,565 @@
+<div class="ct_inner_header_bg ct_mt_30 ct_px_30 ct_d_align_center justify-content-between gap-3 ct_flex_col_575">
+    <div>
+        <h4 class="ct_fs_35 mb-2 ct_ff_Matter_Medium">Tasks</h4>
+        <p class="mb-0 ct_text_929292 ct_fs_18">
+            Manage all tasks with clarity and control.
+        </p>
+    </div>
+    <div class="ct_d_align_center gap-2">
+        <!-- <div class="ct_d_align_center gap-2">
+            <p class="ct_fs_20 ct_ff_Matter_Medium ct_text_clr_4B5563 mb-0 ct_white_nowrap">
+                Show Private Task
+            </p>
+
+            <label class="toggle-switch">
+                <input type="checkbox" [(ngModel)]="showPrivateTask" (change)="getAllTasks()" />
+                <div class="toggle-switch-background">
+                    <div class="toggle-switch-handle"></div>
+                </div>
+            </label>
+        </div> -->
+        <!-- @if(userType == 'team'){ -->
+        <div class="ct_d_align_center gap-3">
+            <p class="ct_fs_20 ct_ff_Matter_Medium ct_text_clr_4B5563 mb-0 ct_white_nowrap">
+                Tasks
+            </p>
+
+            <!-- <label class="ct_radio">
+                <input type="radio" name="taskVisibility" value="all" [(ngModel)]="taskVisibility"
+                    (change)="getAllTasks()" />
+                <span>All</span>
+            </label> -->
+
+            <!-- <label class="ct_radio">
+                <input type="radio" name="taskVisibility" value="private" [(ngModel)]="taskVisibility"
+                    (change)="getAllTasks()" />
+                <span>Private</span>
+            </label> -->
+
+            <div class="d-flex align-items-center gap-2 ">
+                <div class="ct_radio-container ct_radio-container_w_18  ms-auto">
+                    <label class="ct_radio-button">
+                        <input type="radio" name="role" value="all" [(ngModel)]="taskVisibility"
+                            (change)="getAllTasks()">
+                        <span class="ct_radio-checkmark"></span>
+                    </label>
+                </div>
+                <p class="mb-0">All</p>
+            </div>
+            <div class="d-flex align-items-center gap-2 ">
+                <div class="ct_radio-container ct_radio-container_w_18  ms-auto">
+                    <label class="ct_radio-button">
+                        <input type="radio" name="role" value="private" [(ngModel)]="taskVisibility"
+                            (change)="getAllTasks()">
+                        <span class="ct_radio-checkmark"></span>
+                    </label>
+                </div>
+                <p class="mb-0">Private</p>
+            </div>
+        </div>
+
+        @if(planService.needsGoldUpgrade() && !planService.isBronze()){
+        <button class="ct_outline_btn ct_h_40 ct_white_nowrap" (click)="openSubs()">
+            Export as CSV
+        </button>
+        } @else {
+        <button class="ct_outline_btn ct_h_40 ct_white_nowrap" (click)="exportToCSV()">
+            Export as CSV
+        </button>
+        }
+        <!-- } -->
+    </div>
+</div>
+<div class="ct_px_30 ct_mt_30 pb-4">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="ct_d_align_center justify-content-between gap-3 ct_flex_col_1199">
+                    <div class="ct_search_box_bg ct_flex_1 ct_w_100_1199 ct_flex_col_767">
+                        <div class="form-group ct_search_input position-relative ct_flex_1 ct_w_100_767">
+                            <input type="text" class="form-control ct_input ct_input_ps_50 ct_h_48"
+                                placeholder="Search..." [(ngModel)]="searchText" (input)="getAllTasks()" />
+                            <img src="img/search_icon.svg" class="ct_input_icon_left" />
+                        </div>
+                        <div class="ct_w_100_767">
+                            <select class="form-control ct_input ct_grey_select" [(ngModel)]="selectedPriority"
+                                (change)="getAllTasks()">
+                                <option value="" disabled>Priority</option>
+                                <option value="">All</option>
+                                <option value="P1">P1</option>
+                                <option value="P2">P2</option>
+                                <option value="P3">P3</option>
+                                <option value="P4">P4</option>
+                            </select>
+                        </div>
+                        <div class="ct_w_100_767">
+                            <select class="form-control ct_input ct_grey_select" [(ngModel)]="selectedRecent"
+                                (change)="getAllTasks()">
+                                <option value="DESC">Recent</option>
+                                <option value="ASC">Oldest</option>
+                            </select>
+                        </div>
+                        <div class="ct_w_100_767">
+                            <select class="form-control ct_input" [(ngModel)]="selectedTeamId" (change)="getAllTasks()">
+                                <option value="" disabled>Select Team</option>
+                                <option value="">All</option>
+                                <option *ngFor="let agent of teamList" [value]="agent.team_id">
+                                    {{ agent.team_name }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    @if(planService.needsGoldUpgrade()){
+                    <button class="ct_purple_btn ct_w_100_1199 ct_h_60" (click)="openSubs()">
+                        <img src="img/plus-circle.svg" alt="" class="me-2">Create Task
+                    </button>
+                    } @else {
+                    <button class="ct_purple_btn ct_w_100_1199 ct_h_60" data-bs-target="#ct_add_create_modal"
+                        data-bs-toggle="modal" (click)="reset()">
+                        <img src="img/plus-circle.svg" alt="" class="me-2">Create Task
+                    </button>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-responsive ">
+                    <table class="table ct_custom_table">
+                        <thead>
+                            <th>S.No</th>
+                            <th>Task Title</th>
+                            <th *ngIf="planService.hasTeamAccess()">Team</th>
+                            <th *ngIf="planService.hasTeamAccess()">Assignee</th>
+                            <!-- <th *ngIf="planService.hasTeamAccess()">Assign To</th> -->
+                            <th>Priority</th>
+                            <th>Phase</th>
+                            <!-- <th>Task Score</th> -->
+                            <th>Created At</th>
+                            <th>Actions</th>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="let item of taskList | paginate: { itemsPerPage: 10, currentPage: p }; let i = index">
+                                <td>{{(p - 1) * 10 + i + 1}}</td>
+                                <td>
+                                    <span class="ct_overlay_text d-inline-block">{{item.title}}</span>
+                                </td>
+                                <td *ngIf="planService.hasTeamAccess()">{{item.team.team_name}}</td>
+                                <td *ngIf="planService.hasTeamAccess()">{{item.assigned_by.full_name}}</td>
+                                <!-- <td *ngIf="planService.hasTeamAccess()">{{item.assigned_to.full_name}}</td> -->
+                                <td>
+                                    @if(item.priority == 'P1'){
+                                    <span class="ct_custom_badge ct_ff_Matter_Medium ct_fs_16 ct_border_radius_20"
+                                        style="background-color: #FEE2E2; color: #991B1B;">P1</span>
+                                    }
+
+
+                                    @if(item.priority == 'P2'){
+                                    <span class="ct_custom_badge ct_ff_Matter_Medium ct_fs_16 ct_border_radius_20"
+                                        style="background-color: #FFEDD5; color: #9A3412;">P2</span>
+                                    }
+
+
+                                    @if(item.priority == 'P3'){
+                                    <span class="ct_custom_badge ct_ff_Matter_Medium ct_fs_16 ct_border_radius_20"
+                                        style="background-color: #DCFCE7; color: #166534;">P3</span>
+                                    }
+
+                                    @if(item.priority == 'P4'){
+                                    <span class="ct_custom_badge ct_ff_Matter_Medium ct_fs_16 ct_border_radius_20"
+                                        style="background-color: #2222220A; color: #222222;">P4</span>
+                                    }
+                                </td>
+                                <td>
+                                    {{item.phase.phase_name}}
+                                </td>
+                                <td>{{item.created_at | date:'dd-MMM-yyyy'}}</td>
+                                <!-- <td>82</td> -->
+                                <td>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <!-- @if(userType == 'team'){
+                                        <a [routerLink]="['/team/task-details']"
+                                            [queryParams]="{ taskId: item.id, teamId: item.team_id, boardId: item.board_id }">
+                                            <img src="img/eye_purple_icon.png" class="ct_icon_24" alt="" title="View">
+                                        </a>
+                                        } @else if (userType == 'invited') {
+                                        <a [routerLink]="['/invited/task-details']" [queryParams]="{ taskId: item.id }">
+                                            <img src="img/eye_purple_icon.png" class="ct_icon_24" alt="" title="View">
+                                        </a>
+                                        } -->
+
+                                        <a [routerLink]="['/team/task-details']"
+                                            [queryParams]="{ taskId: item.task_id, teamId: item.team_id, boardId: item.board_id }">
+                                            <img src="img/eye_purple_icon.png" class="ct_icon_24" alt="" title="View">
+                                        </a>
+
+                                        <!-- @if(userType == 'team'){
+                                        <a href="javascript:void(0)" data-bs-target="#ct_add_create_modal"
+                                            data-bs-toggle="modal" (click)="fetchPhaseDetails(item)">
+                                            <img src="img/edit_green_icon.png" class="ct_icon_24" alt="" title="Edit">
+                                        </a>
+                                        <a href="javascript:void(0)" (click)="getId(item.id)"
+                                            data-bs-target="#ct_delete_modal" data-bs-toggle="modal">
+                                            <img src="img/Delete_icon.svg" class="ct_icon_24" alt="" title="Delete">
+                                        </a>
+                                        } -->
+
+                                        @if(planService.needsGoldUpgrade()){
+                                        @if(user_id == item.user_id){
+                                        <a href="javascript:void(0)" (click)="openSubs()">
+                                            <img src="img/edit_green_icon.png" class="ct_icon_24" alt="" title="Edit">
+                                        </a>
+                                        <a href="javascript:void(0)" (click)="openSubs()">
+                                            <img src="img/Delete_icon.svg" class="ct_icon_24" alt="" title="Delete">
+                                        </a>
+                                        }
+
+                                        }@else {
+                                        @if(user_id == item.user_id){
+                                        <a href="javascript:void(0)" data-bs-target="#ct_add_create_modal"
+                                            data-bs-toggle="modal" (click)="fetchPhaseDetails(item)">
+                                            <img src="img/edit_green_icon.png" class="ct_icon_24" alt="" title="Edit">
+                                        </a>
+                                        <a href="javascript:void(0)" (click)="getId(item.id)"
+                                            data-bs-target="#ct_delete_modal" data-bs-toggle="modal">
+                                            <img src="img/Delete_icon.svg" class="ct_icon_24" alt="" title="Delete">
+                                        </a>
+                                        }
+
+                                        }
+
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="col-md-12">
+                        <div class="ct_no_recod_found_bg" *ngIf="taskList?.length == 0">
+                            <p class="text-center mb-0 ct_fs_20">No tasks found</p>
+                        </div>
+                    </div>
+                </div>
+                <pagination-controls class="ct_pagination_div" *ngIf="!(taskList?.length == 0)"
+                    (pageChange)="p = $event"></pagination-controls>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add user  board Modal S -->
+<div class="modal fade ct_custom_modal modal-lg" id="ct_add_create_modal" tabindex="-1"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header p-0 border-0">
+                <div class="d-flex align-items-center gap-2">
+                    <img src="img/modal_star.png" alt="" class="ct_flex_shrink_0" />
+                    <div>
+                        <h1 class="modal-title ct_fs_20 ct_ff_Matter_SemiBold mb-0" id="exampleModalLabel">
+                            {{ taskId ? 'Update Task' : 'Create New Task' }}
+                        </h1>
+                        <p *ngIf="!taskId" class="mb-0 ct_fs_14 ct_text_clr_4B5563 ct_text_op_08">
+                            Add a new task to your board and start tracking progress
+                        </p>
+                    </div>
+                </div>
+                <button type="button" class="btn-close ct_close_modal" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body p-0 ct_mt_20">
+                <form [formGroup]="Form">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group ct_mb_22">
+                                <label class="ct_fs_18 ct_ff_Matter_Medium mb-2">Task Title </label>
+                                <input type="text" class="form-control ct_input" placeholder="Enter task title"
+                                    formControlName="title" />
+                                <div *ngIf="Form.controls['title'].invalid && Form.controls['title'].touched"
+                                    class="err_msg">
+                                    <div *ngIf="Form.controls['title'].errors?.['required']">Please enter
+                                        task title.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group ct_mb_22">
+                                <label class="ct_fs_18 ct_ff_Matter_Medium mb-2">Description </label>
+                                <textarea class="form-control ct_input h-auto" rows="2" placeholder="Enter Description"
+                                    formControlName="description"></textarea>
+                                <div *ngIf="Form.controls['description'].invalid && Form.controls['description'].touched"
+                                    class="err_msg">
+                                    <div *ngIf="Form.controls['description'].errors?.['required']">Please enter
+                                        description.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group ct_mb_22">
+                                <label class="ct_fs_18 ct_ff_Matter_Medium mb-2">Estimated Hours </label>
+                                <input type="text" class="form-control ct_input" placeholder="Enter estimated hours"
+                                    formControlName="estimatedHours" [maxlength]="4" />
+                                <div *ngIf="Form.controls['estimatedHours'].invalid && Form.controls['estimatedHours'].touched"
+                                    class="err_msg">
+
+                                    <div *ngIf="Form.controls['estimatedHours'].errors?.['required']">
+                                        Please enter estimated hours.
+                                    </div>
+
+                                    <div *ngIf="!Form.controls['estimatedHours'].errors?.['required']
+              && Form.controls['estimatedHours'].errors?.['pattern']">
+                                        Only numbers are allowed.
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group ct_mb_22">
+                                <label class="ct_fs_18 ct_ff_Matter_Medium mb-2">Estimated Minutes </label>
+                                <input type="text" class="form-control ct_input" placeholder="Enter estimated minutes"
+                                    formControlName="estimatedMinutes" />
+                                <div *ngIf="Form.controls['estimatedMinutes'].invalid && Form.controls['estimatedMinutes'].touched"
+                                    class="err_msg">
+                                    <div *ngIf="Form.controls['estimatedMinutes'].errors?.['required']">
+                                        Please enter estimated minutes.
+                                    </div>
+
+                                    <div *ngIf="!Form.controls['estimatedMinutes'].errors?.['required']
+        && Form.controls['estimatedMinutes'].errors?.['pattern']">
+                                        Only numbers are allowed.
+                                    </div>
+
+                                    <div *ngIf="!Form.controls['estimatedMinutes'].errors?.['required']
+        && !Form.controls['estimatedMinutes'].errors?.['pattern']
+        && (Form.controls['estimatedMinutes'].errors?.['min']
+            || Form.controls['estimatedMinutes'].errors?.['max'])">
+                                        Estimated minutes must be between 0 and 60.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group ct_mb_22">
+                                <label class="ct_fs_18 ct_ff_Matter_Medium mb-2">Select Team</label>
+                                <select class="form-control ct_input" formControlName="selectedTeamId"
+                                    (change)="onTeamChange($event)">
+                                    <option value="" disabled>Select Team</option>
+                                    <option *ngFor="let agent of teamList" [value]="agent.team_id">
+                                        {{ agent.team_name }}
+                                    </option>
+                                </select>
+                                <div *ngIf="Form.controls['selectedTeamId'].invalid && Form.controls['selectedTeamId'].touched"
+                                    class="err_msg">
+                                    Please select a team.
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Assign Member -->
+                        <div class="col-md-12">
+                            <div class="form-group ct_mb_22">
+                                <label class="ct_fs_18 ct_ff_Matter_Medium mb-2">Assign Member</label>
+                                <select class="form-control ct_input" formControlName="memberId">
+                                    <option value="" disabled>Select Member</option>
+                                    <option *ngFor="let member of membersList" [value]="member.user_id">
+                                        {{ member.full_name }}
+                                    </option>
+                                </select>
+                                <div *ngIf="Form.controls['memberId'].invalid && Form.controls['memberId'].touched"
+                                    class="err_msg">
+                                    Please select a member.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group ct_mb_22">
+                                <label class="ct_fs_18 ct_ff_Matter_Medium mb-2">Priority</label>
+                                <select class="form-control ct_input" formControlName="priority">
+                                    <option value="" disabled>Select Priority</option>
+                                    <option value="P1">P1</option>
+                                    <option value="P2">P2</option>
+                                    <option value="P3">P3</option>
+                                    <option value="P4">P4</option>
+                                </select>
+                                <div *ngIf="Form.controls['priority'].invalid && Form.controls['priority'].touched"
+                                    class="err_msg">
+                                    Please select priority.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="ct_fs_18 ct_ff_Matter_Medium mb-2">Phase</label>
+                            <div class="form-group ct_mb_22">
+                                <select class="form-control ct_input" formControlName="phaseId">
+                                    <option value="" disabled>Select Phase</option>
+                                    <option *ngFor="let member of phaseList" [value]="member.phase_id">
+                                        {{ member.phase_name }}
+                                    </option>
+                                </select>
+                                <div *ngIf="Form.controls['phaseId'].invalid && Form.controls['phaseId'].touched"
+                                    class="err_msg">
+                                    Please select a phase.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group ct_mb_22">
+                                <label class="ct_fs_18 ct_ff_Matter_Medium mb-2">Start Date</label>
+                                <input type="date" class="form-control ct_input" formControlName="startDate"
+                                    [min]="minDate" />
+                                <div class="err_msg"
+                                    *ngIf="Form.get('from')?.touched && Form.get('startDate')?.hasError('required')">
+                                    From date is required.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group ct_mb_22">
+                                <label class="ct_fs_18 ct_ff_Matter_Medium mb-2">Due Date</label>
+                                <input type="date" class="form-control ct_input" formControlName="endDate"
+                                    [min]="Form.get('startDate')?.value" />
+                                <div class="err_msg"
+                                    *ngIf="Form.errors?.['dateInvalid'] && (Form.get('endDate')?.touched || Form.get('startDate')?.touched)">
+                                    Due-date must be greater than Start-date.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="ct_para_scroll ct_custom_scroll">
+                                <div class="ct_Members_info_sort gap-2 ct_d_align_center ct_mb_15 ct_light_grey_bg">
+                                    <div class="ct_d_align_center gap-3">
+                                        <img src="img/lucide_lock.svg" alt="" class=" ct_flex_shrink_0">
+                                        <div>
+                                            <h5 class="ct_fs_16 mb-1 ct_ff_Matter_Medium text-truncate"
+                                                style="max-width: 100px">
+                                                Private Task
+                                            </h5>
+                                            <p class="ct_fs_14 ct_text_787885 mb-0 text-truncate">
+                                                Only visible to you
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="ms-auto">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" formControlName="isPrivate">
+                                            <div class="toggle-switch-background">
+                                                <div class="toggle-switch-handle"></div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div
+                                    class="ct_Members_info_sort gap-2 ct_d_align_center ct_mb_15 ct_light_grey_bg ct_mt_15">
+                                    <div class="ct_d_align_center gap-3">
+                                        <img src="img/octicon_goal-24.svg" alt="" class=" ct_flex_shrink_0">
+                                        <div>
+                                            <h5 class="ct_fs_16 mb-1 ct_ff_Matter_Medium text-truncate"
+                                                style="max-width: 150px">
+                                                Goal Relevant
+                                            </h5>
+                                            <p class="ct_fs_14 ct_text_787885 mb-0 text-truncate"
+                                                style="max-width: 120px">
+                                                Related to goal
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="ms-auto">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" formControlName="isGoalRevelant">
+                                            <div class="toggle-switch-background">
+                                                <div class="toggle-switch-handle"></div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div
+                                    class="ct_Members_info_sort gap-2 ct_d_align_center ct_mb_15 ct_light_grey_bg ct_mt_15">
+                                    <div class="ct_d_align_center gap-3">
+                                        <img src="img/urgent.svg" alt="" class=" ct_flex_shrink_0">
+                                        <div>
+                                            <h5 class="ct_fs_16 mb-1 ct_ff_Matter_Medium text-truncate"
+                                                style="max-width: 150px">
+                                                Mark as Urgent
+                                            </h5>
+                                            <p class="ct_fs_14 ct_text_787885 mb-0 text-truncate">
+                                                Requires immediate attention
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="ms-auto">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" formControlName="is_urgent">
+                                            <div class="toggle-switch-background">
+                                                <div class="toggle-switch-handle"></div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="modal-footer border-0 p-0 ct_mt_44">
+                    <button #closeModalAdd type="button" class="ct_outline_btn ct_ff_Matter_Medium"
+                        data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+                    <button type="button" class="ct_purple_btn ct_ff_Matter_Medium" (click)="onSubmit()">
+                        {{ taskId ? 'Update Task' : 'Create Task' }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--  Add user Modal E -->
+
+
+<app-subscription-modal></app-subscription-modal>
+
+<!-- Delete  Modal S -->
+<div class="modal fade ct_custom_modal" id="ct_delete_modal" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header p-0 border-0">
+                <button type="button" class="btn-close ct_close_modal" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body p-0">
+                <div>
+                    <h1 class="modal-title ct_fs_28 ct_ff_Matter_SemiBold mb-2" id="exampleModalLabel">
+                        Delete Task
+                    </h1>
+                    <p class="mb-0 ct_fs_18 ct_text_clr_4B5563 ct_text_op_08">
+                        Are you sure you want to delete this task?
+                    </p>
+                </div>
+                <div class="modal-footer border-0 p-0 ct_mt_30 justify-content-start">
+                    <button #closeModalDelete type="button" class="ct_outline_btn ct_ff_Matter_Medium"
+                        data-bs-dismiss="modal">
+                        No
+                    </button>
+                    <button (click)="deleteTask()" type="button" class="ct_purple_btn ct_ff_Matter_Medium">
+                        Yes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--  ct_delete_modal Modal E -->
+
+<div class="ct_loader_main" *ngIf="loading">
+    <div class="loader-con">
+        <div style="--i: 0;" class="pfile"></div>
+        <div style="--i: 1;" class="pfile"></div>
+        <div class="pfile" style="--i: 2;"></div>
+        <div class="pfile" style="--i: 3;"></div>
+        <div class="pfile" style="--i: 4;"></div>
+        <div class="pfile" style="--i: 5;"></div>
+    </div>
+</div>

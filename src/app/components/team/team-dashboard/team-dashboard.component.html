@@ -1,0 +1,84 @@
+<div class="ct_inner_header_bg ct_mt_30 ct_px_30">
+    <h4 class="ct_fs_35  mb-2 ct_ff_Matter_Medium">Dashboard</h4>
+    <p class="mb-0 ct_text_929292 ct_fs_18">Here's what's happening with your teams today.</p>
+</div>
+<div class="ct_px_30 ct_mt_30 pb-4">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xxl-3 col-xl-6 col-lg-6 col-md-6 mb-4">
+                <div class="ct_dash_card ct_cursor_pointer" routerLink="/team/teams">
+                    <div class="ct_dash_card_title">
+                        <h5 class="ct_fs_32 mb-1 ct_ff_Matter_Bold">{{dashboardData?.total_teams}}</h5>
+                        <p class="mb-0 ct_text_clr_4B5563 ct_fs_20 ">Total Teams</p>
+                    </div>
+                    <div class="ct_dash_icon">
+                        <img src="/img/dash_icon_1.gif" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xxl-3 col-xl-6 col-lg-6 col-md-6 mb-4">
+                <div class="ct_dash_card">
+                    <div class="ct_dash_card_title">
+                        <h5 class="ct_fs_32 mb-1 ct_ff_Matter_Bold">{{dashboardData?.total_boards}}</h5>
+                        <p class="mb-0 ct_text_clr_4B5563 ct_fs_20 ">Active Boards</p>
+                    </div>
+                    <div class="ct_dash_icon">
+                        <img src="/img/dash_icon_2.gif" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xxl-3 col-xl-6 col-lg-6 col-md-6 mb-4">
+                <div class="ct_dash_card ct_cursor_pointer" routerLink="/team/tasks">
+                    <div class="ct_dash_card_title">
+                        <h5 class="ct_fs_32 mb-1 ct_ff_Matter_Bold">{{dashboardData?.total_tasks}}</h5>
+                        <p class="mb-0 ct_text_clr_4B5563 ct_fs_20 ">Total Tasks</p>
+                    </div>
+                    <div class="ct_dash_icon">
+                        <img src="/img/dash_icon_3.gif" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xxl-3 col-xl-6 col-lg-6 col-md-6 mb-4">
+                <div class="ct_dash_card">
+                    <div class="ct_dash_card_title">
+                        <h5 class="ct_fs_32 mb-1 ct_ff_Matter_Bold">{{dashboardData?.total_phases}}</h5>
+                        <p class="mb-0 ct_text_clr_4B5563 ct_fs_20 ">Total Phases</p>
+                    </div>
+                    <div class="ct_dash_icon">
+                        <img src="/img/dash_icon_4.gif" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="ct_white_bg">
+                    <div class="ct_d_align_center justify-content-between gap-3 ct_flex_col_575 ">
+                        <h4 class="ct_fs_22 ct_ff_Matter_SemiBold mb-0">Overall Performance</h4>
+                    </div>
+                    <div id="chart" class="ct_mt_30">
+                        <apx-chart [series]="chartOptions1.series" [chart]="chartOptions1.chart"
+                            [xaxis]="chartOptions1.xaxis" [stroke]="chartOptions1.stroke"
+                            [markers]="chartOptions1.markers" [colors]="chartOptions1.colors"
+                            [title]="chartOptions1.title"></apx-chart>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="ct_white_bg">
+                    <div class="ct_d_align_center justify-content-between gap-3 ">
+                        <h4 class="ct_fs_22 ct_ff_Matter_SemiBold mb-0">Tasks by phase</h4>
+                    </div>
+                    <div class="mx-auto">
+                        <div id="ct_task_by_phase" class="ct_mt_30">
+                            <apx-chart [series]="chartOptions2.series" [chart]="chartOptions2.chart"
+                                [labels]="chartOptions2.labels" [colors]="chartOptions2.colors"
+                                [legend]="chartOptions2.legend" [plotOptions]="chartOptions2.plotOptions"
+                                [dataLabels]="chartOptions2.dataLabels"></apx-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

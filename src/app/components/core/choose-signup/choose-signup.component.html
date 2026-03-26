@@ -1,0 +1,100 @@
+<section class="ct_login_main">
+    <div class="ct_login_left_content">
+        <div>
+            <div class="ct_login_logo ct_mb_35 ct_cursor_pointer">
+                <img routerLink="/" src="img/logo.svg" alt="">
+            </div>
+            <div class="text-center mx-auto ct_login_title" style="max-width: 373px;">
+                <h4 class="ct_fs_44 ct_text_clr_f9f9f9 ct_mb_20 ct_ff_Matter_Light">One Login, Everything in Flow</h4>
+                <p class="ct_text_clr_f9f9f9 ct_fs_18 mb-0">Everything you need to plan, prioritize, and execute – your way.</p>
+            </div>
+        </div>
+        <div class="ct_login_bottom_img mt-auto">
+            <img src="img/login_bottom_img.png" alt="">
+        </div>
+    </div>
+    <div class="ct_login_right_content">
+        <div class="text-center ct_mb_30 ct_pe_90">
+            <h2 class="ct_fs_35 ct_mb_10 ct_ff_Matter_Medium">How are you using Tactyl?</h2>
+            <p class="text_clr_5E6168 mb-0">Choose the option that best describes your situation</p>
+        </div>
+        <div class=" ct_pe_90 ">
+            <ul class="ct_select_role_main_div ct_custom_scroll">
+                <!-- SINGLE ROLE CARD -->
+                <li class="ct_select_role_card ct_d_align_center gap-3" [class.active]="selectedRole === 'individual'"
+                    (click)="selectRole('individual')">
+
+                    <div class="ct_select_role_icon ct_flex_shrink_0 ct_icon_77 ct_border_radius_6">
+                        <img src="img/Individual_icon.png" alt="" class="ct_icon_w_50">
+                    </div>
+
+                    <div class="">
+                        <h4 class="ct_fs_18 ct_ff_Matter_Medium mb-2">Individual</h4>
+                        <p class="ct_text_clr_888D97 mb-0 ct_fs_15">Perfect for personal productivity and
+                            individual task management</p>
+                    </div>
+
+                    <div class="ct_radio-container ms-auto">
+                        <label class="ct_radio-button">
+                            <input type="radio" name="role" value="individual"
+                                [checked]="selectedRole === 'individual'">
+                            <span class="ct_radio-checkmark"></span>
+                        </label>
+                    </div>
+                </li>
+
+                <!-- TEAM ROLE -->
+                <li class="ct_select_role_card ct_d_align_center gap-3 ct_mt_20"
+                    [class.active]="selectedRole === 'team'" (click)="selectRole('team')">
+
+                    <div class="ct_select_role_icon ct_flex_shrink_0 ct_icon_77 ct_border_radius_6">
+                        <img src="img/teamwork_icon.png" alt="" class="ct_icon_w_50">
+                    </div>
+
+                    <div class="">
+                        <h4 class="ct_fs_18 ct_ff_Matter_Medium mb-2">I'm Creating a Team</h4>
+                        <p class="ct_text_clr_888D97 mb-0 ct_fs_15">Set up and manage team workflows,
+                            assign roles, and oversee projects</p>
+                    </div>
+
+                    <div class="ct_radio-container ms-auto">
+                        <label class="ct_radio-button">
+                            <input type="radio" name="role" value="team" [checked]="selectedRole === 'team'">
+                            <span class="ct_radio-checkmark"></span>
+                        </label>
+                    </div>
+                </li>
+
+                <!-- INVITED ROLE -->
+                <!-- <li class="ct_select_role_card ct_d_align_center gap-3 ct_mt_20"
+                    [class.active]="selectedRole === 'invited'" (click)="selectRole('invited')">
+
+                    <div class="ct_select_role_icon ct_flex_shrink_0 ct_icon_77 ct_border_radius_6">
+                        <img src="img/mail_box_icon.png" alt="" class="ct_icon_w_50">
+                    </div>
+
+                    <div class="">
+                        <h4 class="ct_fs_18 ct_ff_Matter_Medium mb-2">I've been invited</h4>
+                        <p class="ct_text_clr_888D97 mb-0 ct_fs_15">Join an existing team and collaborate
+                            on shared projects and tasks</p>
+                    </div>
+
+                    <div class="ct_radio-container ms-auto">
+                        <label class="ct_radio-button">
+                            <input type="radio" name="role" value="invited" [checked]="selectedRole === 'invited'">
+                            <span class="ct_radio-checkmark"></span>
+                        </label>
+                    </div>
+                </li> -->
+
+            </ul>
+
+            <div class="ct_mt_30 mx-4">
+                <a class="ct_2d_purple_btn w-100" (click)="continue()">
+                    Continue
+                </a>
+            </div>
+
+        </div>
+    </div>
+</section>

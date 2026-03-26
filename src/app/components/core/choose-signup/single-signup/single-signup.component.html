@@ -1,0 +1,147 @@
+<section class="ct_login_main">
+    <div class="ct_login_left_content">
+        <div>
+            <div class="ct_login_logo ct_mb_35 ct_cursor_pointer">
+                <img routerLink="/" src="img/logo.svg" alt="">
+            </div>
+            <div class="text-center mx-auto ct_login_title" style="max-width: 373px;">
+                <h4 class="ct_fs_44 ct_text_clr_f9f9f9 ct_mb_20 ct_ff_Matter_Light">One Login, Everything in Flow</h4>
+                <p class="ct_text_clr_f9f9f9 ct_fs_18 mb-0">Everything you need to plan, prioritize, and execute – your way.</p>
+            </div>
+        </div>
+        <div class="ct_login_bottom_img mt-auto">
+            <img src="img/login_bottom_img.png" alt="">
+        </div>
+    </div>
+    <div class="ct_login_right_content">
+        <div class="text-center ct_mb_30 ct_pe_90  ">
+            <h2 class="ct_fs_35 ct_mb_10 ct_ff_Matter_Medium">Create an account</h2>
+            <!-- <p class="ct_text_clr_5E6168 mb-0 ct_fs_20 mx-auto" style="max-width: 492px;">Join Tactyl and start
+                organizing your work, teams, and goals — all in one place.</p> -->
+            <p class="ct_text_clr_5E6168 mb-0 ct_fs_20 mx-auto" style="max-width: 492px;">Join Tactyl and start
+                organizing and prioritizing your work and goals – all in one place.</p>
+        </div>
+        <form [formGroup]="Form" class="  w-100 ">
+            <div class="ct_login_scroll ct_pe_90 ct_custom_scroll">
+                <div class="form-group ct_mb_15">
+                    <label for="" class="ct_fs_18 ct_mb_10">Full Name</label>
+                    <div class="position-relative">
+                        <img src="img/user_icon.svg" alt="" class="ct_input_icon_left">
+                        <input type="text" class="form-control  ct_input ct_input_ps_50" formControlName="name"
+                            placeholder="Enter full name">
+                    </div>
+                    <div *ngIf="Form.controls['name'].invalid && Form.controls['name'].touched" class="err_msg">
+                        <div *ngIf="Form.controls['name'].errors?.['required']" class="ct_fs_14 mt-1">
+                            Name is required.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <div class="col-md-12">
+                    <div class="form-group ct_mb_15">
+                        <label for="" class="ct_fs_18 ct_mb_10">Designation</label>
+                        <div class="position-relative">
+                            <img src="/img/company_icon.svg" alt="" class="ct_input_icon_left">
+                            <input type="text" class="form-control  ct_input ct_input_ps_50 ct_input_pe_40"
+                                placeholder="Enter your designation" formControlName="designation">
+                        </div>
+                        <div *ngIf="Form.controls['designation'].invalid && Form.controls['designation'].touched"
+                            class="err_msg">
+                            <div *ngIf="Form.controls['designation'].errors?.['required']">Please enter
+                                your designation.</div>
+                        </div>
+                    </div>
+                </div> -->
+
+                <div class="form-group ct_mb_15">
+                    <label for="" class="ct_fs_18 ct_mb_10">Email</label>
+                    <div class="position-relative">
+                        <img src="img/email_icon.svg" alt="" class="ct_input_icon_left">
+                        <input type="email" class="form-control  ct_input ct_input_ps_50 ct_input_pe_40"
+                            placeholder="Enter email address" formControlName="email">
+                    </div>
+                    <div *ngIf="Form.controls['email'].invalid && Form.controls['email'].touched" class="err_msg">
+                        <div *ngIf="Form.controls['email'].errors?.['required']" class="ct_fs_14 mt-1">
+                            Email is required.
+                        </div>
+                        <div *ngIf="Form.controls['email'].errors?.['email'] && !Form.controls['email'].errors?.['required']"
+                            class="ct_fs_14 mt-1">
+                            Invalid email format.</div>
+                    </div>
+                </div>
+
+
+                <div class="form-group ct_mb_15">
+                    <label for="" class="ct_fs_18 ct_mb_10">Create Password</label>
+                    <div class="position-relative">
+                        <img src="img/circum_lock.svg" alt="" class="ct_input_icon_left">
+                        <input type="{{ isPasswordVisible2 ? 'text' : 'password' }}"
+                            class="form-control  ct_input ct_input_ps_50 ct_input_pe_50 " placeholder="Enter password"
+                            formControlName="new_password">
+                        <i class="fa-regular ct_show_eye" [ngClass]="isPasswordVisible2 ? 'fa-eye' : 'fa-eye-slash' "
+                            (click)="togglePasswordVisibility2()"></i>
+                    </div>
+                    <div class="err_msg"
+                        *ngIf="Form.controls['new_password']?.invalid && Form.controls['new_password']?.touched">
+
+                        <div *ngIf="Form.controls['new_password'].errors?.['required']; else checkMinLength">
+                            Create password is required.
+                        </div>
+
+                        <ng-template #checkMinLength>
+                            <div *ngIf="Form.controls['new_password'].errors?.['minlength']; else checkUppercase">
+                                New password must be at least 8 characters long.
+                            </div>
+                            <ng-template #checkUppercase>
+                                <div *ngIf="Form.controls['new_password'].errors?.['uppercaseRequired']; else checkSpecial">
+                                    Must include at least one uppercase letter.
+                                </div>
+                            </ng-template>
+                            <ng-template #checkSpecial>
+                                <div *ngIf="Form.controls['new_password'].errors?.['specialRequired']">
+                                    Must include at least one special character.
+                                </div>
+                            </ng-template>
+                        </ng-template>
+                    </div>
+                </div>
+                <div class="form-group ct_mb_15">
+                    <label for="" class="ct_fs_18 ct_mb_10">Confirm Password</label>
+                    <div class="position-relative">
+                        <img src="img/circum_lock.svg" alt="" class="ct_input_icon_left">
+                        <input type="{{ isPasswordVisible3 ? 'text' : 'password' }}"
+                            class="form-control  ct_input ct_input_ps_50 ct_input_pe_50 "
+                            placeholder="Enter confirm password" formControlName="confirm_password">
+                        <i class="fa-regular ct_show_eye" [ngClass]="isPasswordVisible3 ? 'fa-eye' : 'fa-eye-slash' "
+                            (click)="togglePasswordVisibility3()"></i>
+                    </div>
+                    <div *ngIf="Form.controls['confirm_password']?.invalid && Form.controls['confirm_password'].touched"
+                        class="err_msg">
+                        <div *ngIf="Form.controls['confirm_password'].errors?.['required']">
+                            Confirm password is required.</div>
+                        <div *ngIf="passwordMismatch && !Form.controls['confirm_password'].errors?.['required']">
+                            Passwords do not match.</div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="ct_mt_35 ct_pe_90">
+                <a (click)="sumbit()" class="ct_2d_purple_btn w-100">Create Account</a>
+            </div>
+            <p class="mb-0 text-center ct_fs_14 ct_mt_15 ct_pe_90">Already have an account? <a
+                    routerLink="/login" class="ct_text_purple ct_fw_600">Sign In</a></p>
+        </form>
+    </div>
+
+</section>
+
+<div class="ct_loader_main" *ngIf="loading">
+    <div class="loader-con">
+        <div style="--i: 0;" class="pfile"></div>
+        <div style="--i: 1;" class="pfile"></div>
+        <div class="pfile" style="--i: 2;"></div>
+        <div class="pfile" style="--i: 3;"></div>
+        <div class="pfile" style="--i: 4;"></div>
+        <div class="pfile" style="--i: 5;"></div>
+    </div>
+</div>

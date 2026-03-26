@@ -1,0 +1,243 @@
+<div class="row">
+    <div class="col-md-12">
+        @if(planService.needsGoldUpgrade()){
+        @if(teamPermissions.canAddPhase){
+        <div class="text-end">
+            <button class="ct_purple_btn  ct_w_100_767 ms-auto" (click)="openSubs()">
+                <img src="/img/plus-circle.svg" alt="" class="me-2">Create Phase
+            </button>
+        </div>
+        }
+        } @else {
+        @if(teamPermissions.canAddPhase){
+        <div class="text-end">
+            <button class="ct_purple_btn  ct_w_100_767 ms-auto" data-bs-target="#ct_add_phase_modal"
+                data-bs-toggle="modal" (click)="reset()">
+                <img src="/img/plus-circle.svg" alt="" class="me-2">Create Phase
+            </button>
+        </div>
+        }
+        }
+
+
+        <div class="table-responsive ct_mt_20">
+            <table class="table ct_custom_table">
+                <thead>
+                    <th>S.No</th>
+                    <th>Phase Name</th>
+                    <th>Total Tasks</th>
+                    <th>Description</th>
+                    <th *ngIf="teamPermissions.canEditPhase || teamPermissions.canDeletePhase">Actions</th>
+                </thead>
+                <!-- <tbody cdkDropList (cdkDropListDropped)="drop($event)">
+                    <tr
+                        *ngFor="let item of filteredData; let i = index" cdkDrag>
+                        <td>{{(p - 1) * 10 + i + 1}}</td>
+                        <td>
+                            <span class="ct_overlay_text d-inline-block">{{item.phase_name}}</span>
+                        </td>
+                        <td>{{item.totalTasks}}</td>
+                        <td>
+                            <span class="ct_overlay_text d-inline-block">{{item?.description ? item?.description : '-'}}
+                            </span>
+                        </td>
+                        <td *ngIf="userType == 'team'">
+                            <div class="d-flex align-items-center gap-3">
+                                <a href="javascript:void(0)" data-bs-target="#ct_add_phase_modal" data-bs-toggle="modal"
+                                    (click)="fetchBoardDetails(item)">
+                                    <img src="/img/edit_green_icon.png" class="ct_icon_24" alt="" title="Edit" />
+                                </a>
+
+                                <a href="javascript:void(0)" (click)="getId(item)" data-bs-target="#ct_delete_phase"
+                                    data-bs-toggle="modal">
+                                    <img src="/img/Delete_icon.svg" class="ct_icon_24" alt="" title="Delete" />
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody> -->
+
+                <tbody>
+                    <tr *ngFor="let item of filteredData; let i = index">
+                        <td>{{(p - 1) * 10 + i + 1}}</td>
+                        <td>
+                            <span class="ct_overlay_text d-inline-block">{{item.phase_name}}</span>
+                        </td>
+                        <td>{{item.total_tasks}}</td>
+                        <td>
+                            <span class="ct_overlay_text d-inline-block">{{item?.description ? item?.description : '-'}}
+                            </span>
+                        </td>
+                        <td *ngIf="teamPermissions.canEditPhase || teamPermissions.canDeletePhase">
+                            @if(planService.needsGoldUpgrade()){
+                            <div class="d-flex align-items-center gap-3">
+                                <a *ngIf="teamPermissions.canEditPhase" href="javascript:void(0)" (click)="openSubs()">
+                                    <img src="/img/edit_green_icon.png" class="ct_icon_24" alt="" title="Edit" />
+                                </a>
+
+                                <a *ngIf="teamPermissions.canDeletePhase" href="javascript:void(0)" (click)="openSubs()">
+                                    <img src="/img/Delete_icon.svg" class="ct_icon_24" alt="" title="Delete" />
+                                </a>
+                            </div>
+                            } @else {
+                            <div class="d-flex align-items-center gap-3">
+                                <a *ngIf="teamPermissions.canEditPhase" href="javascript:void(0)" data-bs-target="#ct_add_phase_modal" data-bs-toggle="modal"
+                                    (click)="fetchBoardDetails(item)">
+                                    <img src="/img/edit_green_icon.png" class="ct_icon_24" alt="" title="Edit" />
+                                </a>
+
+                                <a *ngIf="teamPermissions.canDeletePhase" href="javascript:void(0)" (click)="getId(item)" data-bs-target="#ct_delete_phase"
+                                    data-bs-toggle="modal">
+                                    <img src="/img/Delete_icon.svg" class="ct_icon_24" alt="" title="Delete" />
+                                </a>
+                            </div>
+                            }
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-12">
+            <div class="ct_no_recod_found_bg" *ngIf="filteredData.length == 0">
+                <p class="text-center mb-0 ct_fs_20">No phases found</p>
+            </div>
+        </div>
+        <!-- <pagination-controls class="ct_pagination_div" *ngIf="!(filteredData?.length == 0)"
+            (pageChange)="p = $event"></pagination-controls> -->
+    </div>
+</div>
+
+<!-- Add phase board Modal S -->
+<div class="modal fade ct_custom_modal modal-lg" id="ct_add_phase_modal" tabindex="-1"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header p-0 border-0">
+                <div class="d-flex align-items-center gap-2">
+                    <img src="/img/modal_star.png" alt="" class="ct_flex_shrink_0" />
+                    <div>
+                        <h1 class="modal-title ct_fs_20 ct_ff_Matter_SemiBold mb-0" id="exampleModalLabel">
+                            {{ phaseId ? 'Update Phase' : 'Create Phase' }}
+                        </h1>
+                        <p class="mb-0 ct_fs_14 ct_text_clr_4B5563 ct_text_op_08">
+                            Build custom phases to streamline your operations.
+                        </p>
+                    </div>
+                </div>
+                <button type="button" class="btn-close ct_close_modal" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body p-0 ct_mt_20">
+                <form [formGroup]="Form">
+                    <div class="form-group ct_mb_22">
+                        <label class="ct_fs_18 ct_ff_Matter_Medium mb-2">Phase Name </label>
+                        <input type="text" class="form-control ct_input" placeholder="Enter phase name here"
+                            formControlName="title" />
+                        <div *ngIf="Form.controls['title'].invalid && Form.controls['title'].touched" class="err_msg">
+                            <div *ngIf="Form.controls['title'].errors?.['required']">Please enter
+                                phase name.</div>
+                        </div>
+                    </div>
+                    <div class="form-group ct_mb_22">
+                        <label class="ct_fs_18 ct_ff_Matter_Medium mb-2">Select Board </label>
+                        <select class="form-control ct_input" formControlName="boardId">
+                            <option value="" disabled>Select Board</option>
+                            <option *ngFor="let agent of boardList" [value]="agent.board_id">
+                                {{ agent.board_name }}
+                            </option>
+                        </select>
+                        <div *ngIf="Form.controls['boardId'].invalid && Form.controls['boardId'].touched"
+                            class="err_msg">
+                            Please select a board.
+                        </div>
+                    </div>
+                    <div class="form-group ct_mb_22">
+                        <label class="ct_fs_18 ct_ff_Matter_Medium mb-2">Description (optional)</label>
+                        <textarea class="form-control ct_input h-auto" rows="4" placeholder="Enter Description"
+                            formControlName="description"></textarea>
+                    </div>
+                </form>
+                <div class="modal-footer border-0 p-0 ct_mt_44">
+                    <button #closeModalAdd type="button" class="ct_outline_btn ct_ff_Matter_Medium"
+                        data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+                    <button (click)="onSubmit()" type="button" class="ct_purple_btn ct_ff_Matter_Medium">
+                        {{ phaseId ? 'Update Phase' : 'Create Phase' }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--  Add phase Modal E -->
+
+
+<!-- Delete  Modal S -->
+<div class="modal fade ct_custom_modal" id="ct_delete_phase" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header p-0 border-0">
+                <button type="button" class="btn-close ct_close_modal" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body p-0">
+                <div>
+                    <h1 class="modal-title ct_fs_28 ct_ff_Matter_SemiBold mb-2" id="exampleModalLabel">
+                        Delete Phase
+                    </h1>
+                    <!-- <p class="mb-0 ct_fs_18 ct_text_clr_4B5563 ct_text_op_08">
+                        Are you sure you want to delete this phase?
+                    </p> -->
+                    @if(isTaskExists){
+                    <p class="mb-0 ct_fs_18 ct_text_clr_4B5563 ct_text_op_08">
+                        Before deleting this phase, please assign another phase to the related task.
+                    </p>
+                    } @else {
+                    <p class="mb-0 ct_fs_18 ct_text_clr_4B5563 ct_text_op_08">
+                        Are you sure you want to delete this phase?
+                    </p>
+                    }
+                </div>
+
+                @if(isTaskExists){
+                <div class="ct_w_100_767 mt-4">
+                    <select class="form-control ct_input" [(ngModel)]="selectedPhaseId">
+                        <option value="" disabled>Select Phase</option>
+                        <option *ngFor="let agent of reassignPhasedList" [value]="agent.phase_id">
+                            {{ agent.phase_name }}
+                        </option>
+                    </select>
+                </div>
+                }
+
+                <div class="modal-footer border-0 p-0 ct_mt_30 justify-content-start">
+                    <button #closeModalDelete type="button" class="ct_outline_btn ct_ff_Matter_Medium"
+                        data-bs-dismiss="modal">
+                        No
+                    </button>
+                    <button (click)="deleteTeam()" type="button" class="ct_purple_btn ct_ff_Matter_Medium">
+                        Yes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-subscription-modal></app-subscription-modal>
+
+<div class="ct_loader_main" *ngIf="loading">
+    <div class="loader-con">
+        <div style="--i: 0;" class="pfile"></div>
+        <div style="--i: 1;" class="pfile"></div>
+        <div class="pfile" style="--i: 2;"></div>
+        <div class="pfile" style="--i: 3;"></div>
+        <div class="pfile" style="--i: 4;"></div>
+        <div class="pfile" style="--i: 5;"></div>
+    </div>
+</div>

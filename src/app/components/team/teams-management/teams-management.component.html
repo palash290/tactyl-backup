@@ -1,0 +1,396 @@
+<div class="ct_inner_header_bg ct_mt_30 ct_px_30 ct_d_align_center justify-content-between gap-3 ct_flex_col_575">
+    <div>
+        <h4 class="ct_fs_35 mb-2 ct_ff_Matter_Medium">Teams</h4>
+        <p class="mb-0 ct_text_929292 ct_fs_18">
+            View and organize all teams under your workspace.
+        </p>
+    </div>
+    <!-- @if(userType == 'team'){ -->
+    <!-- <button class="ct_purple_btn ct_w_100_575" (click)="openModal()">
+        <img src="/img/plus-circle.svg" alt="" class="me-2" />Create Team
+    </button> -->
+    <!-- } -->
+    @if(planService.needsGoldUpgrade()){
+    <button class="ct_purple_btn ct_w_100_575" (click)="openSubs()">
+        <img src="/img/plus-circle.svg" alt="" class="me-2" />Create Team
+    </button>
+    } @else {
+    <button class="ct_purple_btn ct_w_100_575" (click)="openModal()">
+        <img src="/img/plus-circle.svg" alt="" class="me-2" />Create Team
+    </button>
+    }
+
+</div>
+<div class="ct_px_30 ct_mt_30 pb-4">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="ct_search_box_bg ct_flex_col_575">
+                    <div class="form-group ct_search_input position-relative ct_flex_1 ct_w_100_575">
+                        <input type="text" class="form-control ct_input ct_input_ps_50 ct_h_48"
+                            placeholder="Search teams by name..." [(ngModel)]="searchTeamText" (input)="filterTeamList()"
+                            [ngModelOptions]="{standalone: true}" />
+                        <img src="/img/search_icon.svg" class="ct_input_icon_left" />
+                    </div>
+                    <div class="ct_w_100_575">
+                        <select class="form-control ct_input ct_grey_select" [(ngModel)]="sortOrder"
+                            (change)="filterTeamList()" [ngModelOptions]="{standalone: true}">
+                            <option value="latest">Latest</option>
+                            <option value="oldest">Oldest</option>
+                        </select>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row ct_mt_10">
+            <div class="col-xl-6 ct_mb_20"
+                *ngFor="let item of filteredTeamData | paginate: { itemsPerPage: 10, currentPage: p }">
+                <div class="ct_team_card d-grid pb-5    ">
+                    <div>
+                        <div class="ct_team_header_bg">
+                            <h4 class="ct_fs_20 ct_text_clr_f9f9f9 ct_mb_10 ct_ff_Matter_SemiBold">
+                                {{item.team_name}}
+                            </h4>
+                            <p class="ct_fs_14 ct_text_clr_f9f9f9 ct_ff_Matter_Medium mb-0">
+                                {{ item.team_users?.length }} {{ item.team_users?.length > 1 ? 'Members' : 'Member' }}
+                            </p>
+                        </div>
+                        <div class="ct_team_card_body">
+                            <div
+                                class="d-flex align-items-center justify-content-between gap-xxl-5 gap-4 ct_flex_col_1199">
+                                <div class="ct_flex_1 ct_w_100_1199">
+                                    <h5 class="ct_fs_18 ct_ff_Matter_SemiBold mb-2">{{item.progress}}%</h5>
+                                    <!-- <div class="progress ct_progress_bar">
+                                        <div class="progress-bar" role="progressbar" style="width: 0%"
+                                            aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div> -->
+                                    <div class="progress ct_progress_bar">
+                                        <div class="progress-bar" role="progressbar" [style.width.%]="item.progress"
+                                            [attr.aria-valuenow]="item.progress" aria-valuemin="0" aria-valuemax="100">
+                                        </div>
+                                    </div>
+
+                                    <p class="mb-0 ct_fs_14 ct_text_clr_787885 mt-1">Progress</p>
+                                </div>
+                                <div
+                                    class="d-flex align-items-center gap-xxl-5 gap-4 ct_w_100_1199 justify-content-between">
+                                    <div class="text-center">
+                                        <span class=" ct_custom_badge ct_fs_18 ct_ff_Matter_SemiBold"
+                                            style="background-color: #F1F2FF;">{{item.total_tasks}}</span>
+                                        <p class="mb-0 ct_text_787885 ct_fs_14 mt-2">Total Tasks</p>
+                                    </div>
+                                    <div class="text-center">
+                                        <span class=" ct_custom_badge ct_fs_18 ct_ff_Matter_SemiBold"
+                                            style="background-color: #7EFFA1;">{{item.completed_tasks}}</span>
+                                        <p class="mb-0 ct_text_787885 ct_fs_14 mt-2">Completed Tasks</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ct_mt_20">
+                                <h4 class="ct_fs_18 ct_ff_Matter_Medium ct_mb_15">Members</h4>
+                                <ul class="ct_grid_2 ct_grid_3_1199"
+                                    *ngIf="item.team_users?.length > 0; else noMembers">
+                                    <li class="mb-2" *ngFor="let member of item.team_users">
+                                        <div class="ct_Members_info_sort gap-2 ct_d_align_center">
+                                            <img [src]="member.profile_image ? member.profile_image : '/img/no_pro.png'"
+                                                alt="" class="ct_img_42 ct_flex_shrink_0">
+                                            <div>
+                                                <h5 class="ct_fs_16 mb-0 ct_ff_Matter_Medium ct_overlay_text"
+                                                    style="width: 140px;">
+                                                    {{member?.full_name}}
+                                                </h5>
+                                                <p class="ct_fs_12 ct_text_787885 mb-0 ct_overlay_text"
+                                                    style="width: 140px;">
+                                                    {{member?.designation}}</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <ng-template #noMembers>
+                                    <p class="text-center ct_text_787885 ct_fs_14 mb-0">No members</p>
+                                </ng-template>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" text-center mt-auto">
+                        
+                        <!-- @if(userType == 'team'){
+                        <a [routerLink]="['/team/team-overview']"
+                            [queryParams]="{ teamId: item.id, teamName: item.team_name }"
+                            class="ct_purple_link ct_ff_Matter_Medium">View
+                            Details</a>
+                        } @else if (userType == 'invited') {
+                        <a [routerLink]="['/invited/team-overview']"
+                            [queryParams]="{ teamId: item.id, teamName: item.team_name }"
+                            class="ct_purple_link ct_ff_Matter_Medium">View
+                            Details</a>
+                        } -->
+
+                        @if(planService.needsGoldUpgrade()){
+                        <a [routerLink]="['/individual/team-overview']"
+                            [queryParams]="{ teamId: item.team_id, teamName: item.team_name, is_admin: item.is_admin }"
+                            class="ct_purple_link ct_ff_Matter_Medium">View
+                            Details</a>
+                        } @else {
+                        <a [routerLink]="['/team/team-overview']"
+                            [queryParams]="{ teamId: item.team_id, teamName: item.team_name, is_admin: item.is_admin }"
+                            class="ct_purple_link ct_ff_Matter_Medium">View
+                            Details</a>
+                        }
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="ct_no_recod_found_bg" *ngIf="filteredTeamData.length == 0">
+                    <p class="text-center mb-0 ct_fs_20">No teams found</p>
+                </div>
+            </div>
+        </div>
+        <!-- (pageChange)="onPageChange($event)" -->
+        <pagination-controls class="ct_pagination_div" *ngIf="!(filteredTeamData?.length == 0)"
+            (pageChange)="p = $event"></pagination-controls>
+    </div>
+</div>
+
+
+
+
+
+<!-- Create Team Modal S -->
+<div class="modal fade ct_custom_modal modal-lg" id="ct_create_team_modal" tabindex="-1"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header p-0 border-0">
+                <div class="d-flex align-items-center gap-2">
+                    <img src="/img/modal_star.png" alt="" class="ct_flex_shrink_0">
+                    <div>
+                        <h1 class="modal-title ct_fs_20 ct_ff_Matter_SemiBold mb-0" id="exampleModalLabel">Create Team
+                        </h1>
+                        <p class="mb-0 ct_fs_14 ct_text_clr_4B5563 ct_text_op_08">Update your team details and keep your
+                            progress on track.</p>
+                    </div>
+                </div>
+                <button type="button" class="btn-close ct_close_modal" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body p-0 ct_mt_20">
+                <form action="" class=" ">
+                    <div class="form-group ct_mb_22">
+                        <label class="ct_fs_18 ct_ff_Matter_Medium mb-2">Team Name</label>
+                        <input type="text" class="form-control ct_input" placeholder="Team name" [(ngModel)]="teamName"
+                            name="teamName" />
+                    </div>
+                    <div class="form-group ct_mb_22">
+                        <div>
+                            <label class="ct_fs_18 ct_ff_Matter_Medium mb-1">Members</label>
+                            <p class="ct_fs_16 ct_text_787885">Invite and manage team members and their roles.</p>
+                        </div>
+                        <!-- <div class="ct_add_member_border" data-bs-target="#ct_invite_team_modal" data-bs-toggle="modal">
+                            <p class="text-center ct_text_787885 mb-0"><img src="/img/add_member_icon.svg" alt=""
+                                    class="me-2">Add Members from Directory</p>
+                        </div> -->
+                    </div>
+                    <div class="modal-body p-0 ct_mt_20">
+                        <form action="">
+                            <div class="form-group ct_mb_22">
+                                <div class="position-relative">
+                                    <input type="search" class="form-control ct_input  ct_input_pe_100"
+                                        placeholder="Search here..." [(ngModel)]="searchText" (input)="filterTable()"
+                                        [ngModelOptions]="{standalone: true}">
+                                    <button class="ct_show_eye ct_purple_btn ct_h_40 px-3" style="right: 16px;">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-group ct_mb_22">
+                                <div class="ct_para_scroll ct_custom_scroll" style="max-height: 400px;">
+                                    <div class="ct_Members_info_sort gap-2 ct_d_align_center ct_mb_15 ct_light_grey_bg"
+                                        *ngFor="let item of filteredData">
+
+                                        <div class="form-check ct_custom_check2">
+                                            <input type="checkbox" (change)="toggleMember(item.user_id, $event)"
+                                                class="form-check-input" id="flexCheckDefault">
+                                        </div>
+                                        <img [src]="item.profile_image ? item.profile_image : '/img/no_pro.png'" alt=""
+                                            class="ct_img_42 ct_flex_shrink_0">
+                                        <div>
+                                            <h5 class="ct_fs_16 mb-0 ct_ff_Matter_Medium text-truncate">
+                                                {{item.full_name}}
+                                            </h5>
+                                            <p class="ct_fs_12 ct_text_787885 mb-0 text-truncate">
+                                                {{item.email}}</p>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="filteredData.length == 0">
+                                        <span class="text-center">No members found</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="ct_white_bg ct_border_radius_10 ct_border_clr_D2D5DB ct_py_28_px_20 mt-4">
+                        <div>
+                            <ul
+                                class="d-flex align-items-center gap-3 flex-wrap  ct_para_scroll ct_custom_scroll ct_pe_30">
+                                @for (item of selectedDrEmail; track
+                                $index) {
+                                <li>
+                                    <button type="button" class="ct_select_badge">{{item}}
+                                        <span (click)="removeDrEmail($index)"><i
+                                                class="fa-solid fa-xmark"></i></span></button>
+                                </li>
+                                }
+                            </ul>
+                            <div class="form-group ct_mb_22">
+                                <div class="position-relative">
+                                    <input type="email" class="form-control ct_input ct_input_ps_50 ct_input_pe_100"
+                                        placeholder="Invite new member via email" #drEmail>
+                                    <img src="/img/email_icon.svg" class="ct_input_icon_left" style="left: 16px;">
+                                    <button type="button" class="ct_show_eye ct_purple_btn ct_h_40 px-3"
+                                        style="right: 16px;" (click)="addDrEmail(drEmail.value)">
+                                        Add
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="modal-footer border-0 p-0 ct_mt_44">
+                    <button type="button" class="ct_outline_btn ct_ff_Matter_Medium" data-bs-dismiss="modal"
+                        #closeBtn>Close</button>
+                    <button (click)="submitForm()" type="button" class="ct_purple_btn ct_ff_Matter_Medium">Create
+                        Team</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Create Team Modal E -->
+
+
+<!-- invite Team Modal S -->
+<div class="modal fade ct_custom_modal modal-lg" id="ct_invite_team_modal" tabindex="-1"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header p-0 border-0">
+                <div class="d-flex align-items-center gap-2">
+                    <img src="/img/modal_star.png" alt="" class="ct_flex_shrink_0">
+                    <div>
+                        <h1 class="modal-title ct_fs_20 ct_ff_Matter_SemiBold mb-0" id="exampleModalLabel">Invite Team
+                        </h1>
+                    </div>
+                </div>
+                <button type="button" class="btn-close ct_close_modal" data-bs-dismiss="modal" aria-label="Close"
+                    (click)="openModal()">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body p-0 ct_mt_20">
+                <form action="">
+                    <div class="form-group ct_mb_22">
+                        <div class="position-relative">
+                            <input type="search" class="form-control ct_input  ct_input_pe_100"
+                                placeholder="Search here...">
+                            <button class="ct_show_eye ct_purple_btn ct_h_40 px-3" style="right: 16px;">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group ct_mb_22">
+                        <div class="ct_para_scroll ct_custom_scroll" style="max-height: 400px;">
+                            <div class="ct_Members_info_sort gap-2 ct_d_align_center ct_mb_15 ct_light_grey_bg">
+                                <img src="/img/user_2.png" alt="" class="ct_img_42 ct_flex_shrink_0">
+                                <div>
+                                    <h5 class="ct_fs_16 mb-0 ct_ff_Matter_Medium text-truncate"
+                                        style="max-width: 100px;">John Smith</h5>
+                                    <p class="ct_fs_12 ct_text_787885 mb-0 text-truncate" style="max-width: 120px;">
+                                        Johnsmithexample.com</p>
+                                </div>
+                                <div class="ms-auto">
+                                    <button class="ct_purple_btn">Send Invite</button>
+                                </div>
+                            </div>
+                            <div class="ct_Members_info_sort gap-2 ct_d_align_center ct_mb_15 ct_light_grey_bg">
+                                <img src="/img/user_2.png" alt="" class="ct_img_42 ct_flex_shrink_0">
+                                <div>
+                                    <h5 class="ct_fs_16 mb-0 ct_ff_Matter_Medium text-truncate"
+                                        style="max-width: 100px;">Wade Warren</h5>
+                                    <p class="ct_fs_12 ct_text_787885 mb-0 text-truncate" style="max-width: 120px;">
+                                        wadewarrenexample.com</p>
+                                </div>
+                                <div class="ms-auto">
+                                    <div class="ms-auto">
+                                        <button class="ct_purple_btn">Send Invite</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ct_Members_info_sort gap-2 ct_d_align_center ct_mb_15 ct_light_grey_bg">
+                                <img src="/img/user_2.png" alt="" class="ct_img_42 ct_flex_shrink_0">
+                                <div>
+                                    <h5 class="ct_fs_16 mb-0 ct_ff_Matter_Medium text-truncate"
+                                        style="max-width: 100px;">Wade Warren</h5>
+                                    <p class="ct_fs_12 ct_text_787885 mb-0 text-truncate" style="max-width: 120px;">
+                                        wadewarrenexample.com</p>
+                                </div>
+                                <div class="ms-auto">
+                                    <div class="ms-auto">
+                                        <button class="ct_purple_btn">Send Invite</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ct_Members_info_sort gap-2 ct_d_align_center ct_mb_15 ct_light_grey_bg">
+                                <img src="/img/user_2.png" alt="" class="ct_img_42 ct_flex_shrink_0">
+                                <div>
+                                    <h5 class="ct_fs_16 mb-0 ct_ff_Matter_Medium text-truncate"
+                                        style="max-width: 100px;">Wade Warren</h5>
+                                    <p class="ct_fs_12 ct_text_787885 mb-0 text-truncate" style="max-width: 120px;">
+                                        wadewarrenexample.com</p>
+                                </div>
+                                <div class="ms-auto">
+                                    <div class="ms-auto">
+                                        <button class="ct_purple_btn">Send Invite</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ct_Members_info_sort gap-2 ct_d_align_center ct_mb_15 ct_light_grey_bg">
+                                <img src="/img/user_2.png" alt="" class="ct_img_42 ct_flex_shrink_0">
+                                <div>
+                                    <h5 class="ct_fs_16 mb-0 ct_ff_Matter_Medium text-truncate"
+                                        style="max-width: 100px;">Wade Warren</h5>
+                                    <p class="ct_fs_12 ct_text_787885 mb-0 text-truncate" style="max-width: 120px;">
+                                        wadewarrenexample.com</p>
+                                </div>
+                                <div class="ms-auto">
+                                    <div class="ms-auto">
+                                        <button class="ct_purple_btn">Send Invite</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<app-subscription-modal></app-subscription-modal>
+
+
+<div class="ct_loader_main" *ngIf="loading">
+    <div class="loader-con">
+        <div style="--i: 0;" class="pfile"></div>
+        <div style="--i: 1;" class="pfile"></div>
+        <div class="pfile" style="--i: 2;"></div>
+        <div class="pfile" style="--i: 3;"></div>
+        <div class="pfile" style="--i: 4;"></div>
+        <div class="pfile" style="--i: 5;"></div>
+    </div>
+</div>

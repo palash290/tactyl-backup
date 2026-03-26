@@ -1,0 +1,97 @@
+<div class="ct_inner_header_bg ct_mt_30 ct_px_30 ct_d_align_center justify-content-between gap-3  mb-4">
+    <div class="d-flex align-items-center justify-content-between gap-3">
+        <h4 class="ct_fs_35 mb-0 ct_ff_Matter_Medium d-flex align-items-center gap-2"><a (click)="backClicked()"
+                class="ct_back_icon me-1"><i class="fa-solid fa-chevron-left"></i></a>Team Member Details</h4>
+    </div>
+</div>
+<div class=" ct_mt_30 ct_px_30 pb-4">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="ct_team_detail_white">
+                    <div class="d-flex align-items-center gap-3 ct_flex_col_575">
+                        <img [src]="allMembers?.profile_image ? allMembers?.profile_image : '/img/no_pro.png'"
+                            class="ct_img_w_88" />
+                        <div>
+                            <h5 class="ct_fs_24 ct_ff_Matter_SemiBold">{{allMembers?.full_name}}</h5>
+                            <ul>
+                                <li>Team Member</li>
+                                <li>{{allMembers?.designation ? allMembers?.designation : '-'}}</li>
+                                <li>{{allMembers?.email}}</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="ct_team_detail_white ct_mt_30">
+                    <h4 class="ct_fs_26 ct_ff_Matter_SemiBold ct_mb_20">Tasks Assigned</h4>
+                    <div class=" table-responsive">
+                        <table class="table ct_custom_table_2">
+                            <thead>
+                                <tr>
+                                    <th>S.No</th>
+                                    <th>Task Title</th>
+                                    <!-- <th>Team</th> -->
+                                    <th>Priority</th>
+                                    <th>Phase</th>
+                                    <th>Created At</th>
+                                    <th>Created By</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of allMembers?.tasks; let i = index">
+                                    <td>{{i+1}}</td>
+                                    <td>
+                                        <span class="ct_overlay_text d-inline-block">{{item.title}}</span>
+                                    </td>
+                                    <!-- <td>{{item.team_name}}</td> -->
+                                    <td>
+                                        @if(item.priority == 'P1'){
+                                        <span class="ct_custom_badge ct_ff_Matter_Medium ct_fs_16 ct_border_radius_20"
+                                            style="background-color: #FEE2E2; color: #991B1B;">P1</span>
+                                        }
+
+
+                                        @if(item.priority == 'P2'){
+                                        <span class="ct_custom_badge ct_ff_Matter_Medium ct_fs_16 ct_border_radius_20"
+                                            style="background-color: #FFEDD5; color: #9A3412;">P2</span>
+                                        }
+
+
+                                        @if(item.priority == 'P3'){
+                                        <span class="ct_custom_badge ct_ff_Matter_Medium ct_fs_16 ct_border_radius_20"
+                                            style="background-color: #DCFCE7; color: #166534;">P3</span>
+                                        }
+
+                                        @if(item.priority == 'P4'){
+                                        <span class="ct_custom_badge ct_ff_Matter_Medium ct_fs_16 ct_border_radius_20"
+                                            style="background-color: #2222220A; color: #222222;">P4</span>
+                                        }
+                                    </td>
+                                    <td>{{item.phase_details.phase_name}}</td>
+                                    <td>{{item.created_at | date:'dd-MMM-yyyy'}}</td>
+                                    <td>
+                                        <!-- <div class="d-flex align-items-center gap-2">
+                                            <img src="/img/user_4.png" class="ct_img_w_24">
+                                            <p class="mb-0 ct_fs_16 ct_text_374151">Sarah</p>
+                                        </div> -->
+                                        <div class="d-flex align-items-center gap-2">
+                                            <img [src]="item.assigned_by.profile_image ? item.assigned_by.profile_image : '/img/np_pro.png'"
+                                                class="ct_img_w_24">
+                                            <p class="mb-0 ct_fs_16 ct_text_374151">{{item.assigned_by.full_name}}</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="col-md-12">
+                            <div class="ct_no_recod_found_bg" *ngIf="allMembers?.tasks?.length == 0">
+                                <p class="text-center mb-0 ct_fs_20">No tasks found</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

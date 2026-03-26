@@ -1,0 +1,122 @@
+<div class="ct_pricing_main_bg">
+  <div class="ct_pricing_header">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-12">
+          <div class="ct_pricing_header_row">
+            <img src="img/logo.svg" alt="Company Logo">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- @if(showBackButton()){ -->
+  <div class="ct_pricing_back_row">
+    <a class="ct_back_btn ct_back_btn_body" (click)="goBack()" aria-label="Go back">
+      <span class="ct_back_icon">
+        <i class="fa-solid fa-arrow-left"></i>
+      </span>
+      <span>Back</span>
+    </a>
+  </div>
+  <!-- } -->
+
+  <div class="ct_pricing_body">
+    <div class="ct_pricing_intro">
+      <span class="ct_pricing_kicker">Pricing Plans</span>
+      <h1>Choose a plan that fits your work</h1>
+    </div>
+
+    @if(activePlan || upcomingPlan){
+    <div class="ct_plan_timeline" [ngClass]="{ 'ct_plan_timeline_single': activePlan && !upcomingPlan }">
+      @if(activePlan){
+      <div class="ct_plan_timeline_card">
+        <p class="ct_plan_timeline_label">Current Plan</p>
+        <h3 class="ct_plan_timeline_title">{{activePlan.plan_name}}</h3>
+        <p class="ct_plan_timeline_meta">
+          Ends on {{formatPlanDate(activePlan.end_time)}}
+        </p>
+      </div>
+      }
+      @if(upcomingPlan){
+      <div class="ct_plan_timeline_card ct_plan_timeline_upcoming">
+        <p class="ct_plan_timeline_label">Upcoming Plan</p>
+        <h3 class="ct_plan_timeline_title">{{upcomingPlan.plan_name}}</h3>
+        <p class="ct_plan_timeline_meta">
+          Starts on {{formatPlanDate(upcomingPlan.start_time)}}
+        </p>
+      </div>
+      }
+    </div>
+    }
+
+    @if(!upcomingPlan){
+    <div class="ct_pricing_grid" [ngClass]="{ 'ct_pricing_grid_single': visiblePlanCount === 1 }">
+
+      @if(canViewBronze()){
+      <div class="ct_plan_card">
+        <div class="ct_plan_header">
+          <span class="ct_plan_badge ct_badge_bronze">Bronze</span>
+          <span class="ct_plan_days">Individual</span>
+        </div>
+        <h2 class="ct_plan_price">$5.99<span>/month</span></h2>
+        <p class="ct_plan_desc">Perfect for solo professionals managing personal tasks and goals.</p>
+        <button (click)="purchasePlan('2')" class="ct_pricing_btn ct_pricing_btn_outline">
+          Choose Bronze
+        </button>
+        <ul class="ct_plan_list">
+          <li><i class="fa-solid fa-check ct_plan_check"></i>Personal task and phase management</li>
+          <li><i class="fa-solid fa-check ct_plan_check"></i>Tactyl Compass with action scores</li>
+          <li><i class="fa-solid fa-check ct_plan_check"></i>Private notes and personal boards</li>
+          <li><i class="fa-solid fa-check ct_plan_check"></i>Reports and exports (PDF / CSV)</li>
+          <li><i class="fa-solid fa-check ct_plan_check"></i>No team collaboration features</li>
+        </ul>
+      </div>
+      }
+
+      @if(canViewGold()){
+      <div class="ct_plan_card ct_plan_highlight">
+        <div class="ct_plan_header">
+          <span class="ct_plan_badge ct_badge_gold">Gold</span>
+          <span class="ct_plan_days">Team</span>
+        </div>
+        <div class="ct_plan_tag">Most Popular</div>
+        <h2 class="ct_plan_price">$14.99<span>/month</span></h2>
+        <p class="ct_plan_desc">Built for teams to collaborate, assign work, and track progress together.</p>
+        <button (click)="purchasePlan('4')" class="ct_pricing_btn">
+          Choose Gold
+        </button>
+        <ul class="ct_plan_list">
+          <li><i class="fa-solid fa-check ct_plan_check"></i>Everything in Bronze</li>
+          <li><i class="fa-solid fa-check ct_plan_check"></i>Team workspaces with permissions</li>
+          <li><i class="fa-solid fa-check ct_plan_check"></i>Task assignment and member tracking</li>
+          <li><i class="fa-solid fa-check ct_plan_check"></i>Boards, notes, and reporting</li>
+          <li><i class="fa-solid fa-check ct_plan_check"></i>Unified team and personal dashboard</li>
+        </ul>
+      </div>
+      }
+    </div>
+    }
+
+    @if(hasRestrictedView()){
+    <div class="ct_pricing_continue">
+      <button (click)="continueWithoutPlan()" class="ct_pricing_btn ct_pricing_btn_outline">
+        Continue without any plan
+      </button>
+      <p class="ct_plan_note">You will only have view access based on your last plan.</p>
+    </div>
+    }
+  </div>
+</div>
+
+<div class="ct_loader_main" *ngIf="loading">
+  <div class="loader-con">
+    <div style="--i: 0;" class="pfile"></div>
+    <div style="--i: 1;" class="pfile"></div>
+    <div class="pfile" style="--i: 2;"></div>
+    <div class="pfile" style="--i: 3;"></div>
+    <div class="pfile" style="--i: 4;"></div>
+    <div class="pfile" style="--i: 5;"></div>
+  </div>
+</div>

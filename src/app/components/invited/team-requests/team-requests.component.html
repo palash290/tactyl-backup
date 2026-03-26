@@ -1,0 +1,134 @@
+<div class="ct_inner_header_bg ct_mt_30 ct_px_30 ct_d_align_center justify-content-between gap-3 ct_flex_col_575">
+    <div>
+        <h4 class="ct_fs_35 mb-0 ct_ff_Matter_Medium">Team Requests</h4>
+    </div>
+</div>
+<div class="ct_px_30 ct_mt_30 pb-4">
+    <div class="container-fluid">
+        <div class="row ">
+            <div class="col-md-12">
+                <div *ngFor="let item of allRequests">
+                    <!-- when button will be signle then hide this class ct_flex_col_575 -->
+                    <div [ngClass]="{ 'ct_flex_col_575': item.is_team_member == 0 }"
+                        class="ct_Members_info_sort ct_light_blue_bg ct_py_26_px_38 gap-3 ct_d_align_center ct_mb_18 ct_light_grey_bg">
+                        <div>
+                            <h5 class="ct_fs_18 mb-1 ct_ff_Matter_Medium ">{{item.team_name}}</h5>
+                            @if(item.team_owner_name){
+                            <p class="mb-0 ct_fs_14 ct_text_787885">Team Admin: {{item.team_owner_name}}</p>
+                            }
+                            <!-- <p class="ct_fs_12 ct_text_787885 mb-0 ">testgmail.com</p> -->
+                            <div class="ct_d_align_center gap-2 ct_mt_15 ">
+                                <img src="/img/calander_icon.svg">
+                                <p class="mb-0 ct_text_clr_6E6F76 ct_white_nowrap">{{item.created_at |
+                                    date:'dd-MMM-yyyy'}}</p>
+                            </div>
+                        </div>
+                        @if(item.status == 'Pending'){
+                        <div class="d-flex gap-3 ms-auto ct_flex_col_575 ct_w_100_575">
+                            <a class="ct_outline_btn ct_outline_btn_purple ct_w_100_575 ct_h_40 px-3 ct_ff_Matter_Medium"
+                                (click)="getId(item.team_user_id)" data-bs-target="#ct_accept_modal"
+                                data-bs-toggle="modal">
+                                Accept
+                            </a>
+
+                            <a class="ct_outline_btn ct_outline_btn_purple ct_w_100_575  ct_h_40 px-3 ct_ff_Matter_Medium"
+                                (click)="getId(item.team_user_id)" data-bs-target="#ct_reject_modal"
+                                data-bs-toggle="modal">
+                                Reject
+                            </a>
+                        </div>
+                        } @else {
+                        @if(item.status == 'Accepted'){
+                        <span class="ct_status_badge ms-auto ct_status_accepted ">Accepted</span>
+                        } @else if(item.status == 'Rejected') {
+                        <span class="ct_status_badge ms-auto ct_status_rejected ">Rejected</span>
+                        }
+                        }
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="ct_no_recod_found_bg" *ngIf="allRequests?.length == 0 || erroeMsg">
+                        <p class="text-center mb-0 ct_fs_20">{{erroeMsg || 'No requests found'}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Accept  Modal S -->
+<div class="modal fade ct_custom_modal" id="ct_accept_modal" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header p-0 border-0">
+                <button type="button" class="btn-close ct_close_modal" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body p-0">
+                <div>
+                    <h1 class="modal-title ct_fs_28 ct_ff_Matter_SemiBold mb-2" id="exampleModalLabel">
+                        Accept Invitation
+                    </h1>
+                    <p class="mb-0 ct_fs_18 ct_text_clr_4B5563 ct_text_op_08">
+                        Are you sure you want to accept this invitation?
+                    </p>
+                </div>
+                <div class="modal-footer border-0 p-0 ct_mt_30 justify-content-start">
+                    <button #closeModalAccept type="button" class="ct_outline_btn ct_ff_Matter_Medium"
+                        data-bs-dismiss="modal">
+                        No
+                    </button>
+                    <button (click)="accept()" type="button" class="ct_purple_btn ct_ff_Matter_Medium">
+                        Yes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Reject  Modal S -->
+<div class="modal fade ct_custom_modal" id="ct_reject_modal" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header p-0 border-0">
+                <button type="button" class="btn-close ct_close_modal" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body p-0">
+                <div>
+                    <h1 class="modal-title ct_fs_28 ct_ff_Matter_SemiBold mb-2" id="exampleModalLabel">
+                        Reject Invitation
+                    </h1>
+                    <p class="mb-0 ct_fs_18 ct_text_clr_4B5563 ct_text_op_08">
+                        Are you sure you want to reject this invitation?
+                    </p>
+                </div>
+                <div class="modal-footer border-0 p-0 ct_mt_30 justify-content-start">
+                    <button #closeModalReject type="button" class="ct_outline_btn ct_ff_Matter_Medium"
+                        data-bs-dismiss="modal">
+                        No
+                    </button>
+                    <button (click)="reject()" type="button" class="ct_purple_btn ct_ff_Matter_Medium">
+                        Yes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="ct_loader_main" *ngIf="loading">
+    <div class="loader-con">
+        <div style="--i: 0;" class="pfile"></div>
+        <div style="--i: 1;" class="pfile"></div>
+        <div class="pfile" style="--i: 2;"></div>
+        <div class="pfile" style="--i: 3;"></div>
+        <div class="pfile" style="--i: 4;"></div>
+        <div class="pfile" style="--i: 5;"></div>
+    </div>
+</div>

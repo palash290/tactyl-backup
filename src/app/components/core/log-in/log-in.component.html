@@ -1,0 +1,82 @@
+<section class="ct_login_main">
+      <div class="ct_login_left_content">
+            <div>
+                  <div class="ct_login_logo ct_mb_35 ct_cursor_pointer">
+                        <img routerLink="/" src="img/logo.svg" alt="">
+                  </div>
+                  <div class="text-center mx-auto ct_login_title" style="max-width: 373px;">
+                        <h4 class="ct_fs_44 ct_text_clr_f9f9f9 ct_mb_20 ct_ff_Matter_Light">One Login, Everything in Flow
+                        </h4>
+                        <p class="ct_text_clr_f9f9f9 ct_fs_18 mb-0">Everything you need to plan, prioritize, and execute – your way.</p>
+                  </div>
+            </div>
+            <div class="ct_login_bottom_img mt-auto">
+                  <img src="img/login_bottom_img.png" alt="">
+            </div>
+      </div>
+      <div class="ct_login_right_content">
+            <div class="text-center ct_mb_30 ct_pe_90  ">
+                  <h2 class="ct_fs_35 ct_mb_10 ct_ff_Matter_Medium">Welcome back to Tactyl</h2>
+                  <p class="ct_text_clr_5E6168 mb-0 ct_fs_20 mx-auto">Log in to manage your projects and stay on track.
+                  </p>
+            </div>
+            <form [formGroup]="Form" class="  w-100 ">
+                  <div class="ct_login_scroll ct_pe_90 ct_custom_scroll">
+                        <div class="form-group ct_mb_15">
+                              <label for="" class="ct_fs_18 ct_mb_10">Email</label>
+                              <div class="position-relative">
+                                    <img src="img/user_icon.svg" alt="" class="ct_input_icon_left">
+                                    <input type="text" class="form-control  ct_input ct_input_ps_50 ct_input_pe_40"
+                                          placeholder="Enter email address" formControlName="email">
+                              </div>
+                              <div *ngIf="Form.controls['email'].invalid && Form.controls['email'].touched"
+                                    class="err_msg">
+                                    <div *ngIf="Form.controls['email'].errors?.['required']" class="ct_fs_14 mt-1">
+                                          Email is required.
+                                    </div>
+                                    <div *ngIf="Form.controls['email'].errors?.['email'] && !Form.controls['email'].errors?.['required']"
+                                          class="ct_fs_14 mt-1">
+                                          Invalid email format.</div>
+                              </div>
+                        </div>
+                        <div class="form-group ct_mb_15">
+                              <label for="" class="ct_fs_18 ct_mb_10">Password</label>
+                              <div class="position-relative">
+                                    <img src="img/circum_lock.svg" alt="" class="ct_input_icon_left">
+                                    <input type="{{ isPasswordVisible ? 'text' : 'password' }}"
+                                          class="form-control  ct_input ct_input_ps_50 ct_input_pe_50 "
+                                          placeholder="Enter password" formControlName="password">
+                                    <i class="fa-regular ct_show_eye"
+                                          [ngClass]="isPasswordVisible ? 'fa-eye' : 'fa-eye-slash' "
+                                          (click)="togglePasswordVisibility()"></i>
+                              </div>
+                              <div *ngIf="Form.controls['password'].invalid && Form.controls['password'].touched"
+                                    class="err_msg">
+                                    <div *ngIf="Form.controls['password'].errors?.['required']" class="ct_fs_14 mt-1">
+                                          Password is
+                                          required.</div>
+                              </div>
+                        </div>
+                  </div>
+                  <div class="text-end ct_pe_90">
+                        <a routerLink="/forgot-password" class="ct_text_purple ct_fw_600">Forgot Password?</a>
+                  </div>
+                  <div class="ct_mt_35 ct_pe_90" (click)="login()">
+                        <a class="ct_2d_purple_btn w-100">Sign In</a>
+                  </div>
+                  <p class="mb-0 text-center ct_fs_14 ct_mt_15 ct_pe_90">Don’t have an account? <a
+                              routerLink="/single-signup" class="ct_text_purple ct_fw_600">Sign Up</a></p>
+            </form>
+      </div>
+</section>
+
+<div class="ct_loader_main" *ngIf="loading">
+      <div class="loader-con">
+            <div style="--i: 0;" class="pfile"></div>
+            <div style="--i: 1;" class="pfile"></div>
+            <div class="pfile" style="--i: 2;"></div>
+            <div class="pfile" style="--i: 3;"></div>
+            <div class="pfile" style="--i: 4;"></div>
+            <div class="pfile" style="--i: 5;"></div>
+      </div>
+</div>

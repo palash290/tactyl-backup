@@ -1,0 +1,781 @@
+<div class="ct_inner_header_bg ct_mt_30 ct_px_30 ct_d_align_center justify-content-between gap-3 ct_flex_col_575">
+    <div>
+        <h4 class="ct_fs_35 mb-2 ct_ff_Matter_Medium">Tactyl Compass</h4>
+        <p class="mb-0 ct_text_929292 ct_fs_18">
+            Track your productivity, progress, and weekly accomplishments.
+        </p>
+    </div>
+    <!-- <div class="ct_d_align_center gap-2">
+        <div class=" ct_d_align_center gap-2">
+            <p class="ct_fs_20 ct_ff_Matter_Medium ct_text_clr_4B5563 mb-0 ct_white_nowrap">Show Private Task</p>
+            <label class="toggle-switch">
+                <input type="checkbox">
+                <div class="toggle-switch-background">
+                    <div class="toggle-switch-handle"></div>
+                </div>
+            </label>
+        </div>
+        <div class="dropdown ct_right_dropdown">
+            <i class="fa-solid fa-ellipsis-vertical" id="dropdownMenuButton" id="dropdownMenuButton1"
+                data-bs-toggle="dropdown" aria-expanded="false"></i>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li>
+                    <a class="dropdown-item" >Export As CSV</a>
+                </li>
+            </ul>
+        </div>
+    </div> -->
+</div>
+<div class="ct_px_30 ct_mt_30 pb-4">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="ct_d_align_center justify-content-between gap-3 ct_flex_col_1199">
+                    <div class="ct_search_box_bg ct_flex_1 ct_w_100_1199 ct_flex_col_767">
+                        <div class="form-group ct_search_input position-relative ct_flex_1 ct_w_100_767">
+                            <input type="text" class="form-control ct_input ct_input_ps_50 ct_h_48"
+                                placeholder="Search..." [(ngModel)]="searchText" (input)="applyFilters()" />
+                            <img src="img/search_icon.svg" class="ct_input_icon_left" />
+                        </div>
+                        <!-- @if(userType == 'team'){ -->
+                        <div class="ct_w_100_767">
+                            <select class="form-control ct_input ct_grey_select" [(ngModel)]="selectedTeam"
+                                (change)="onTeamChange()">
+                                <option value="">All Teams</option>
+                                <option *ngFor="let team of teams" [value]="team.team_id">
+                                    {{ team.team_name }}
+                                </option>
+                            </select>
+                        </div>
+                        <!-- } -->
+
+                        <!-- @if(userType == 'team' || userType == 'individual'){ -->
+                        <div class="ct_w_100_767">
+                            <select class="form-control ct_input ct_grey_select" [(ngModel)]="selectedBoard"
+                                [disabled]="!selectedTeam" (change)="onBoardChange()">
+                                <option value="">All Boards</option>
+                                <option *ngFor="let board_name of boards" [value]="board_name.board_id">
+                                    {{ board_name.board_name }}
+                                </option>
+                            </select>
+                        </div>
+                        <!-- } -->
+
+                        <!-- @if(userType == 'individual'){ -->
+                        <div class="ct_w_100_767">
+                            <select class="form-control ct_input ct_grey_select" [(ngModel)]="selectedPhase"
+                                [disabled]="!selectedTeam || !selectedBoard" (change)="applyFilters()">
+                                <option value="">All Phases</option>
+                                <option *ngFor="let phase_name of phases" [value]="phase_name.phase_id">
+                                    {{ phase_name.phase_name }}
+                                </option>
+                            </select>
+                        </div>
+                        <!-- } -->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row ct_mt_30">
+            <!-- ================= DO NOW ================= -->
+            <div class="col-lg-6 mb-4">
+                <div class="ct_compase_card"
+                    style="box-shadow: 0 0 0 3px #ffe3e3; border-color: #EF4444; background-color: #FEF2F2;">
+                    <div class="ct_d_align_center justify-content-between gap-3">
+                        <span class="ct_custom_badge text-white ct_border_radius_20 px-3 py-2"
+                            style="background-color: #EF4444;">
+                            Do Now
+                        </span>
+                        <div>
+                            <p class="ct_fs_14 mb-0 ct_text_clr_6B7280">
+                                {{ doNow.length }} tasks
+                            </p>
+                            <p class="ct_fs_14 mb-0 ct_text_clr_6B7280">
+                                Est hrs: {{ getTotalHours(doNow) }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="ct_mt_40 ct_para_scroll">
+                        <div class="ct_compass_white_card mb-3" style="border-color: #FEE2E2;"
+                            *ngFor="let task of doNow">
+                            <div class="ct_d_align_center justify-content-between gap-3">
+                                <!-- @if(userType == 'team'){ -->
+                                <div class="ct_cursor_pointer" [routerLink]="['/team/task-details']"
+                                    [queryParams]="{ taskId: task.task_id, teamId: task.team_id, boardId: task.board_id }">
+                                    <h4 class="ct_fs_15 ct_ff_Matter_Medium ct_para_scroll ct_custom_scroll">
+                                        {{ task.title }}
+                                        @if(task.isNotesExists){
+                                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M8.83665 7.49999L12.4592 8.47049M8.2539 9.67349L10.4274 10.2555M15.2379 9.48524C14.7842 11.1765 14.5576 12.0225 14.0439 12.5707C13.6385 13.0036 13.1139 13.3066 12.5364 13.4415C12.4639 13.4585 12.3902 13.4715 12.3152 13.4805C11.6289 13.5652 10.7912 13.341 9.26715 12.933C7.5759 12.4792 6.7299 12.2527 6.18165 11.739C5.74865 11.3334 5.44563 10.8085 5.3109 10.2307C5.1399 9.49874 5.3664 8.65349 5.82015 6.96224L6.2079 5.51324L6.3909 4.83449C6.73215 3.58499 6.96165 2.89724 7.4019 2.427C7.80739 1.99439 8.33197 1.69165 8.9094 1.557C9.6414 1.386 10.4874 1.6125 12.1794 2.06625C13.8699 2.51925 14.7159 2.74574 15.2642 3.25874C15.6973 3.66454 16.0003 4.18968 16.1349 4.76774C16.2556 5.28524 16.1777 5.85974 15.9617 6.74999"
+                                                stroke="#128A50" stroke-width="1.125" stroke-linecap="round" />
+                                            <path
+                                                d="M2.45385 12.4855C2.90685 14.1767 3.1341 15.0227 3.64785 15.571C4.05324 16.0039 4.57783 16.3069 5.15535 16.4417C5.88735 16.612 6.73335 16.3855 8.42535 15.9325C10.1159 15.4795 10.9619 15.253 11.5101 14.7392C11.8788 14.3939 12.1543 13.961 12.3111 13.4807M6.38685 4.83398C6.12335 4.90248 5.8321 4.97998 5.5131 5.06648C3.82185 5.51948 2.97585 5.74598 2.4276 6.25898C1.99447 6.66478 1.69144 7.18992 1.55685 7.76798C1.4361 8.28548 1.5141 8.85998 1.7301 9.75023"
+                                                stroke="#128A50" stroke-width="1.125" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                        </svg>
+                                        }
+                                    </h4>
+                                    <div class="ct_d_align_center gap-2">
+                                        <img [src]="task.assigned_to.profile_image ? task.assigned_to.profile_image : 'img/no_pro.png'"
+                                            class="ct_img_w_24 ct_flex_shrink_0">
+                                        <p class="mb-0 ct_fs_14 ct_text_clr_4B5563">
+                                            {{ task.assigned_to.full_name }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- } @else if (userType == 'invited') {
+                                <div class="ct_cursor_pointer" [routerLink]="['/invited/task-details']"
+                                    [queryParams]="{ taskId: task.id }">
+                                    <h4 class="ct_fs_15 ct_ff_Matter_Medium ct_para_scroll ct_custom_scroll">
+                                        {{ task.title }}
+                                        @if(task.isNotesExists){
+                                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M8.83665 7.49999L12.4592 8.47049M8.2539 9.67349L10.4274 10.2555M15.2379 9.48524C14.7842 11.1765 14.5576 12.0225 14.0439 12.5707C13.6385 13.0036 13.1139 13.3066 12.5364 13.4415C12.4639 13.4585 12.3902 13.4715 12.3152 13.4805C11.6289 13.5652 10.7912 13.341 9.26715 12.933C7.5759 12.4792 6.7299 12.2527 6.18165 11.739C5.74865 11.3334 5.44563 10.8085 5.3109 10.2307C5.1399 9.49874 5.3664 8.65349 5.82015 6.96224L6.2079 5.51324L6.3909 4.83449C6.73215 3.58499 6.96165 2.89724 7.4019 2.427C7.80739 1.99439 8.33197 1.69165 8.9094 1.557C9.6414 1.386 10.4874 1.6125 12.1794 2.06625C13.8699 2.51925 14.7159 2.74574 15.2642 3.25874C15.6973 3.66454 16.0003 4.18968 16.1349 4.76774C16.2556 5.28524 16.1777 5.85974 15.9617 6.74999"
+                                                stroke="#128A50" stroke-width="1.125" stroke-linecap="round" />
+                                            <path
+                                                d="M2.45385 12.4855C2.90685 14.1767 3.1341 15.0227 3.64785 15.571C4.05324 16.0039 4.57783 16.3069 5.15535 16.4417C5.88735 16.612 6.73335 16.3855 8.42535 15.9325C10.1159 15.4795 10.9619 15.253 11.5101 14.7392C11.8788 14.3939 12.1543 13.961 12.3111 13.4807M6.38685 4.83398C6.12335 4.90248 5.8321 4.97998 5.5131 5.06648C3.82185 5.51948 2.97585 5.74598 2.4276 6.25898C1.99447 6.66478 1.69144 7.18992 1.55685 7.76798C1.4361 8.28548 1.5141 8.85998 1.7301 9.75023"
+                                                stroke="#128A50" stroke-width="1.125" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                        </svg>
+                                        }
+                                    </h4>
+
+                                    <div class="ct_d_align_center gap-2">
+                                        <img [src]="task.assignee_profile_image ? task.assignee_profile_image : 'img/no_pro.png'"
+                                            class="ct_img_w_24 ct_flex_shrink_0">
+                                        <p class="mb-0 ct_fs_14 ct_text_clr_4B5563">
+                                            {{ task.assignee_name }}
+                                        </p>
+                                    </div>
+                                </div>
+                                } @else if (userType == 'individual') {
+                                <div class="ct_cursor_pointer" [routerLink]="['/individual/task-details']"
+                                    [queryParams]="{ taskId: task.id }">
+                                    <h4 class="ct_fs_15 ct_ff_Matter_Medium ct_para_scroll ct_custom_scroll">
+                                        {{ task.title }}
+                                        @if(task.isNotesExists){
+                                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M8.83665 7.49999L12.4592 8.47049M8.2539 9.67349L10.4274 10.2555M15.2379 9.48524C14.7842 11.1765 14.5576 12.0225 14.0439 12.5707C13.6385 13.0036 13.1139 13.3066 12.5364 13.4415C12.4639 13.4585 12.3902 13.4715 12.3152 13.4805C11.6289 13.5652 10.7912 13.341 9.26715 12.933C7.5759 12.4792 6.7299 12.2527 6.18165 11.739C5.74865 11.3334 5.44563 10.8085 5.3109 10.2307C5.1399 9.49874 5.3664 8.65349 5.82015 6.96224L6.2079 5.51324L6.3909 4.83449C6.73215 3.58499 6.96165 2.89724 7.4019 2.427C7.80739 1.99439 8.33197 1.69165 8.9094 1.557C9.6414 1.386 10.4874 1.6125 12.1794 2.06625C13.8699 2.51925 14.7159 2.74574 15.2642 3.25874C15.6973 3.66454 16.0003 4.18968 16.1349 4.76774C16.2556 5.28524 16.1777 5.85974 15.9617 6.74999"
+                                                stroke="#128A50" stroke-width="1.125" stroke-linecap="round" />
+                                            <path
+                                                d="M2.45385 12.4855C2.90685 14.1767 3.1341 15.0227 3.64785 15.571C4.05324 16.0039 4.57783 16.3069 5.15535 16.4417C5.88735 16.612 6.73335 16.3855 8.42535 15.9325C10.1159 15.4795 10.9619 15.253 11.5101 14.7392C11.8788 14.3939 12.1543 13.961 12.3111 13.4807M6.38685 4.83398C6.12335 4.90248 5.8321 4.97998 5.5131 5.06648C3.82185 5.51948 2.97585 5.74598 2.4276 6.25898C1.99447 6.66478 1.69144 7.18992 1.55685 7.76798C1.4361 8.28548 1.5141 8.85998 1.7301 9.75023"
+                                                stroke="#128A50" stroke-width="1.125" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                        </svg>
+                                        }
+                                    </h4>
+                                    <div class="ct_d_align_center gap-2">
+                                        <img [src]="task.assigned_to.profile_image ? task.assigned_to.profile_image : 'img/no_pro.png'"
+                                            class="ct_img_w_24 ct_flex_shrink_0">
+                                        <p class="mb-0 ct_fs_14 ct_text_clr_4B5563">
+                                            {{ task.assigned_to.full_name }}
+                                        </p>
+                                    </div>
+                                </div>
+                                } -->
+                                <div class="text-end">
+                                    @if(task?.status?.toLowerCase() === 'completed'){
+                                    <div>
+                                        <span class="ct_outline_badge"
+                                            style="border-color: #008000; color: #008000;">Completed</span>
+                                    </div>
+                                    } @else if (planService.isGold() || planService.isTrialActive()) {
+                                    <span class="ct_outline_badge ct_cursor_pointer"
+                                        style="border-color: #008000; color: #008000;"
+                                        data-bs-target="#ct_complete_modal" data-bs-toggle="modal"
+                                        (click)="getTaskDet(task)">
+                                        Mark As Done
+                                    </span>
+                                    } @else if (!planService.currentPlan) {
+                                    <span class="ct_outline_badge ct_cursor_pointer"
+                                        style="border-color: #008000; color: #008000;" (click)="openSubs()">
+                                        Mark As Done
+                                    </span>
+                                    } @else if (planService.isBronze() && task.team_id != null) {
+                                    <span class="ct_outline_badge ct_cursor_pointer"
+                                        style="border-color: #008000; color: #008000;" (click)="openSubs()">
+                                        Mark As Done
+                                    </span>
+                                    } @else {
+                                    <span class="ct_outline_badge ct_cursor_pointer"
+                                        style="border-color: #008000; color: #008000;"
+                                        data-bs-target="#ct_complete_modal" data-bs-toggle="modal"
+                                        (click)="getTaskDet(task)">
+                                        Mark As Done
+                                    </span>
+                                    }
+                                    <p class="ct_fs_15 ct_text_clr_4B5563 mb-0 mt-1 ct_white_nowrap">
+                                        Action Score: {{ task.action_score }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="doNow?.length == 0" class="text-center">
+                            No task here..
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ================= DO NEXT ================= -->
+            <div class="col-lg-6 mb-4">
+                <div class="ct_compase_card"
+                    style="box-shadow: 0 0 0 3px #BFDBFE; border-color: #3B82F6; background-color: #EFF6FF;">
+
+                    <div class="ct_d_align_center justify-content-between gap-3">
+                        <span class="ct_custom_badge text-white ct_border_radius_20 px-3 py-2"
+                            style="background-color: #3B82F6;">
+                            Do Next
+                        </span>
+                        <div>
+                            <p class="ct_fs_14 mb-0 ct_text_clr_6B7280">
+                                {{ doNext.length }} tasks
+                            </p>
+                            <p class="ct_fs_14 mb-0 ct_text_clr_6B7280">
+                                Est hrs: {{ getTotalHours(doNext) }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="ct_mt_40 ct_para_scroll">
+                        <div class="ct_compass_white_card mb-3 " style="border-color: #DBEAFE;"
+                            *ngFor="let task of doNext">
+                            <div class="ct_d_align_center justify-content-between gap-3">
+                                <!-- @if(userType == 'team'){ -->
+                                <div class="ct_cursor_pointer" [routerLink]="['/team/task-details']"
+                                    [queryParams]="{ taskId: task.task_id, teamId: task.team_id, boardId: task.board_id }">
+                                    <h4 class="ct_fs_15 ct_ff_Matter_Medium ct_para_scroll ct_custom_scroll">
+                                        {{ task.title }}
+                                        @if(task.isNotesExists){
+                                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M8.83665 7.49999L12.4592 8.47049M8.2539 9.67349L10.4274 10.2555M15.2379 9.48524C14.7842 11.1765 14.5576 12.0225 14.0439 12.5707C13.6385 13.0036 13.1139 13.3066 12.5364 13.4415C12.4639 13.4585 12.3902 13.4715 12.3152 13.4805C11.6289 13.5652 10.7912 13.341 9.26715 12.933C7.5759 12.4792 6.7299 12.2527 6.18165 11.739C5.74865 11.3334 5.44563 10.8085 5.3109 10.2307C5.1399 9.49874 5.3664 8.65349 5.82015 6.96224L6.2079 5.51324L6.3909 4.83449C6.73215 3.58499 6.96165 2.89724 7.4019 2.427C7.80739 1.99439 8.33197 1.69165 8.9094 1.557C9.6414 1.386 10.4874 1.6125 12.1794 2.06625C13.8699 2.51925 14.7159 2.74574 15.2642 3.25874C15.6973 3.66454 16.0003 4.18968 16.1349 4.76774C16.2556 5.28524 16.1777 5.85974 15.9617 6.74999"
+                                                stroke="#128A50" stroke-width="1.125" stroke-linecap="round" />
+                                            <path
+                                                d="M2.45385 12.4855C2.90685 14.1767 3.1341 15.0227 3.64785 15.571C4.05324 16.0039 4.57783 16.3069 5.15535 16.4417C5.88735 16.612 6.73335 16.3855 8.42535 15.9325C10.1159 15.4795 10.9619 15.253 11.5101 14.7392C11.8788 14.3939 12.1543 13.961 12.3111 13.4807M6.38685 4.83398C6.12335 4.90248 5.8321 4.97998 5.5131 5.06648C3.82185 5.51948 2.97585 5.74598 2.4276 6.25898C1.99447 6.66478 1.69144 7.18992 1.55685 7.76798C1.4361 8.28548 1.5141 8.85998 1.7301 9.75023"
+                                                stroke="#128A50" stroke-width="1.125" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                        </svg>
+                                        }
+                                    </h4>
+                                    <div class="ct_d_align_center gap-2">
+                                        <img [src]="task.assigned_to.profile_image ? task.assigned_to.profile_image : 'img/no_pro.png'"
+                                            class="ct_img_w_24 ct_flex_shrink_0">
+                                        <p class="mb-0 ct_fs_14 ct_text_clr_4B5563">
+                                            {{ task.assigned_to.full_name }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- } @else if (userType == 'invited') {
+                                <div class="ct_cursor_pointer" [routerLink]="['/invited/task-details']"
+                                    [queryParams]="{ taskId: task.id }">
+                                    <h4 class="ct_fs_15 ct_ff_Matter_Medium ct_para_scroll ct_custom_scroll">
+                                        {{ task.title }}
+                                        @if(task.isNotesExists){
+                                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M8.83665 7.49999L12.4592 8.47049M8.2539 9.67349L10.4274 10.2555M15.2379 9.48524C14.7842 11.1765 14.5576 12.0225 14.0439 12.5707C13.6385 13.0036 13.1139 13.3066 12.5364 13.4415C12.4639 13.4585 12.3902 13.4715 12.3152 13.4805C11.6289 13.5652 10.7912 13.341 9.26715 12.933C7.5759 12.4792 6.7299 12.2527 6.18165 11.739C5.74865 11.3334 5.44563 10.8085 5.3109 10.2307C5.1399 9.49874 5.3664 8.65349 5.82015 6.96224L6.2079 5.51324L6.3909 4.83449C6.73215 3.58499 6.96165 2.89724 7.4019 2.427C7.80739 1.99439 8.33197 1.69165 8.9094 1.557C9.6414 1.386 10.4874 1.6125 12.1794 2.06625C13.8699 2.51925 14.7159 2.74574 15.2642 3.25874C15.6973 3.66454 16.0003 4.18968 16.1349 4.76774C16.2556 5.28524 16.1777 5.85974 15.9617 6.74999"
+                                                stroke="#128A50" stroke-width="1.125" stroke-linecap="round" />
+                                            <path
+                                                d="M2.45385 12.4855C2.90685 14.1767 3.1341 15.0227 3.64785 15.571C4.05324 16.0039 4.57783 16.3069 5.15535 16.4417C5.88735 16.612 6.73335 16.3855 8.42535 15.9325C10.1159 15.4795 10.9619 15.253 11.5101 14.7392C11.8788 14.3939 12.1543 13.961 12.3111 13.4807M6.38685 4.83398C6.12335 4.90248 5.8321 4.97998 5.5131 5.06648C3.82185 5.51948 2.97585 5.74598 2.4276 6.25898C1.99447 6.66478 1.69144 7.18992 1.55685 7.76798C1.4361 8.28548 1.5141 8.85998 1.7301 9.75023"
+                                                stroke="#128A50" stroke-width="1.125" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                        </svg>
+                                        }
+                                    </h4>
+                                    <div class="ct_d_align_center gap-2">
+                                        <img [src]="task.assignee_profile_image ? task.assignee_profile_image : 'img/no_pro.png'"
+                                            class="ct_img_w_24 ct_flex_shrink_0">
+                                        <p class="mb-0 ct_fs_14 ct_text_clr_4B5563">
+                                            {{ task.assignee_name }}
+                                        </p>
+                                    </div>
+                                </div>
+                                } @else if (userType == 'individual') {
+                                <div class="ct_cursor_pointer" [routerLink]="['/individual/task-details']"
+                                    [queryParams]="{ taskId: task.id }">
+                                    <h4 class="ct_fs_15 ct_ff_Matter_Medium ct_para_scroll ct_custom_scroll">
+                                        {{ task.title }}
+                                        @if(task.isNotesExists){
+                                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M8.83665 7.49999L12.4592 8.47049M8.2539 9.67349L10.4274 10.2555M15.2379 9.48524C14.7842 11.1765 14.5576 12.0225 14.0439 12.5707C13.6385 13.0036 13.1139 13.3066 12.5364 13.4415C12.4639 13.4585 12.3902 13.4715 12.3152 13.4805C11.6289 13.5652 10.7912 13.341 9.26715 12.933C7.5759 12.4792 6.7299 12.2527 6.18165 11.739C5.74865 11.3334 5.44563 10.8085 5.3109 10.2307C5.1399 9.49874 5.3664 8.65349 5.82015 6.96224L6.2079 5.51324L6.3909 4.83449C6.73215 3.58499 6.96165 2.89724 7.4019 2.427C7.80739 1.99439 8.33197 1.69165 8.9094 1.557C9.6414 1.386 10.4874 1.6125 12.1794 2.06625C13.8699 2.51925 14.7159 2.74574 15.2642 3.25874C15.6973 3.66454 16.0003 4.18968 16.1349 4.76774C16.2556 5.28524 16.1777 5.85974 15.9617 6.74999"
+                                                stroke="#128A50" stroke-width="1.125" stroke-linecap="round" />
+                                            <path
+                                                d="M2.45385 12.4855C2.90685 14.1767 3.1341 15.0227 3.64785 15.571C4.05324 16.0039 4.57783 16.3069 5.15535 16.4417C5.88735 16.612 6.73335 16.3855 8.42535 15.9325C10.1159 15.4795 10.9619 15.253 11.5101 14.7392C11.8788 14.3939 12.1543 13.961 12.3111 13.4807M6.38685 4.83398C6.12335 4.90248 5.8321 4.97998 5.5131 5.06648C3.82185 5.51948 2.97585 5.74598 2.4276 6.25898C1.99447 6.66478 1.69144 7.18992 1.55685 7.76798C1.4361 8.28548 1.5141 8.85998 1.7301 9.75023"
+                                                stroke="#128A50" stroke-width="1.125" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                        </svg>
+                                        }
+                                    </h4>
+                                    <div class="ct_d_align_center gap-2">
+                                        <img [src]="task.assignee_profile_image ? task.assignee_profile_image : 'img/no_pro.png'"
+                                            class="ct_img_w_24 ct_flex_shrink_0">
+                                        <p class="mb-0 ct_fs_14 ct_text_clr_4B5563">
+                                            {{ task.assignee_name }}
+                                        </p>
+                                    </div>
+                                </div>
+                                } -->
+                                <div class="text-end">
+                                    @if(task?.status?.toLowerCase() === 'completed'){
+                                    <div>
+                                        <span class="ct_outline_badge"
+                                            style="border-color: #008000; color: #008000;">Completed</span>
+                                    </div>
+                                    } @else if (planService.isGold() || planService.isTrialActive()) {
+                                    <span class="ct_outline_badge ct_cursor_pointer"
+                                        style="border-color: #008000; color: #008000;"
+                                        data-bs-target="#ct_complete_modal" data-bs-toggle="modal"
+                                        (click)="getTaskDet(task)">
+                                        Mark As Done
+                                    </span>
+                                    } @else if (!planService.currentPlan) {
+                                    <span class="ct_outline_badge ct_cursor_pointer"
+                                        style="border-color: #008000; color: #008000;" (click)="openSubs()">
+                                        Mark As Done
+                                    </span>
+                                    } @else if (planService.isBronze() && task.team_id != null) {
+                                    <span class="ct_outline_badge ct_cursor_pointer"
+                                        style="border-color: #008000; color: #008000;" (click)="openSubs()">
+                                        Mark As Done
+                                    </span>
+                                    } @else {
+                                    <span class="ct_outline_badge ct_cursor_pointer"
+                                        style="border-color: #008000; color: #008000;"
+                                        data-bs-target="#ct_complete_modal" data-bs-toggle="modal"
+                                        (click)="getTaskDet(task)">
+                                        Mark As Done
+                                    </span>
+                                    }
+                                    <p class="ct_fs_15 ct_text_clr_4B5563 mb-0 mt-1 ct_white_nowrap">
+                                        Action Score: {{ task.action_score }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="doNext?.length == 0" class="text-center">
+                            No task here..
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ================= DO LATER ================= -->
+            <div class="col-lg-6 mb-4">
+                <div class="ct_compase_card"
+                    style="box-shadow: 0 0 0 3px #FEF08A; border-color: #EAB308; background-color: #FEFCE8;">
+                    <div class="ct_d_align_center justify-content-between gap-3">
+                        <span class="ct_custom_badge text-white ct_border_radius_20 px-3 py-2"
+                            style="background-color: #EAB308;">
+                            Do Later
+                        </span>
+                        <div>
+                            <p class="ct_fs_14 mb-0 ct_text_clr_6B7280">
+                                {{ doLater.length }} tasks
+                            </p>
+                            <p class="ct_fs_14 mb-0 ct_text_clr_6B7280">
+                                Est hrs: {{ getTotalHours(doLater) }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="ct_mt_40 ct_para_scroll">
+                        <div class="ct_compass_white_card mb-3" style="border-color: #FEF3C7;"
+                            *ngFor="let task of doLater">
+                            <div class="ct_d_align_center justify-content-between gap-3">
+                                <!-- @if(userType == 'team'){ -->
+                                <div class="ct_cursor_pointer" [routerLink]="['/team/task-details']"
+                                    [queryParams]="{ taskId: task.task_id, teamId: task.team_id, boardId: task.board_id }">
+                                    <h4 class="ct_fs_15 ct_ff_Matter_Medium ct_para_scroll ct_custom_scroll">
+                                        {{ task.title }}
+                                        @if(task.isNotesExists){
+                                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M8.83665 7.49999L12.4592 8.47049M8.2539 9.67349L10.4274 10.2555M15.2379 9.48524C14.7842 11.1765 14.5576 12.0225 14.0439 12.5707C13.6385 13.0036 13.1139 13.3066 12.5364 13.4415C12.4639 13.4585 12.3902 13.4715 12.3152 13.4805C11.6289 13.5652 10.7912 13.341 9.26715 12.933C7.5759 12.4792 6.7299 12.2527 6.18165 11.739C5.74865 11.3334 5.44563 10.8085 5.3109 10.2307C5.1399 9.49874 5.3664 8.65349 5.82015 6.96224L6.2079 5.51324L6.3909 4.83449C6.73215 3.58499 6.96165 2.89724 7.4019 2.427C7.80739 1.99439 8.33197 1.69165 8.9094 1.557C9.6414 1.386 10.4874 1.6125 12.1794 2.06625C13.8699 2.51925 14.7159 2.74574 15.2642 3.25874C15.6973 3.66454 16.0003 4.18968 16.1349 4.76774C16.2556 5.28524 16.1777 5.85974 15.9617 6.74999"
+                                                stroke="#128A50" stroke-width="1.125" stroke-linecap="round" />
+                                            <path
+                                                d="M2.45385 12.4855C2.90685 14.1767 3.1341 15.0227 3.64785 15.571C4.05324 16.0039 4.57783 16.3069 5.15535 16.4417C5.88735 16.612 6.73335 16.3855 8.42535 15.9325C10.1159 15.4795 10.9619 15.253 11.5101 14.7392C11.8788 14.3939 12.1543 13.961 12.3111 13.4807M6.38685 4.83398C6.12335 4.90248 5.8321 4.97998 5.5131 5.06648C3.82185 5.51948 2.97585 5.74598 2.4276 6.25898C1.99447 6.66478 1.69144 7.18992 1.55685 7.76798C1.4361 8.28548 1.5141 8.85998 1.7301 9.75023"
+                                                stroke="#128A50" stroke-width="1.125" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                        </svg>
+                                        }
+                                    </h4>
+                                    <div class="ct_d_align_center gap-2">
+                                        <img [src]="task.assigned_to.profile_image ? task.assigned_to.profile_image : 'img/no_pro.png'"
+                                            class="ct_img_w_24 ct_flex_shrink_0">
+                                        <p class="mb-0 ct_fs_14 ct_text_clr_4B5563">
+                                            {{ task.assigned_to.full_name }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- } @else if (userType == 'invited') {
+                                <div class="ct_cursor_pointer" [routerLink]="['/invited/task-details']"
+                                    [queryParams]="{ taskId: task.id }">
+                                    <h4 class="ct_fs_15 ct_ff_Matter_Medium ct_para_scroll ct_custom_scroll">
+                                        {{ task.title }}
+                                        @if(task.isNotesExists){
+                                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M8.83665 7.49999L12.4592 8.47049M8.2539 9.67349L10.4274 10.2555M15.2379 9.48524C14.7842 11.1765 14.5576 12.0225 14.0439 12.5707C13.6385 13.0036 13.1139 13.3066 12.5364 13.4415C12.4639 13.4585 12.3902 13.4715 12.3152 13.4805C11.6289 13.5652 10.7912 13.341 9.26715 12.933C7.5759 12.4792 6.7299 12.2527 6.18165 11.739C5.74865 11.3334 5.44563 10.8085 5.3109 10.2307C5.1399 9.49874 5.3664 8.65349 5.82015 6.96224L6.2079 5.51324L6.3909 4.83449C6.73215 3.58499 6.96165 2.89724 7.4019 2.427C7.80739 1.99439 8.33197 1.69165 8.9094 1.557C9.6414 1.386 10.4874 1.6125 12.1794 2.06625C13.8699 2.51925 14.7159 2.74574 15.2642 3.25874C15.6973 3.66454 16.0003 4.18968 16.1349 4.76774C16.2556 5.28524 16.1777 5.85974 15.9617 6.74999"
+                                                stroke="#128A50" stroke-width="1.125" stroke-linecap="round" />
+                                            <path
+                                                d="M2.45385 12.4855C2.90685 14.1767 3.1341 15.0227 3.64785 15.571C4.05324 16.0039 4.57783 16.3069 5.15535 16.4417C5.88735 16.612 6.73335 16.3855 8.42535 15.9325C10.1159 15.4795 10.9619 15.253 11.5101 14.7392C11.8788 14.3939 12.1543 13.961 12.3111 13.4807M6.38685 4.83398C6.12335 4.90248 5.8321 4.97998 5.5131 5.06648C3.82185 5.51948 2.97585 5.74598 2.4276 6.25898C1.99447 6.66478 1.69144 7.18992 1.55685 7.76798C1.4361 8.28548 1.5141 8.85998 1.7301 9.75023"
+                                                stroke="#128A50" stroke-width="1.125" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                        </svg>
+                                        }
+                                    </h4>
+                                    <div class="ct_d_align_center gap-2">
+                                        <img [src]="task.assignee_profile_image ? task.assignee_profile_image : 'img/no_pro.png'"
+                                            class="ct_img_w_24 ct_flex_shrink_0">
+                                        <p class="mb-0 ct_fs_14 ct_text_clr_4B5563">
+                                            {{ task.assignee_name }}
+                                        </p>
+                                    </div>
+                                </div>
+                                } @else if (userType == 'individual') {
+                                <div class="ct_cursor_pointer" [routerLink]="['/individual/task-details']"
+                                    [queryParams]="{ taskId: task.id }">
+                                    <h4 class="ct_fs_15 ct_ff_Matter_Medium ct_para_scroll ct_custom_scroll">
+                                        {{ task.title }}
+                                        @if(task.isNotesExists){
+                                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M8.83665 7.49999L12.4592 8.47049M8.2539 9.67349L10.4274 10.2555M15.2379 9.48524C14.7842 11.1765 14.5576 12.0225 14.0439 12.5707C13.6385 13.0036 13.1139 13.3066 12.5364 13.4415C12.4639 13.4585 12.3902 13.4715 12.3152 13.4805C11.6289 13.5652 10.7912 13.341 9.26715 12.933C7.5759 12.4792 6.7299 12.2527 6.18165 11.739C5.74865 11.3334 5.44563 10.8085 5.3109 10.2307C5.1399 9.49874 5.3664 8.65349 5.82015 6.96224L6.2079 5.51324L6.3909 4.83449C6.73215 3.58499 6.96165 2.89724 7.4019 2.427C7.80739 1.99439 8.33197 1.69165 8.9094 1.557C9.6414 1.386 10.4874 1.6125 12.1794 2.06625C13.8699 2.51925 14.7159 2.74574 15.2642 3.25874C15.6973 3.66454 16.0003 4.18968 16.1349 4.76774C16.2556 5.28524 16.1777 5.85974 15.9617 6.74999"
+                                                stroke="#128A50" stroke-width="1.125" stroke-linecap="round" />
+                                            <path
+                                                d="M2.45385 12.4855C2.90685 14.1767 3.1341 15.0227 3.64785 15.571C4.05324 16.0039 4.57783 16.3069 5.15535 16.4417C5.88735 16.612 6.73335 16.3855 8.42535 15.9325C10.1159 15.4795 10.9619 15.253 11.5101 14.7392C11.8788 14.3939 12.1543 13.961 12.3111 13.4807M6.38685 4.83398C6.12335 4.90248 5.8321 4.97998 5.5131 5.06648C3.82185 5.51948 2.97585 5.74598 2.4276 6.25898C1.99447 6.66478 1.69144 7.18992 1.55685 7.76798C1.4361 8.28548 1.5141 8.85998 1.7301 9.75023"
+                                                stroke="#128A50" stroke-width="1.125" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                        </svg>
+                                        }
+                                    </h4>
+                                    <div class="ct_d_align_center gap-2">
+                                        <img [src]="task.assignee_profile_image ? task.assignee_profile_image : 'img/no_pro.png'"
+                                            class="ct_img_w_24 ct_flex_shrink_0">
+                                        <p class="mb-0 ct_fs_14 ct_text_clr_4B5563">
+                                            {{ task.assignee_name }}
+                                        </p>
+                                    </div>
+                                </div>
+                                } -->
+                                <div class="text-end">
+                                    @if(task?.status?.toLowerCase() === 'completed'){
+                                    <div>
+                                        <span class="ct_outline_badge"
+                                            style="border-color: #008000; color: #008000;">Completed</span>
+                                    </div>
+                                    } @else if (planService.isGold() || planService.isTrialActive()) {
+                                    <span class="ct_outline_badge ct_cursor_pointer"
+                                        style="border-color: #008000; color: #008000;"
+                                        data-bs-target="#ct_complete_modal" data-bs-toggle="modal"
+                                        (click)="getTaskDet(task)">
+                                        Mark As Done
+                                    </span>
+                                    } @else if (!planService.currentPlan) {
+                                    <span class="ct_outline_badge ct_cursor_pointer"
+                                        style="border-color: #008000; color: #008000;" (click)="openSubs()">
+                                        Mark As Done
+                                    </span>
+                                    } @else if (planService.isBronze() && task.team_id != null) {
+                                    <span class="ct_outline_badge ct_cursor_pointer"
+                                        style="border-color: #008000; color: #008000;" (click)="openSubs()">
+                                        Mark As Done
+                                    </span>
+                                    } @else {
+                                    <span class="ct_outline_badge ct_cursor_pointer"
+                                        style="border-color: #008000; color: #008000;"
+                                        data-bs-target="#ct_complete_modal" data-bs-toggle="modal"
+                                        (click)="getTaskDet(task)">
+                                        Mark As Done
+                                    </span>
+                                    }
+                                    <p class="ct_fs_15 ct_text_clr_4B5563 mb-0 mt-1 ct_white_nowrap">
+                                        Action Score: {{ task.action_score }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="doLater?.length == 0" class="text-center">
+                            No task here..
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ================= DO LAST ================= -->
+            <div class="col-lg-6 mb-4">
+                <div class="ct_compase_card"
+                    style="box-shadow: 0 0 0 3px #E5E7EB; border-color: #9CA3AF; background-color: #F9FAFB;">
+                    <div class="ct_d_align_center justify-content-between gap-3">
+                        <span class="ct_custom_badge text-white ct_border_radius_20 px-3 py-2"
+                            style="background-color: #6B7280;">
+                            Do Last
+                        </span>
+                        <div>
+                            <p class="ct_fs_14 mb-0 ct_text_clr_6B7280">
+                                {{ doLast.length }} tasks
+                            </p>
+                            <p class="ct_fs_14 mb-0 ct_text_clr_6B7280">
+                                Est hrs: {{ getTotalHours(doLast) }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="ct_mt_40 ct_para_scroll">
+                        <div class="ct_compass_white_card mb-3" style="border-color: #E5E7EB;"
+                            *ngFor="let task of doLast">
+                            <div class="ct_d_align_center justify-content-between gap-3">
+                                <!-- @if(userType == 'team'){ -->
+                                <div class="ct_cursor_pointer" [routerLink]="['/team/task-details']"
+                                    [queryParams]="{ taskId: task.task_id, teamId: task.team_id, boardId: task.board_id }">
+                                    <h4 class="ct_fs_15 ct_ff_Matter_Medium ct_para_scroll ct_custom_scroll">
+                                        {{ task.title }}
+                                        @if(task.isNotesExists){
+                                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M8.83665 7.49999L12.4592 8.47049M8.2539 9.67349L10.4274 10.2555M15.2379 9.48524C14.7842 11.1765 14.5576 12.0225 14.0439 12.5707C13.6385 13.0036 13.1139 13.3066 12.5364 13.4415C12.4639 13.4585 12.3902 13.4715 12.3152 13.4805C11.6289 13.5652 10.7912 13.341 9.26715 12.933C7.5759 12.4792 6.7299 12.2527 6.18165 11.739C5.74865 11.3334 5.44563 10.8085 5.3109 10.2307C5.1399 9.49874 5.3664 8.65349 5.82015 6.96224L6.2079 5.51324L6.3909 4.83449C6.73215 3.58499 6.96165 2.89724 7.4019 2.427C7.80739 1.99439 8.33197 1.69165 8.9094 1.557C9.6414 1.386 10.4874 1.6125 12.1794 2.06625C13.8699 2.51925 14.7159 2.74574 15.2642 3.25874C15.6973 3.66454 16.0003 4.18968 16.1349 4.76774C16.2556 5.28524 16.1777 5.85974 15.9617 6.74999"
+                                                stroke="#128A50" stroke-width="1.125" stroke-linecap="round" />
+                                            <path
+                                                d="M2.45385 12.4855C2.90685 14.1767 3.1341 15.0227 3.64785 15.571C4.05324 16.0039 4.57783 16.3069 5.15535 16.4417C5.88735 16.612 6.73335 16.3855 8.42535 15.9325C10.1159 15.4795 10.9619 15.253 11.5101 14.7392C11.8788 14.3939 12.1543 13.961 12.3111 13.4807M6.38685 4.83398C6.12335 4.90248 5.8321 4.97998 5.5131 5.06648C3.82185 5.51948 2.97585 5.74598 2.4276 6.25898C1.99447 6.66478 1.69144 7.18992 1.55685 7.76798C1.4361 8.28548 1.5141 8.85998 1.7301 9.75023"
+                                                stroke="#128A50" stroke-width="1.125" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                        </svg>
+                                        }
+                                    </h4>
+                                    <div class="ct_d_align_center gap-2">
+                                        <img [src]="task.assigned_to.profile_image ? task.assigned_to.profile_image : 'img/no_pro.png'"
+                                            class="ct_img_w_24 ct_flex_shrink_0">
+                                        <p class="mb-0 ct_fs_14 ct_text_clr_4B5563">
+                                            {{ task.assigned_to.full_name }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- } @else if (userType == 'invited') {
+                                <div class="ct_cursor_pointer" [routerLink]="['/invited/task-details']"
+                                    [queryParams]="{ taskId: task.id }">
+                                    <h4 class="ct_fs_15 ct_ff_Matter_Medium ct_para_scroll ct_custom_scroll">
+                                        {{ task.title }}
+                                        @if(task.isNotesExists){
+                                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M8.83665 7.49999L12.4592 8.47049M8.2539 9.67349L10.4274 10.2555M15.2379 9.48524C14.7842 11.1765 14.5576 12.0225 14.0439 12.5707C13.6385 13.0036 13.1139 13.3066 12.5364 13.4415C12.4639 13.4585 12.3902 13.4715 12.3152 13.4805C11.6289 13.5652 10.7912 13.341 9.26715 12.933C7.5759 12.4792 6.7299 12.2527 6.18165 11.739C5.74865 11.3334 5.44563 10.8085 5.3109 10.2307C5.1399 9.49874 5.3664 8.65349 5.82015 6.96224L6.2079 5.51324L6.3909 4.83449C6.73215 3.58499 6.96165 2.89724 7.4019 2.427C7.80739 1.99439 8.33197 1.69165 8.9094 1.557C9.6414 1.386 10.4874 1.6125 12.1794 2.06625C13.8699 2.51925 14.7159 2.74574 15.2642 3.25874C15.6973 3.66454 16.0003 4.18968 16.1349 4.76774C16.2556 5.28524 16.1777 5.85974 15.9617 6.74999"
+                                                stroke="#128A50" stroke-width="1.125" stroke-linecap="round" />
+                                            <path
+                                                d="M2.45385 12.4855C2.90685 14.1767 3.1341 15.0227 3.64785 15.571C4.05324 16.0039 4.57783 16.3069 5.15535 16.4417C5.88735 16.612 6.73335 16.3855 8.42535 15.9325C10.1159 15.4795 10.9619 15.253 11.5101 14.7392C11.8788 14.3939 12.1543 13.961 12.3111 13.4807M6.38685 4.83398C6.12335 4.90248 5.8321 4.97998 5.5131 5.06648C3.82185 5.51948 2.97585 5.74598 2.4276 6.25898C1.99447 6.66478 1.69144 7.18992 1.55685 7.76798C1.4361 8.28548 1.5141 8.85998 1.7301 9.75023"
+                                                stroke="#128A50" stroke-width="1.125" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                        </svg>
+                                        }
+                                    </h4>
+                                    <div class="ct_d_align_center gap-2">
+                                        <img [src]="task.assignee_profile_image ? task.assignee_profile_image : 'img/no_pro.png'"
+                                            class="ct_img_w_24 ct_flex_shrink_0">
+                                        <p class="mb-0 ct_fs_14 ct_text_clr_4B5563">
+                                            {{ task.assignee_name }}
+                                        </p>
+                                    </div>
+                                </div>
+                                } @else if (userType == 'individual') {
+                                <div class="ct_cursor_pointer" [routerLink]="['/individual/task-details']"
+                                    [queryParams]="{ taskId: task.id }">
+                                    <h4 class="ct_fs_15 ct_ff_Matter_Medium ct_para_scroll ct_custom_scroll">
+                                        {{ task.title }}
+                                        @if(task.isNotesExists){
+                                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M8.83665 7.49999L12.4592 8.47049M8.2539 9.67349L10.4274 10.2555M15.2379 9.48524C14.7842 11.1765 14.5576 12.0225 14.0439 12.5707C13.6385 13.0036 13.1139 13.3066 12.5364 13.4415C12.4639 13.4585 12.3902 13.4715 12.3152 13.4805C11.6289 13.5652 10.7912 13.341 9.26715 12.933C7.5759 12.4792 6.7299 12.2527 6.18165 11.739C5.74865 11.3334 5.44563 10.8085 5.3109 10.2307C5.1399 9.49874 5.3664 8.65349 5.82015 6.96224L6.2079 5.51324L6.3909 4.83449C6.73215 3.58499 6.96165 2.89724 7.4019 2.427C7.80739 1.99439 8.33197 1.69165 8.9094 1.557C9.6414 1.386 10.4874 1.6125 12.1794 2.06625C13.8699 2.51925 14.7159 2.74574 15.2642 3.25874C15.6973 3.66454 16.0003 4.18968 16.1349 4.76774C16.2556 5.28524 16.1777 5.85974 15.9617 6.74999"
+                                                stroke="#128A50" stroke-width="1.125" stroke-linecap="round" />
+                                            <path
+                                                d="M2.45385 12.4855C2.90685 14.1767 3.1341 15.0227 3.64785 15.571C4.05324 16.0039 4.57783 16.3069 5.15535 16.4417C5.88735 16.612 6.73335 16.3855 8.42535 15.9325C10.1159 15.4795 10.9619 15.253 11.5101 14.7392C11.8788 14.3939 12.1543 13.961 12.3111 13.4807M6.38685 4.83398C6.12335 4.90248 5.8321 4.97998 5.5131 5.06648C3.82185 5.51948 2.97585 5.74598 2.4276 6.25898C1.99447 6.66478 1.69144 7.18992 1.55685 7.76798C1.4361 8.28548 1.5141 8.85998 1.7301 9.75023"
+                                                stroke="#128A50" stroke-width="1.125" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                        </svg>
+                                        }
+                                    </h4>
+                                    <div class="ct_d_align_center gap-2">
+                                        <img [src]="task.assignee_profile_image ? task.assignee_profile_image : 'img/no_pro.png'"
+                                            class="ct_img_w_24 ct_flex_shrink_0">
+                                        <p class="mb-0 ct_fs_14 ct_text_clr_4B5563">
+                                            {{ task.assignee_name }}
+                                        </p>
+                                    </div>
+                                </div>
+                                } -->
+                                <div class="text-end">
+                                    @if(task?.status?.toLowerCase() === 'completed'){
+                                    <div>
+                                        <span class="ct_outline_badge"
+                                            style="border-color: #008000; color: #008000;">Completed</span>
+                                    </div>
+                                    } @else if (planService.isGold() || planService.isTrialActive()) {
+                                    <span class="ct_outline_badge ct_cursor_pointer"
+                                        style="border-color: #008000; color: #008000;"
+                                        data-bs-target="#ct_complete_modal" data-bs-toggle="modal"
+                                        (click)="getTaskDet(task)">
+                                        Mark As Done
+                                    </span>
+                                    } @else if (!planService.currentPlan) {
+                                    <span class="ct_outline_badge ct_cursor_pointer"
+                                        style="border-color: #008000; color: #008000;" (click)="openSubs()">
+                                        Mark As Done
+                                    </span>
+                                    } @else if (planService.isBronze() && task.team_id != null) {
+                                    <span class="ct_outline_badge ct_cursor_pointer"
+                                        style="border-color: #008000; color: #008000;" (click)="openSubs()">
+                                        Mark As Done
+                                    </span>
+                                    } @else {
+                                    <span class="ct_outline_badge ct_cursor_pointer"
+                                        style="border-color: #008000; color: #008000;"
+                                        data-bs-target="#ct_complete_modal" data-bs-toggle="modal"
+                                        (click)="getTaskDet(task)">
+                                        Mark As Done
+                                    </span>
+                                    }
+                                    <p class="ct_fs_15 ct_text_clr_4B5563 mb-0 mt-1 ct_white_nowrap">
+                                        Action Score: {{ task.action_score }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="doLast?.length == 0" class="text-center">
+                            No task here..
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- complete Modal S -->
+<div class="modal fade ct_custom_modal" id="ct_complete_modal" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header p-0 border-0">
+                <div class="d-flex align-items-center gap-2">
+                    <img src="/img/modal_star.png" alt="" class="ct_flex_shrink_0" />
+                    <div>
+                        <h1 class="modal-title ct_fs_20 ct_ff_Matter_SemiBold mb-0" id="exampleModalLabel">
+                            Task Completed
+                        </h1>
+                        <p class="mb-0 ct_fs_14 ct_text_clr_4B5563 ct_text_op_08">
+                            Please enter the Actual Hours spent
+                        </p>
+                    </div>
+                </div>
+                <button type="button" class="btn-close ct_close_modal" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body p-0 mt-3">
+                <div class="d-flex justify-content-start gap-3 justify-content-between mb-1">
+                    <h1 class="modal-title ct_fs_18 ct_ff_Matter_SemiBold mb-2 ">
+                        Task Name:
+                    </h1>
+                    <p class="mb-0 ct_fs_18 ct_text_clr_4B5563 ct_text_op_08">
+                        {{taskName}}
+                    </p>
+                </div>
+                <div class="d-flex justify-content-start gap-3 justify-content-between mb-3">
+                    <h1 class="modal-title ct_fs_18 ct_ff_Matter_SemiBold mb-2 ">
+                        Estimated Hours:
+                    </h1>
+                    <p class="mb-0 ct_fs_18 ct_text_clr_4B5563 ct_text_op_08">
+                        {{actualTime}}
+                    </p>
+                </div>
+
+                <form [formGroup]="completeForm">
+                    <div class="col-md-12">
+                        <div class="form-group ct_mb_22">
+                            <label class="ct_fs_18 ct_ff_Matter_Medium mb-2">Actual Hours </label>
+                            <input type="text" class="form-control ct_input" placeholder="Enter actual hours"
+                                formControlName="actualHours" [maxlength]="4" />
+                            <div *ngIf="completeForm.controls['actualHours'].invalid && completeForm.controls['actualHours'].touched"
+                                class="err_msg">
+
+                                <div *ngIf="completeForm.controls['actualHours'].errors?.['required']">
+                                    Please enter actual hours.
+                                </div>
+
+                                <div *ngIf="!completeForm.controls['actualHours'].errors?.['required']
+              && completeForm.controls['actualHours'].errors?.['pattern']">
+                                    Only numbers are allowed.
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group ct_mb_22">
+                            <label class="ct_fs_18 ct_ff_Matter_Medium mb-2">Actual Minutes </label>
+                            <input type="text" class="form-control ct_input" placeholder="Enter actual minutes"
+                                formControlName="actualMinutes" />
+                            <div *ngIf="completeForm.controls['actualMinutes'].invalid && completeForm.controls['actualMinutes'].touched"
+                                class="err_msg">
+                                <div *ngIf="completeForm.controls['actualMinutes'].errors?.['required']">
+                                    Please enter actual minutes.
+                                </div>
+
+                                <div *ngIf="!completeForm.controls['actualMinutes'].errors?.['required']
+        && completeForm.controls['actualMinutes'].errors?.['pattern']">
+                                    Only numbers are allowed.
+                                </div>
+
+                                <div *ngIf="!completeForm.controls['actualMinutes'].errors?.['required']
+        && !completeForm.controls['actualMinutes'].errors?.['pattern']
+        && (completeForm.controls['actualMinutes'].errors?.['min']
+            || completeForm.controls['actualMinutes'].errors?.['max'])">
+                                    Estimated minutes must be between 0 and 60.
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </form>
+
+
+                <div class="modal-footer border-0 p-0 ct_mt_30 justify-content-start">
+                    <button #closeModalComplete type="button" class="ct_outline_btn ct_ff_Matter_Medium"
+                        data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+                    <button (click)="submitTask()" type="button" class="ct_purple_btn ct_ff_Matter_Medium">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--  ct_complete_modal Modal E -->
+
+<app-subscription-modal></app-subscription-modal>
+
+<div class="ct_loader_main" *ngIf="loading">
+    <div class="loader-con">
+        <div style="--i: 0;" class="pfile"></div>
+        <div style="--i: 1;" class="pfile"></div>
+        <div class="pfile" style="--i: 2;"></div>
+        <div class="pfile" style="--i: 3;"></div>
+        <div class="pfile" style="--i: 4;"></div>
+        <div class="pfile" style="--i: 5;"></div>
+    </div>
+</div>

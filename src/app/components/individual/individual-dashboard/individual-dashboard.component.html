@@ -1,0 +1,272 @@
+<div class="ct_inner_header_bg ct_mt_30 ct_px_30">
+    <div class="ct_d_align_center justify-content-between gap-3">
+        <div>
+            <h4 class="ct_fs_35  mb-2 ct_ff_Matter_Medium">Dashboard</h4>
+            <p class="mb-0 ct_text_929292 ct_fs_18">Here's what's happening with your tasks today.</p>
+        </div>
+    </div>
+</div>
+<div class="ct_px_30 ct_mt_30 pb-4">
+    <div class="container-fluid">
+
+
+        <div class="row gx-5">
+            <div class="col-xxl-4 col-xl-6 col-lg-6 col-md-6 mb-4 ct_cursor_pointer"
+                [routerLink]="['/individual/my-task']" [queryParams]="{ status: '' }">
+                <div class="ct_dash_card justify-content-start gap-4">
+                    <div class="ct_icon_82" style="background-color: #F7BE4A;">
+                        <img src="/img/total_task_icon.svg" alt="">
+                    </div>
+                    <div class="ct_dash_card_title">
+                        <p class="mb-0  ct_fs_18 ct_ff_Matter_Medium mb-1">Total Tasks</p>
+                        <h5 class="ct_fs_32 mb-1 ct_ff_Matter_Bold" style="color: #F7BE4A;">
+                            {{dashboardData.total_tasks}}</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xxl-4 col-xl-6 col-lg-6 col-md-6 mb-4 ct_cursor_pointer"
+                [routerLink]="['/individual/my-task']" [queryParams]="{ status: 'show' }">
+                <div class="ct_dash_card justify-content-start gap-4">
+                    <div class="ct_icon_82" style="background-color: #19CE71;">
+                        <img src="/img/completed_task_icon.svg" alt="">
+                    </div>
+                    <div class="ct_dash_card_title">
+                        <p class="mb-0  ct_fs_18 ct_ff_Matter_Medium mb-1">Completed</p>
+                        <h5 class="ct_fs_32 mb-1 ct_ff_Matter_Bold" style="color: #19CE71;">
+                            {{dashboardData.completed_tasks ? dashboardData.completed_tasks : '0'}}</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xxl-4 col-xl-6 col-lg-6 col-md-6 mb-4 ct_cursor_pointer"
+                [routerLink]="['/individual/my-task']" [queryParams]="{ status: 'hide' }">
+                <div class="ct_dash_card justify-content-start gap-4">
+                    <div class="ct_icon_82" style="background-color: #F24E1E;">
+                        <img src="/img/pending_task_icon.svg" alt="">
+                    </div>
+                    <div class="ct_dash_card_title">
+                        <p class="mb-0  ct_fs_18 ct_ff_Matter_Medium mb-1">Pending</p>
+                        <h5 class="ct_fs_32 mb-1 ct_ff_Matter_Bold" style="color: #F24E1E;">
+                            {{dashboardData.pending_tasks ? dashboardData.pending_tasks : '0'}}</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row ct_mt_15">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="ct_white_bg">
+                    <div class="ct_d_align_center justify-content-between gap-3 ct_flex_col_575 ">
+                        <h4 class="ct_fs_22 ct_ff_Matter_SemiBold mb-0">Task Distribution by phase</h4>
+                    </div>
+                    <div id="chart" class="ct_mt_30">
+                        <apx-chart [series]="chartOptions1.series" [chart]="chartOptions1.chart"
+                            [labels]="chartOptions1.labels" [colors]="chartOptions1.colors"
+                            [legend]="chartOptions1.legend" [plotOptions]="chartOptions1.plotOptions"
+                            [dataLabels]="chartOptions1.dataLabels"></apx-chart>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="ct_white_bg">
+                    <div class="ct_d_align_center justify-content-between gap-3 ">
+                        <h4 class="ct_fs_22 ct_ff_Matter_SemiBold mb-0">Recent Tasks</h4>
+                    </div>
+                    <ul class="ct_mt_30 ct_recent_task_lists ct_para_scroll ct_custom_scroll"
+                        style="max-height: 383px;">
+                        <li>
+                            <div class="d-flex align-items-center justify-content-between gap-3">
+                                <div class="d-flex align-items-center gap-2">
+                                    <img src="/img/check_icon.svg" alt="">
+                                    <p class="ct_fs_12 mb-0">Update documentation</p>
+                                </div>
+                                <div>
+                                    <span class="ct_custom_badge px-3 ct_ff_Matter_SemiBold"
+                                        style="background-color: #FEFCE8; color: #EAB308;">P3</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="d-flex align-items-center justify-content-between gap-3">
+                                <div class="d-flex align-items-center gap-2">
+                                    <img src="/img/check_icon.svg" alt="">
+                                    <p class="ct_fs_12 mb-0">Landing Page Design</p>
+                                </div>
+                                <div>
+                                    <span class="ct_custom_badge px-3 ct_ff_Matter_SemiBold"
+                                        style="background-color: #F9FAFB; color: #6B7280;">P3</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="d-flex align-items-center justify-content-between gap-3">
+                                <div class="d-flex align-items-center gap-2">
+                                    <img src="/img/check_icon.svg" alt="">
+                                    <p class="ct_fs_12 mb-0">Update documentation</p>
+                                </div>
+                                <div>
+                                    <span class="ct_custom_badge px-3 ct_ff_Matter_SemiBold"
+                                        style="background-color: #EFF6FF; color: #3B82F6;">P3</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="d-flex align-items-center justify-content-between gap-3">
+                                <div class="d-flex align-items-center gap-2">
+                                    <img src="/img/check_icon.svg" alt="">
+                                    <p class="ct_fs_12 mb-0">Update documentation</p>
+                                </div>
+                                <div>
+                                    <span class="ct_custom_badge px-3 ct_ff_Matter_SemiBold"
+                                        style="background-color: #FEF2F2; color: #EF4444;">P3</span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Add user board Modal S -->
+<div class="modal fade ct_custom_modal modal-lg" id="ct_add_create_modal" tabindex="-1"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header p-0 border-0">
+                <div class="d-flex align-items-center gap-2">
+                    <img src="../assets/img/modal_star.png" alt="" class="ct_flex_shrink_0" />
+                    <div>
+                        <h1 class="modal-title ct_fs_20 ct_ff_Matter_SemiBold mb-0" id="exampleModalLabel">
+                            Create New Task
+                        </h1>
+                        <p class="mb-0 ct_fs_14 ct_text_clr_4B5563 ct_text_op_08">
+                            Add a new task to your board and start tracking progress
+                        </p>
+                    </div>
+                </div>
+                <button type="button" class="btn-close ct_close_modal" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body p-0 ct_mt_20">
+                <form action="">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group ct_mb_22">
+                                <label class="ct_fs_18 ct_ff_Matter_Medium mb-2">Task Title </label>
+                                <input type="text" class="form-control ct_input" placeholder="Enter task title" />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group ct_mb_22">
+                                <label class="ct_fs_18 ct_ff_Matter_Medium mb-2">Description </label>
+                                <textarea class="form-control ct_input h-auto" rows="2"
+                                    placeholder="Enter Description"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group ct_mb_22">
+                                <label class="ct_fs_18 ct_ff_Matter_Medium mb-2">Assign Member</label>
+                                <select class="form-control ct_input">
+                                    <option value="">Select Member</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group ct_mb_22">
+                                <label class="ct_fs_18 ct_ff_Matter_Medium mb-2">Priority</label>
+                                <select class="form-control ct_input">
+                                    <option value="">Medium Priority</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="ct_fs_18 ct_ff_Matter_Medium mb-2">Phase</label>
+                            <div class="form-group ct_mb_22">
+                                <select class="form-control ct_input">
+                                    <option value="">Design Review</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group ct_mb_22">
+                                <label class="ct_fs_18 ct_ff_Matter_Medium mb-2">Start Date</label>
+                                <input type="date" class="form-control ct_input" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group ct_mb_22">
+                                <label class="ct_fs_18 ct_ff_Matter_Medium mb-2">Due Date</label>
+                                <input type="date" class="form-control ct_input" />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="ct_para_scroll ct_custom_scroll">
+                                <div class="ct_Members_info_sort gap-2 ct_d_align_center ct_mb_15 ct_light_grey_bg">
+                                    <div class="ct_d_align_center gap-3">
+                                        <img src="../assets/img/lucide_lock.svg" alt="" class=" ct_flex_shrink_0">
+                                        <div>
+                                            <h5 class="ct_fs_16 mb-1 ct_ff_Matter_Medium text-truncate"
+                                                style="max-width: 100px">
+                                                Private Task
+                                            </h5>
+                                            <p class="ct_fs_14 ct_text_787885 mb-0 text-truncate">
+                                                Only visible to you
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="ms-auto">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox">
+                                            <div class="toggle-switch-background">
+                                                <div class="toggle-switch-handle"></div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div
+                                    class="ct_Members_info_sort gap-2 ct_d_align_center ct_mb_15 ct_light_grey_bg ct_mt_15">
+                                    <div class="ct_d_align_center gap-3">
+                                        <img src="../assets/img/octicon_goal-24.svg" alt="" class=" ct_flex_shrink_0">
+                                        <div>
+                                            <h5 class="ct_fs_16 mb-1 ct_ff_Matter_Medium text-truncate"
+                                                style="max-width: 150px">
+                                                Goal Relevant
+                                            </h5>
+                                            <p class="ct_fs_14 ct_text_787885 mb-0 text-truncate"
+                                                style="max-width: 120px">
+                                                Related to goal
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="ms-auto">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox">
+                                            <div class="toggle-switch-background">
+                                                <div class="toggle-switch-handle"></div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="modal-footer border-0 p-0 ct_mt_44">
+                    <button type="button" class="ct_outline_btn ct_ff_Matter_Medium" data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+                    <button type="button" class="ct_purple_btn ct_ff_Matter_Medium">
+                        Create Task
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--  Add user Modal E -->

@@ -1,0 +1,148 @@
+.ct_pricing_header{
+    padding: 20px 0px;
+    border-bottom: 1px solid #fff;
+}
+
+.ct_pricing_main_bg{
+    background-image: url(../../../../../public/img/pricing_bg_banner.png);
+    min-height: 100vh;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+
+.trial-card {
+  max-width: 520px;
+  margin: auto;
+  background: #fff;
+  border-radius: 18px;
+  padding: 40px 36px;
+  box-shadow: 0 20px 50px rgba(0,0,0,.12);
+  text-align: center;
+}
+
+.trial-badge {
+  display: inline-block;
+background: linear-gradient(90deg, #F0FDF4 0%, #ECFDF5 100%);
+  color: #15803D;
+  padding: 8px 16px;
+  border: 1px solid #BBF7D0;
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+h1 {
+  margin: 22px 0 10px;
+  font-size: 28px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 26px;
+}
+
+.info-box {
+background: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 70.71%);
+  border-radius: 12px;
+  padding: 25px;
+  border: 1px solid #E5E7EB;
+  text-align: left;
+  margin-bottom: 28px;
+}
+
+.info-box h4 {
+  margin: 0 0 12px;
+  font-size: 15px;
+  color: #111827;
+}
+
+.info-box ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.info-box li {
+  font-size: 14px;
+  color: #374151;
+  margin-bottom: 8px;
+  padding-left: 22px;
+  position: relative;
+}
+
+.info-box li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #7c5cff;
+  font-weight: 700;
+}
+
+.timeline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 30px 0 34px;
+  position: relative;
+  z-index: 1;
+}
+.timeline:before {
+    content: "";
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    height: 2px;
+    background: #e5e7eb;
+    z-index: 0;
+    z-index: -1;
+}
+.timeline-item {
+  text-align: center;
+  width: 120px;
+}
+
+.timeline-item span {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+.timeline-item small {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.dot {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e5e7eb;
+  color: #6b7280;
+  margin: auto;
+  font-size: 16px;
+}
+
+.timeline-item.active .dot {
+  background: #7c5cff;
+  color: #fff;
+}
+
+
+
+
+
+.footer-text {
+  margin-top: 14px;
+  font-size: 12px;
+  color: #6B7280;
+}
+

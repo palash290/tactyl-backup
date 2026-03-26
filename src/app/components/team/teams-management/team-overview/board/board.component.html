@@ -1,0 +1,247 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="d-flex align-items-center gap-3 justify-content-between ct_flex_col_767">
+            <div class="ct_search_box_bg ct_flex_1 ct_w_100_767 ct_flex_col_575">
+                <div class="form-group ct_search_input position-relative ct_flex_1 ct_w_100_575">
+                    <input type="text" class="form-control ct_input ct_input_ps_50 ct_h_48" placeholder="Search..."
+                        [(ngModel)]="searchText" (input)="filterTable()" [ngModelOptions]="{standalone: true}" />
+                    <img src="/img/search_icon.svg" class="ct_input_icon_left" />
+                </div>
+                <div class="ct_w_100_575">
+                    <!-- <select class="form-control ct_input ct_grey_select ct_w_100_575">
+                        <option value="">All Teams</option>
+                    </select> -->
+                </div>
+            </div>
+
+            @if(planService.needsGoldUpgrade()){
+            @if(teamPermissions.canAddBoard){
+            <div class="ct_w_100_767">
+                <button class="ct_purple_btn ct_h_60 ct_w_100_767" (click)="openSubs()">
+                    <img src="/img/plus-circle.svg" alt="" class="me-2" />Create Board
+                </button>
+            </div>
+            }
+            } @else {
+            @if(teamPermissions.canAddBoard){
+            <div class="ct_w_100_767">
+                <button (click)="reset()" class="ct_purple_btn ct_h_60 ct_w_100_767"
+                    data-bs-target="#ct_add_board_modal" data-bs-toggle="modal">
+                    <img src="/img/plus-circle.svg" alt="" class="me-2" />Create Board
+                </button>
+            </div>
+            }
+            }
+        </div>
+
+        <div class="table-responsive ct_mt_20">
+            <table class="table ct_custom_table">
+                <thead>
+                    <th>S.No</th>
+                    <th>Board Name</th>
+                    <!-- <th>Created By</th> -->
+                    <th>Created On</th>
+                    <th>Total Tasks</th>
+                    <!-- <th>Team</th> -->
+                    <th>Action</th>
+                </thead>
+                <tbody>
+                    <tr
+                        *ngFor="let item of filteredData | paginate: { itemsPerPage: 10, currentPage: p }; let i = index">
+                        <td>{{(p - 1) * 10 + i + 1}}</td>
+                        <td>
+                            <div class="d-flex align-item-start gap-2">
+                                <span class="ct_dot_10 mt-2" style="border: 1px solid #e6e6e6;"
+                                    [ngStyle]="{ 'background-color': item.board_color }"></span>
+                                <div>
+                                    <h5 class="ct_fs_16 mb-1 ct_fw_500">
+                                        {{item.board_name}}
+                                    </h5>
+                                    <p class="mb-0 ct_fs_14 ct_text_787885 ct_overlay_text">
+                                        {{item.description}}
+                                    </p>
+                                </div>
+                            </div>
+                        </td>
+                        <!-- <td>{{item.created_name}}</td> -->
+                        <td>{{item.created_at | date:'dd-MMM-yyyy'}}</td>
+                        <td>{{item.total_tasks}}</td>
+                        <td>
+                            <div class="d-flex align-items-center gap-3">
+                                @if(planService.needsGoldUpgrade()){
+                                <a (click)="openSubs()">
+                                    <img src="/img/eye_purple_icon.png" class="ct_icon_24" alt="" title="View" />
+                                </a>
+                                <a *ngIf="teamPermissions.canEditBoard" href="javascript:void(0)" (click)="openSubs()">
+                                    <img src="/img/edit_green_icon.png" class="ct_icon_24" alt="" title="Edit" />
+                                </a>
+                                <a *ngIf="teamPermissions.canDeleteBoard" href="javascript:void(0)" (click)="openSubs()">
+                                    <img src="/img/Delete_icon.svg" class="ct_icon_24" alt="" title="Delete" />
+                                </a>
+                                } @else {
+                                <a [routerLink]="['/team/view-board']"
+                                    [queryParams]="{ boardId: item.board_id, teamId: teamId, boardName: item.board_name }">
+                                    <img src="/img/eye_purple_icon.png" class="ct_icon_24" alt="" title="View" />
+                                </a>
+                                <a *ngIf="teamPermissions.canEditBoard" href="javascript:void(0)"
+                                    data-bs-target="#ct_add_board_modal" data-bs-toggle="modal"
+                                    (click)="fetchBoardDetails(item.board_id)">
+                                    <img src="/img/edit_green_icon.png" class="ct_icon_24" alt="" title="Edit" />
+                                </a>
+                                <a *ngIf="teamPermissions.canDeleteBoard" href="javascript:void(0)" (click)="getId(item)"
+                                    data-bs-target="#ct_delete_board" data-bs-toggle="modal">
+                                    <img src="/img/Delete_icon.svg" class="ct_icon_24" alt="" title="Delete" />
+                                </a>
+                                }
+
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-12">
+            <div class="ct_no_recod_found_bg" *ngIf="filteredData.length == 0">
+                <p class="text-center mb-0 ct_fs_20">No board found</p>
+            </div>
+        </div>
+        <pagination-controls class="ct_pagination_div" *ngIf="!(filteredData?.length == 0)"
+            (pageChange)="p = $event"></pagination-controls>
+    </div>
+</div>
+
+
+<!-- Add board Modal S -->
+<div class="modal fade ct_custom_modal modal-lg" id="ct_add_board_modal" tabindex="-1"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header p-0 border-0">
+                <div class="d-flex align-items-center gap-2">
+                    <img src="/img/modal_star.png" alt="" class="ct_flex_shrink_0" />
+                    <div>
+                        <h1 class="modal-title ct_fs_20 ct_ff_Matter_SemiBold mb-0" id="exampleModalLabel">
+                            {{ boardId ? 'Update Board' : 'Create Board' }}
+                        </h1>
+                        <!-- @if(userType == 'team'){ -->
+                        <p class="mb-0 ct_fs_14 ct_text_clr_4B5563 ct_text_op_08">
+                            Set up a new board to organize your team's tasks
+                        </p>
+                        <!-- } @else {
+                        <p class="mb-0 ct_fs_14 ct_text_clr_4B5563 ct_text_op_08">
+                            Set up a new board to organize your tasks
+                        </p>
+                        } -->
+                    </div>
+                </div>
+                <button type="button" class="btn-close ct_close_modal" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body p-0 ct_mt_20">
+                <form [formGroup]="Form">
+                    <div class="form-group ct_mb_22">
+                        <label class="ct_fs_18 ct_ff_Matter_Medium mb-2">Board Name</label>
+                        <input type="text" class="form-control ct_input" formControlName="title"
+                            placeholder="Enter board name" va />
+                        <div *ngIf="Form.controls['title'].invalid && Form.controls['title'].touched" class="err_msg">
+                            <div *ngIf="Form.controls['title'].errors?.['required']">Please enter
+                                board name.</div>
+                        </div>
+                    </div>
+                    <div class="form-group ct_mb_22">
+                        <label class="ct_fs_18 ct_ff_Matter_Medium mb-2">Description (optional)</label>
+                        <textarea type="text" class="form-control ct_input" placeholder="Enter description"
+                            formControlName="description"></textarea>
+                    </div>
+
+                    <div class="form-group ct_mb_22">
+                        <label class="ct_fs_18 ct_ff_Matter_Medium mb-2">Board Colour</label>
+                        <input type="color" class="form-control ct_input p-1" style="height: 53px"
+                            formControlName="colour" />
+                        <div *ngIf="Form.controls['colour'].invalid && Form.controls['colour'].touched" class="err_msg">
+                            <div *ngIf="Form.controls['colour'].errors?.['required']">Please select
+                                board colour.</div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer border-0 p-0 ct_mt_44">
+                        <button #closeModalAdd type="button" class="ct_outline_btn ct_ff_Matter_Medium"
+                            data-bs-dismiss="modal">
+                            Cancel
+                        </button>
+                        <button (click)="onSubmit()" type="button" class="ct_purple_btn ct_ff_Matter_Medium">
+                            {{ boardId ? 'Update Board' : 'Create Board' }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--  Add board Modal E -->
+
+
+<!-- Delete  Modal S -->
+<div class="modal fade ct_custom_modal" id="ct_delete_board" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header p-0 border-0">
+                <button type="button" class="btn-close ct_close_modal" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body p-0">
+                <div>
+                    <h1 class="modal-title ct_fs_28 ct_ff_Matter_SemiBold mb-2" id="exampleModalLabel">
+                        Delete Board
+                    </h1>
+                    @if(isPhaseExists){
+                    <p class="mb-0 ct_fs_18 ct_text_clr_4B5563 ct_text_op_08">
+                        Before deleting this board, please assign another board to the related phase.
+                    </p>
+                    } @else {
+                    <p class="mb-0 ct_fs_18 ct_text_clr_4B5563 ct_text_op_08">
+                        Are you sure you want to delete this board?
+                    </p>
+                    }
+                </div>
+
+                @if(isPhaseExists){
+                <div class="ct_w_100_767 mt-4">
+                    <select class="form-control ct_input" [(ngModel)]="selectedBoardId">
+                        <option value="" disabled>Select Board</option>
+                        <option *ngFor="let agent of reassignBoardList" [value]="agent.board_id">
+                            {{ agent.board_name }}
+                        </option>
+                    </select>
+                </div>
+                }
+
+                <div class="modal-footer border-0 p-0 ct_mt_30 justify-content-start">
+                    <button #closeModalDelete type="button" class="ct_outline_btn ct_ff_Matter_Medium"
+                        data-bs-dismiss="modal">
+                        No
+                    </button>
+                    <button (click)="deleteBoard()" type="button" class="ct_purple_btn ct_ff_Matter_Medium">
+                        Yes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-subscription-modal></app-subscription-modal>
+
+<div class="ct_loader_main" *ngIf="loading">
+    <div class="loader-con">
+        <div style="--i: 0;" class="pfile"></div>
+        <div style="--i: 1;" class="pfile"></div>
+        <div class="pfile" style="--i: 2;"></div>
+        <div class="pfile" style="--i: 3;"></div>
+        <div class="pfile" style="--i: 4;"></div>
+        <div class="pfile" style="--i: 5;"></div>
+    </div>
+</div>

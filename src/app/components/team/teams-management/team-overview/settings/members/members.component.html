@@ -1,0 +1,326 @@
+<div class="d-flex align-items-center gap-3 justify-content-between ct_flex_col_767">
+    <div class="ct_search_box_bg ct_flex_1 ct_w_100_767 ct_flex_col_575">
+        <div class="form-group ct_search_input position-relative ct_flex_1 ct_w_100_575">
+            <input type="text" class="form-control ct_input ct_input_ps_50 ct_h_48" placeholder="Search..."
+                [(ngModel)]="searchText" (input)="filterTable()" [ngModelOptions]="{standalone: true}" />
+            <img src="/img/search_icon.svg" class="ct_input_icon_left" />
+        </div>
+        <!-- <div class="ct_w_100_575">
+            <select class="form-control ct_input ct_grey_select ct_w_100_575">
+                <option value="">Designation</option>
+            </select>
+        </div> -->
+    </div>
+
+    @if(planService.needsGoldUpgrade()){
+    @if(teamPermissions.canInviteMembers){
+    <div class="ct_w_100_767">
+        <button class="ct_purple_btn ct_h_60 ct_w_100_767" (click)="openSubs()">
+            <img src="/img/plus-circle.svg" alt="" class="me-2" />Invite Members
+        </button>
+    </div>
+    }
+    } @else {
+    @if(teamPermissions.canInviteMembers){
+    <div class="ct_w_100_767">
+        <button class="ct_purple_btn ct_h_60 ct_w_100_767" (click)="getAllMembers()" data-bs-target="#ct_add_user_modal"
+            data-bs-toggle="modal">
+            <img src="/img/plus-circle.svg" alt="" class="me-2" />Invite Members
+        </button>
+    </div>
+    }
+    }
+    
+</div>
+
+<div class="table-responsive ct_mt_20">
+    <table class="table ct_custom_table">
+        <thead>
+            <th>S.No</th>
+            <th>Profile</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Plan</th>
+            <th>Designation</th>
+            <th>Status</th>
+            <th>Action</th>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of filteredData | paginate: { itemsPerPage: 10, currentPage: p }; let i = index">
+                <td>{{(p - 1) * 10 + i + 1}}</td>
+                <td>
+                    <img [src]="item.profile_image ? item.profile_image : '/img/no_pro.png'" class="ct_img_40" />
+                </td>
+                <td>{{item.full_name}}</td>
+                <td>{{item.email}}</td>
+                <td>{{item.current_plan ? item.current_plan.plan_name : 'No Active Plan'}}</td>
+                <td>{{item.designation ? item.designation : '-'}}</td>
+                <td>
+
+                    @if(item.user_id == userId){
+                    <span class="ct_text_blue ct_fw_600">Group Admin</span>
+                    }
+
+                    @else if(item.status == 'Pending'){
+                    <span class="ct_orange_text">Pending</span>
+                    }
+
+                    @else if(item.status == 'Accepted'){
+                    <span class="ct_green_text">Accepted</span>
+                    }
+
+                    @else if(item.status == 'Rejected'){
+                    <span class="ct_red_text">Rejected</span>
+                    }
+
+                </td>
+
+                <td>
+                    <div class="d-flex align-items-center gap-3">
+                        <!-- @if (userType == 'team') {
+                        <a [routerLink]="['/team/view-team-member']"
+                            [queryParams]="{ memberId: item.user_id, teamId: teamId }">
+                            <img src="/img/eye_purple_icon.png" class="ct_icon_24" alt="" title="View" />
+                        </a>
+                        } @else {
+                        <a [routerLink]="['/invited/view-team-member']"
+                            [queryParams]="{ memberId: item.user_id, teamId: teamId }">
+                            <img src="/img/eye_purple_icon.png" class="ct_icon_24" alt="" title="View" />
+                        </a>
+                        } -->
+                        <a [routerLink]="['/team/view-team-member']"
+                            [queryParams]="{ memberId: item.user_id, teamId: teamId }">
+                            <img src="/img/eye_purple_icon.png" class="ct_icon_24" alt="" title="View" />
+                        </a>
+
+                        @if(planService.needsGoldUpgrade()){
+                        <a *ngIf="teamPermissions.canInviteMembers" href="javascript:void(0)" (click)="openSubs()">
+                            <img src="/img/Delete_icon.svg" class="ct_icon_24" alt="" title="Delete" />
+                        </a>
+                        <a *ngIf="is_admin == '1' && teamPermissions.canInviteMembers" href="javascript:void(0)" (click)="openSubs()">
+                            <img src="/img/permission.svg" class="ct_icon_24" alt="" title="Permission" />
+                        </a>
+                        @if(item.status == 'Rejected'){
+                        <a *ngIf="teamPermissions.canInviteMembers" href="javascript:void(0)" (click)="openSubs()">
+                            <img src="/img/re_invite.png" class="ct_icon_24" alt="" title="Re-invite" />
+                        </a>
+                        }
+                        } @else {
+                        <a *ngIf="teamPermissions.canInviteMembers" href="javascript:void(0)" (click)="getId(item.user_id)"
+                            data-bs-target="#ct_delete_member" data-bs-toggle="modal">
+                            <img src="/img/Delete_icon.svg" class="ct_icon_24" alt="" title="Delete" />
+                        </a>
+                        <a *ngIf="is_admin == '1' && teamPermissions.canInviteMembers && !(item.user_id == userId || item.status == 'Pending')"
+                            href="javascript:void(0)" [routerLink]="['/team/user-permissions']"
+                            [queryParams]="{ memberId: item.user_id, teamId: teamId }">
+                            <img src="/img/permission.svg" class="ct_icon_24" alt="" title="Permission" />
+                        </a>
+                        @if(item.status == 'Rejected'){
+                        <a *ngIf="teamPermissions.canInviteMembers" href="javascript:void(0)" (click)="getId(item.user_id)"
+                            data-bs-target="#ct_reinvite_member" data-bs-toggle="modal">
+                            <img src="/img/re_invite.png" class="ct_icon_24" alt="" title="Re-invite" />
+                        </a>
+                        }
+                        }
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div *ngIf="filteredData?.length == 0" class="text-center">
+    <p class="ct_fs_15 mt-5">No members found</p>
+</div>
+<pagination-controls class="ct_pagination_div" *ngIf="!(filteredData?.length == 0)"
+    (pageChange)="p = $event"></pagination-controls>
+
+<!-- Add user board Modal S -->
+<div class="modal fade ct_custom_modal modal-lg" id="ct_add_user_modal" tabindex="-1"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header p-0 border-0">
+                <div class="d-flex align-items-center gap-2">
+                    <img src="/img/modal_star.png" alt="" class="ct_flex_shrink_0" />
+                    <div>
+                        <h1 class="modal-title ct_fs_20 ct_ff_Matter_SemiBold mb-0" id="exampleModalLabel">
+                            Invite Member
+                        </h1>
+                        <p class="mb-0 ct_fs_14 ct_text_clr_4B5563 ct_text_op_08">
+                            Send an invitation to join your workspace
+                        </p>
+                    </div>
+                </div>
+                <button type="button" class="btn-close ct_close_modal" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body p-0 ct_mt_20">
+                <form action="">
+
+                    <div class="form-group ct_mb_22">
+                        <div class="position-relative">
+                            <input type="search" class="form-control ct_input  ct_input_pe_100"
+                                placeholder="Search here..." [(ngModel)]="searchAllText" (input)="filterAllTable()"
+                                [ngModelOptions]="{standalone: true}">
+                            <button class="ct_show_eye ct_purple_btn ct_h_40 px-3" style="right: 16px;">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group ct_mb_22">
+                        <div class="position-relative">
+                            <!-- <input type="search" class="form-control ct_input ct_input_pe_100"
+                                        placeholder="Search here..." [(ngModel)]="searchText" (input)="filterTable()"
+                                        [ngModelOptions]="{standalone: true}">
+                                    <button class="ct_show_eye ct_purple_btn ct_h_40 px-3" style="right: 16px;">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                    </button> -->
+                        </div>
+                    </div>
+                    <div class="form-group ct_mb_22">
+                        <div class="ct_para_scroll ct_custom_scroll" style="max-height: 400px;">
+                            <div class="ct_Members_info_sort gap-2 ct_d_align_center ct_mb_15 ct_light_grey_bg"
+                                *ngFor="let item of filteredAllData">
+
+                                <!-- <input type="checkbox" (change)="toggleMember(item.email, $event)"> -->
+                                <div class="form-check ct_custom_check2">
+                                    <input type="checkbox" (change)="toggleMember(item.user_id, $event)"
+                                        class="form-check-input" id="flexCheckDefault">
+                                </div>
+
+                                <img [src]="item.profile_image ? item.profile_image : '/img/no_pro.png'" alt=""
+                                    class="ct_img_42 ct_flex_shrink_0">
+                                <div>
+                                    <h5 class="ct_fs_16 mb-0 ct_ff_Matter_Medium text-truncate">{{item.full_name}}</h5>
+                                    <p class="ct_fs_12 ct_text_787885 mb-0 text-truncate">
+                                        {{item.email}}</p>
+                                </div>
+                            </div>
+                            <div *ngIf="filteredAllData?.length == 0">
+                                <span class="text-center">No members found</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ct_white_bg ct_border_radius_10 ct_border_clr_D2D5DB ct_py_28_px_20 mt-4">
+                        <div>
+                            <ul
+                                class="d-flex align-items-center gap-3 flex-wrap  ct_para_scroll ct_custom_scroll ct_pe_30">
+                                @for (item of selectedDrEmail; track
+                                $index) {
+                                <li>
+                                    <button type="button" class="ct_select_badge">{{item}}
+                                        <span (click)="removeDrEmail($index)"><i
+                                                class="fa-solid fa-xmark"></i></span></button>
+                                </li>
+                                }
+                            </ul>
+
+                            <div class="form-group ct_mb_22">
+                                <div class="position-relative">
+                                    <input type="email" class="form-control ct_input ct_input_ps_50 ct_input_pe_100"
+                                        placeholder="Invite new member via email" #drEmail>
+                                    <img src="/img/email_icon.svg" class="ct_input_icon_left" style="left: 16px;">
+                                    <button type="button" class="ct_show_eye ct_purple_btn ct_h_40 px-3"
+                                        style="right: 16px;" (click)="addDrEmail(drEmail.value)">
+                                        Add
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+                <div class="modal-footer border-0 p-0 ct_mt_44">
+                    <button type="button" class="ct_outline_btn ct_ff_Matter_Medium" data-bs-dismiss="modal"
+                        #closeBtn>Close</button>
+                    <button (click)="submitForm()" type="button" class="ct_purple_btn ct_ff_Matter_Medium">Invite
+                        Members</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--  Add user Modal E -->
+
+<!-- Delete Modal S -->
+<div class="modal fade ct_custom_modal" id="ct_delete_member" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header p-0 border-0">
+                <button type="button" class="btn-close ct_close_modal" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body p-0">
+                <div>
+                    <h1 class="modal-title ct_fs_28 ct_ff_Matter_SemiBold mb-2" id="exampleModalLabel">
+                        Remove Member
+                    </h1>
+                    <p class="mb-0 ct_fs_18 ct_text_clr_4B5563 ct_text_op_08">
+                        Are you sure you want to remove this member?
+                    </p>
+                </div>
+                <div class="modal-footer border-0 p-0 ct_mt_30 justify-content-start">
+                    <button #closeModalDelete type="button" class="ct_outline_btn ct_ff_Matter_Medium"
+                        data-bs-dismiss="modal">
+                        No
+                    </button>
+                    <button (click)="removeMem()" type="button" class="ct_purple_btn ct_ff_Matter_Medium">
+                        Yes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ReInvite Modal S -->
+<div class="modal fade ct_custom_modal" id="ct_reinvite_member" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header p-0 border-0">
+                <button type="button" class="btn-close ct_close_modal" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body p-0">
+                <div>
+                    <h1 class="modal-title ct_fs_28 ct_ff_Matter_SemiBold mb-2" id="exampleModalLabel">
+                        Re-Invite Member
+                    </h1>
+                    <p class="mb-0 ct_fs_18 ct_text_clr_4B5563 ct_text_op_08">
+                        Are you sure you want to re-invite this member?
+                    </p>
+                </div>
+                <div class="modal-footer border-0 p-0 ct_mt_30 justify-content-start">
+                    <button #closeModalInv type="button" class="ct_outline_btn ct_ff_Matter_Medium"
+                        data-bs-dismiss="modal">
+                        No
+                    </button>
+                    <button (click)="reInviteMem()" type="button" class="ct_purple_btn ct_ff_Matter_Medium">
+                        Yes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-subscription-modal></app-subscription-modal>
+
+<div class="ct_loader_main" *ngIf="loading">
+    <div class="loader-con">
+        <div style="--i: 0;" class="pfile"></div>
+        <div style="--i: 1;" class="pfile"></div>
+        <div class="pfile" style="--i: 2;"></div>
+        <div class="pfile" style="--i: 3;"></div>
+        <div class="pfile" style="--i: 4;"></div>
+        <div class="pfile" style="--i: 5;"></div>
+    </div>
+</div>

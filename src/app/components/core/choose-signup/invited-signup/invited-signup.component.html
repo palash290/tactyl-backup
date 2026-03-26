@@ -1,0 +1,50 @@
+<section class="ct_login_main">
+    <div class="ct_login_left_content">
+        <div>
+            <div class="ct_login_logo ct_mb_35 ct_cursor_pointer">
+                <img routerLink="/" src="img/logo.svg" alt="">
+            </div>
+            <div class="text-center mx-auto" style="max-width: 373px;">
+                <h4 class="ct_fs_44 ct_text_clr_f9f9f9 ct_mb_20 ct_ff_Matter_Light">One Login, Everything in Flow</h4>
+                <p class="ct_text_clr_f9f9f9 ct_fs_18 mb-0">Everything you need to plan, prioritize, and execute – your way.</p>
+            </div>
+        </div>
+        <div class="ct_login_bottom_img mt-auto">
+            <img src="img/login_bottom_img.png" alt="">
+        </div>
+    </div>
+    <div class="ct_login_right_content">
+        <div class="text-center ct_mb_30 ct_pe_90 ct_login_title">
+            <h2 class="ct_fs_35 ct_mb_10 ct_ff_Matter_Medium">I've been invited</h2>
+            <p class="ct_text_clr_5E6168 mb-0 ct_fs_20 mx-auto">Join an existing team and collaborate on shared projects
+                and tasks</p>
+        </div>
+        <form class=" ct_login_scroll w-100 ct_pe_90">
+            <div class="form-group ct_mb_15">
+                <label for="" class="ct_fs_18 ct_mb_10">Invite or link</label>
+                <div class="position-relative">
+                    <img src="img/link_icon.png" alt="" class="ct_input_icon_left">
+                    <input type="text" class="form-control ct_input ct_input_ps_50 " placeholder="Enter here">
+                </div>
+            </div>
+            <div class="ct_mt_35" >
+                <button type="button" (click)="jionTeam()" class="ct_2d_purple_btn w-100">Sign In</button>
+            </div>
+        </form>
+    </div>
+
+</section>
+
+<!-- <a routerLink="/join-team">Go to Join Team</a> -->
+
+
+<div class="ct_loader_main" *ngIf="loading">
+      <div class="loader-con">
+            <div style="--i: 0;" class="pfile"></div>
+            <div style="--i: 1;" class="pfile"></div>
+            <div class="pfile" style="--i: 2;"></div>
+            <div class="pfile" style="--i: 3;"></div>
+            <div class="pfile" style="--i: 4;"></div>
+            <div class="pfile" style="--i: 5;"></div>
+      </div>
+</div>

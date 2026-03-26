@@ -1,0 +1,147 @@
+<div class="ct_inner_header_bg ct_mt_30 ct_px_30 ct_d_align_center justify-content-between gap-3 mb-4">
+    <div class="d-flex align-items-center justify-content-between gap-3">
+        <div>
+            <h4 class="ct_fs_35 mb-0 ct_ff_Matter_Medium d-flex align-items-center gap-2">
+                Team Performance
+            </h4>
+            <p class="mb-0 ct_text_929292">Understand your team’s strengths, progress, and opportunities for
+                improvement.</p>
+        </div>
+    </div>
+    <div class="dropdown ct_right_dropdown">
+        <!-- <i class="fa-solid fa-ellipsis-vertical" id="dropdownMenuButton" data-bs-toggle="dropdown"
+            aria-expanded="false"></i>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li>
+                <a class="dropdown-item" >Export As CSV</a>
+            </li>
+        </ul> -->
+    </div>
+</div>
+<div class="ct_mt_40 ct_px_30 pb-4">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-xxl-3 col-xl-6 col-lg-6 col-md-6 mb-4">
+                        <div class="ct_dash_card">
+                            <div class="ct_dash_card_title">
+                                <h5 class="ct_fs_32 mb-1 ct_ff_Matter_Bold">{{performanceData?.overall_efficiency}}%
+                                </h5>
+                                <p class="mb-0 ct_text_clr_4B5563 ct_fs_20">
+                                    Overall Efficiency
+                                </p>
+                            </div>
+                            <div class="ct_icon_43" style="background-color: #7f4eec12">
+                                <img src="/img/Total_Tasks_icon.png" class="ct_icon_w_26" alt="" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xxl-3 col-xl-6 col-lg-6 col-md-6 mb-4">
+                        <div class="ct_dash_card">
+                            <div class="ct_dash_card_title">
+                                <h5 class="ct_fs_32 mb-1 ct_ff_Matter_Bold">{{performanceData?.weekly_task_progress}}%
+                                </h5>
+                                <p class="mb-0 ct_text_clr_4B5563 ct_fs_20">
+                                    Weekly Task Progress
+                                </p>
+                            </div>
+                            <div class="ct_icon_43" style="background-color: #7f4eec12">
+                                <img src="/img/Completed_Tasks_icon.png" class="ct_icon_w_26" alt="" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xxl-3 col-xl-6 col-lg-6 col-md-6 mb-4">
+                        <div class="ct_dash_card">
+                            <div class="ct_dash_card_title">
+                                <h5 class="ct_fs_32 mb-1 ct_ff_Matter_Bold">{{performanceData?.overdue_tasks}}</h5>
+                                <p class="mb-0 ct_text_clr_4B5563 ct_fs_20">
+                                    Overdue Tasks
+                                </p>
+                            </div>
+                            <div class="ct_icon_43" style="background-color: #7f4eec12">
+                                <img src="/img/Overdue_Tasks_icon.png" class="ct_icon_w_26" alt="" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xxl-3 col-xl-6 col-lg-6 col-md-6 mb-4">
+                        <div class="ct_dash_card">
+                            <div class="ct_dash_card_title">
+                                <h5 class="ct_fs_32 mb-1 ct_ff_Matter_Bold">
+                                    {{performanceData?.team_workload_balance}}%
+                                </h5>
+                                <p class="mb-0 ct_text_clr_4B5563 ct_fs_20">
+                                    Team Workload Balance
+                                </p>
+                            </div>
+                            <div class="ct_icon_43" style="background-color: #7f4eec12">
+                                <img src="/img/Avg_Cycle_Time_icon.png" class="ct_icon_w_26" alt="" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ct_white_bg_2 bg-white">
+                    <div class="ct_d_align_center justify-content-between gap-3 ct_flex_col_575 ">
+                        <h4 class="ct_fs_22 ct_ff_Matter_SemiBold mb-0">Overall Team Score</h4>
+                    </div>
+                    <div id="chart" *ngIf="hasGraphData; else noGraphData">
+                        <apx-chart [series]="chartOptions1?.series" [chart]="chartOptions1?.chart"
+                            [xaxis]="chartOptions1?.xaxis" [stroke]="chartOptions1?.stroke"
+                            [markers]="chartOptions1?.markers" [colors]="chartOptions1?.colors"
+                            [title]="chartOptions1?.title"></apx-chart>
+                    </div>
+                    <ng-template #noGraphData>
+                        <div class="ct_text_929292 ct_py_25">No data found</div>
+                    </ng-template>
+                </div>
+                <div class="ct_light_blue_bg_2 ct_mt_40 h-auto">
+                    <div>
+                        <h4 class="ct_fs_24 ct_ff_Matter_Medium mb-0">Performance Insights</h4>
+                        <p class="mb-0 ct_text_clr_6B7280">Key highlights and recommendations for you</p>
+                    </div>
+                    <div class="mt-4 row">
+                        <div class="col-xl-4 col-lg-6 mb-4">
+                            <div class="ct_white_bg_2 ct_border_light_blue ct_py_25_px_22">
+                                <div class="ct_icon_48 ct_mb_15" style="background-color: #DCFCE7;">
+                                    <img src="/img/trophy_icon.svg" alt="">
+                                </div>
+                                <div>
+                                    <h4 class="ct_fs_16 ct_text_clr_334155 ct_ff_Matter_Medium ct_mb_30">
+                                        {{performance_insights0?.message}}</h4>
+                                    <p class="mb-0 ct_fs_14 ct_text_clr_64748B">{{performance_insights0?.suggestion}}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-6 mb-4">
+                            <div class="ct_white_bg_2 ct_border_light_blue ct_py_25_px_22">
+                                <div class="ct_icon_48 ct_mb_15" style="background-color: #FEF3C7;">
+                                    <img src="/img/bulb_icon.svg" alt="">
+                                </div>
+                                <div>
+                                    <h4 class="ct_fs_16 ct_text_clr_334155 ct_ff_Matter_Medium ct_mb_30">
+                                        {{performance_insights1?.message}}</h4>
+                                    <p class="mb-0 ct_fs_14 ct_text_clr_64748B">{{performance_insights1?.suggestion}}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-6 mb-4">
+                            <div class="ct_white_bg_2 ct_border_light_blue ct_py_25_px_22">
+                                <div class="ct_icon_48 ct_mb_15" style="background-color: #DBEAFE;">
+                                    <img src="/img/plain.svg" alt="">
+                                </div>
+                                <div>
+                                    <h4 class="ct_fs_16 ct_text_clr_334155 ct_ff_Matter_Medium ct_mb_30">
+                                        {{performance_insights2?.message}}</h4>
+                                    <p class="mb-0 ct_fs_14 ct_text_clr_64748B">{{performance_insights2?.suggestion}}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

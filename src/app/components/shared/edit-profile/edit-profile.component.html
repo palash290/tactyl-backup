@@ -1,0 +1,147 @@
+<div class="ct_inner_header_bg ct_mt_30 ct_px_30">
+    <h4 class="ct_fs_35  mb-2 ct_ff_Matter_Medium">Edit Profile</h4>
+    <p class="mb-0 ct_text_929292 ct_fs_18">Keep your information up to date and manage your personal details.</p>
+</div>
+<div class="ct_px_30 ct_mt_30 pb-4">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="ct_white_bg bg-white ct_border_radius_15">
+                    <form [formGroup]="profileForm">
+                        <div class="row">
+                            <div class="col-md-12 mb-5">
+                                <div class="d-flex align-items-center  gap-3">
+                                    <div class="ct_profile_img">
+                                        <img [src]="profileImg ? profileImg : 'https://creativethoughtsinfo.com/interfriendsApp/assets/img/np_pro.png'"
+                                            alt="">
+                                        <label for="ct_profile_update">
+                                            <input type="file" class="d-none" id="ct_profile_update"
+                                                (change)="onFileSelected($event)" accept="image/*">
+                                            <div class="ct_upload_icon">
+                                                <img src="/img/camera.png" alt="">
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-between w-100 gap-3">
+                                        <div>
+                                            <h5 class="ct_fs_20 ct_ff_Matter_Medium mb-0">{{first_name}}</h5>
+                                            <p class="mb-0 ct_text_clr_4B5563 ct_fs_15">{{userEmail}}</p>
+                                        </div>
+                                        <button type="button" class="ct_outline_btn ct_ff_Matter_Medium"
+                                            data-bs-target="#ct_delete_account" data-bs-toggle="modal">
+                                            Delete Account
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group ct_mb_15">
+                                    <label for="" class="ct_fs_18 ct_mb_10">Full Name</label>
+                                    <div class="position-relative">
+                                        <img src="/img/user_icon.svg" alt="" class="ct_input_icon_left">
+                                        <input type="text" class="form-control  ct_input ct_input_ps_50 "
+                                            placeholder="Enter full name" value="Alex Johnson" formControlName="name">
+                                    </div>
+                                    <div *ngIf="profileForm.controls['name'].invalid && profileForm.controls['name'].touched"
+                                        class="err_msg">
+                                        <div *ngIf="profileForm.controls['name'].errors?.['required']">Please enter
+                                            your full name.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group ct_mb_15">
+                                    <label for="" class="ct_fs_18 ct_mb_10">Email (non-editable)</label>
+                                    <div class="position-relative">
+                                        <img src="/img/email_icon.svg" alt="" class="ct_input_icon_left">
+                                        <input type="text" class="form-control  ct_input ct_input_ps_50 ct_input_pe_40"
+                                            placeholder="Enter email address" value="alexjhonson2025gmail.com"
+                                            formControlName="email">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- @if(userType == 'team'){
+                            <div class="col-md-12">
+                                <div class="form-group ct_mb_15">
+                                    <label for="" class="ct_fs_18 ct_mb_10">Company Name</label>
+                                    <div class="position-relative">
+                                        <img src="/img/user_icon.svg" alt="" class="ct_input_icon_left">
+                                        <input type="text" class="form-control  ct_input ct_input_ps_50 "
+                                            placeholder="Enter full name" value="Alex Johnson"
+                                            formControlName="company_name">
+                                    </div>
+                                </div>
+                            </div>
+                            } -->
+                            <div class="col-md-12">
+                                <div class="form-group ct_mb_15">
+                                    <label for="" class="ct_fs_18 ct_mb_10">Designation</label>
+                                    <div class="position-relative">
+                                        <img src="/img/company_icon.svg" alt="" class="ct_input_icon_left">
+                                        <input type="text" class="form-control  ct_input ct_input_ps_50 ct_input_pe_40"
+                                            placeholder="Enter your designation" formControlName="designation">
+                                    </div>
+                                    <div *ngIf="profileForm.controls['designation'].invalid && profileForm.controls['designation'].touched"
+                                        class="err_msg">
+                                        <div *ngIf="profileForm.controls['designation'].errors?.['required']">Please
+                                            enter
+                                            your designation.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center gap-3 mt-5">
+                            <!-- <button routerLink="/individual/dashboard"
+                                class="ct_outline_btn ct_ff_Matter_Medium">Cancel</button> -->
+                            <button class="ct_purple_btn ct_ff_Matter_Medium" (click)="onSubmit()">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete  Modal S -->
+<div class="modal fade ct_custom_modal" id="ct_delete_account" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header p-0 border-0">
+                <button type="button" class="btn-close ct_close_modal" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body p-0">
+                <div>
+                    <h1 class="modal-title ct_fs_28 ct_ff_Matter_SemiBold mb-2" id="exampleModalLabel">
+                        Delete Account
+                    </h1>
+                    <p class="mb-0 ct_fs_18 ct_text_clr_4B5563 ct_text_op_08">
+                        Are you sure you want to delete youre acount?
+                    </p>
+                </div>
+                <div class="modal-footer border-0 p-0 ct_mt_30 justify-content-start">
+                    <button #closeModalDelete type="button" class="ct_outline_btn ct_ff_Matter_Medium"
+                        data-bs-dismiss="modal">
+                        No
+                    </button>
+                    <button (click)="deleteAccount()" type="button" class="ct_purple_btn ct_ff_Matter_Medium">
+                        Yes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="ct_loader_main" *ngIf="loading">
+    <div class="loader-con">
+        <div style="--i: 0;" class="pfile"></div>
+        <div style="--i: 1;" class="pfile"></div>
+        <div class="pfile" style="--i: 2;"></div>
+        <div class="pfile" style="--i: 3;"></div>
+        <div class="pfile" style="--i: 4;"></div>
+        <div class="pfile" style="--i: 5;"></div>
+    </div>
+</div>

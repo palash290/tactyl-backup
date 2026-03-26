@@ -1,0 +1,23 @@
+.ct_select_badge {
+  background-color: #f5f5f599;
+  border: 1px solid #f5f5f599;
+  padding: 10px;
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  transition: 0.4s ease all;
+}
+
+.ct_select_badge:hover {
+  background-color: transparent;
+  color: #8050e9;
+  border-color: var(--purple);
+}
+
+.ct_grid_2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}

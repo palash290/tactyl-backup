@@ -1,0 +1,219 @@
+<div class="ct_inner_header_bg ct_mt_30 ct_px_30 ct_d_align_center justify-content-between gap-3 ct_flex_col_575">
+  <div>
+    <h4 class="ct_fs_35 mb-2 ct_ff_Matter_Medium">Notes</h4>
+    <p class="mb-0 ct_text_929292 ct_fs_18">
+      Store key decisions, progress updates, and action points.
+    </p>
+  </div>
+  <div class="ct_d_align_center gap-2">
+    <div class=" ct_d_align_center gap-2">
+      <p class="ct_fs_20 ct_ff_Matter_Medium ct_text_clr_4B5563 mb-0 ct_white_nowrap">Show Private Note</p>
+      <label class="toggle-switch">
+        <input type="checkbox">
+        <div class="toggle-switch-background">
+          <div class="toggle-switch-handle"></div>
+        </div>
+      </label>
+    </div>
+
+    <div class="dropdown ct_right_dropdown">
+      <i class="fa-solid fa-ellipsis-vertical" id="dropdownMenuButton" id="dropdownMenuButton1"
+        data-bs-toggle="dropdown" aria-expanded="false"></i>
+      <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+        <li>
+          <a class="dropdown-item">Export As CSV</a>
+        </li>
+
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="ct_px_30 ct_mt_30 pb-4">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="ct_d_align_center justify-content-between gap-3 ct_flex_col_1199">
+          <div class="ct_search_box_bg ct_flex_1 ct_w_100_1199 ct_flex_col_767">
+            <div class="form-group ct_search_input position-relative ct_flex_1 ct_w_100_767">
+              <input type="text" class="form-control ct_input ct_input_ps_50 ct_h_48" placeholder="Search...">
+              <img src="/img/search_icon.svg" class="ct_input_icon_left">
+            </div>
+            <div class="ct_w_100_767">
+              <select class="form-control ct_input ct_grey_select">
+                <option value="">Priority</option>
+              </select>
+            </div>
+            <div class="ct_w_100_767">
+              <select class="form-control ct_input ct_grey_select">
+                <option value="">Task</option>
+              </select>
+            </div>
+            <div class="ct_w_100_767">
+              <select class="form-control ct_input ct_grey_select">
+                <option value="">Date</option>
+              </select>
+            </div>
+          </div>
+          <button class="ct_purple_btn ct_w_100_1199 ct_h_60" data-bs-target="#ct_add_note_modal"
+            data-bs-toggle="modal">
+            <img src="/img/plus-circle.svg" alt="" class="me-2">Add Note
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="row ct_mt_30">
+      <div class="col-md-12">
+        <div>
+          <div
+            class="ct_Members_info_sort ct_light_blue_bg ct_py_26_px_38 gap-2 ct_d_align_center ct_mb_18 ct_light_grey_bg">
+            <div>
+              <h5 class="ct_fs_18 mb-1 ct_ff_Matter_Medium ">Engineering Priorities</h5>
+              <p class="ct_fs_12 ct_text_787885 mb-0 ">Key development focus areas, tech upgrades, or performance
+                improvements.</p>
+              <div class="ct_d_align_center gap-2 ct_mt_15 ">
+                <img src="/img/calander_icon.svg">
+                <p class="mb-0 ct_text_clr_6E6F76 ct_white_nowrap">Nov 12, 2025</p>
+
+              </div>
+            </div>
+            <div class="ms-auto">
+              @if(userType == 'individual'){
+              <a routerLink="/individual/view-notes"
+                class="ct_outline_btn ct_outline_btn_purple ct_h_40 px-3 ct_ff_Matter_Medium">View Details</a>
+              }
+              @if(userType == 'team'){
+              <a routerLink="/team/view-notes"
+                class="ct_outline_btn ct_outline_btn_purple ct_h_40 px-3 ct_ff_Matter_Medium">View Details</a>
+              }
+            </div>
+          </div>
+          <div
+            class="ct_Members_info_sort ct_light_blue_bg ct_py_26_px_38 gap-2 ct_d_align_center ct_mb_18 ct_light_grey_bg">
+            <div>
+              <h5 class="ct_fs_18 mb-1 ct_ff_Matter_Medium ">Engineering Priorities</h5>
+              <p class="ct_fs_12 ct_text_787885 mb-0 ">Key development focus areas, tech upgrades, or performance
+                improvements.</p>
+              <div class="ct_d_align_center gap-2 ct_mt_15 ">
+                <img src="/img/calander_icon.svg">
+                <p class="mb-0 ct_text_clr_6E6F76 ct_white_nowrap">Nov 12, 2025</p>
+
+              </div>
+            </div>
+            <div class="ms-auto">
+              @if(userType == 'individual'){
+              <a routerLink="/individual/view-notes"
+                class="ct_outline_btn ct_outline_btn_purple ct_h_40 px-3 ct_ff_Matter_Medium">View Details</a>
+              }
+              @if(userType == 'team'){
+              <a routerLink="/team/view-notes"
+                class="ct_outline_btn ct_outline_btn_purple ct_h_40 px-3 ct_ff_Matter_Medium">View Details</a>
+              }
+            </div>
+          </div>
+          <div
+            class="ct_Members_info_sort ct_light_blue_bg ct_py_26_px_38 gap-2 ct_d_align_center ct_mb_18 ct_light_grey_bg">
+            <div>
+              <h5 class="ct_fs_18 mb-1 ct_ff_Matter_Medium ">Engineering Priorities</h5>
+              <p class="ct_fs_12 ct_text_787885 mb-0 ">Key development focus areas, tech upgrades, or performance
+                improvements.</p>
+              <div class="ct_d_align_center gap-2 ct_mt_15 ">
+                <img src="/img/calander_icon.svg">
+                <p class="mb-0 ct_text_clr_6E6F76 ct_white_nowrap">Nov 12, 2025</p>
+
+              </div>
+            </div>
+            <div class="ms-auto">
+              @if(userType == 'individual'){
+              <a routerLink="/individual/view-notes"
+                class="ct_outline_btn ct_outline_btn_purple ct_h_40 px-3 ct_ff_Matter_Medium">View Details</a>
+              }
+              @if(userType == 'team'){
+              <a routerLink="/team/view-notes"
+                class="ct_outline_btn ct_outline_btn_purple ct_h_40 px-3 ct_ff_Matter_Medium">View Details</a>
+              }
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Add note  board Modal S -->
+<div class="modal fade ct_custom_modal modal-lg" id="ct_add_note_modal" tabindex="-1"
+  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header p-0 border-0">
+        <div class="d-flex align-items-center gap-2">
+          <img src="../assets/img/modal_star.png" alt="" class="ct_flex_shrink_0" />
+          <div>
+            <h1 class="modal-title ct_fs_20 ct_ff_Matter_SemiBold mb-0" id="exampleModalLabel">
+              Add Note
+            </h1>
+            <p class="mb-0 ct_fs_14 ct_text_clr_4B5563 ct_text_op_08">
+              Store key decisions, progress updates, and action points.
+            </p>
+          </div>
+        </div>
+        <button type="button" class="btn-close ct_close_modal" data-bs-dismiss="modal" aria-label="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body p-0 ct_mt_20">
+        <form action="">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group ct_mb_22">
+                <label class="ct_fs_18 ct_ff_Matter_Medium mb-2">Note Title </label>
+                <input type="text" class="form-control ct_input" placeholder="Enter note title " />
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group ct_mb_22">
+                <label class="ct_fs_18 ct_ff_Matter_Medium mb-2">Description </label>
+                <textarea class="form-control ct_input h-auto" rows="2" placeholder="Enter Description"></textarea>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="ct_para_scroll ct_custom_scroll">
+                <div class="ct_Members_info_sort gap-2 ct_d_align_center ct_mb_15 ct_light_grey_bg">
+                  <div class="ct_d_align_center gap-3">
+                    <img src="../assets/img/lucide_lock.svg" alt="" class=" ct_flex_shrink_0">
+                    <div>
+                      <h5 class="ct_fs_16 mb-1 ct_ff_Matter_Medium text-truncate" style="max-width: 100px">
+                        Private Note
+                      </h5>
+                      <p class="ct_fs_14 ct_text_787885 mb-0 text-truncate" style="max-width: 120px">
+                        Only visible to you
+                      </p>
+                    </div>
+                  </div>
+                  <div class="ms-auto">
+                    <label class="toggle-switch">
+                      <input type="checkbox">
+                      <div class="toggle-switch-background">
+                        <div class="toggle-switch-handle"></div>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="modal-footer border-0 p-0 ct_mt_44">
+          <button type="button" class="ct_outline_btn ct_ff_Matter_Medium" data-bs-dismiss="modal">
+            Cancel
+          </button>
+          <button type="button" class="ct_purple_btn ct_ff_Matter_Medium">
+            Add Note
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--  Add user Modal E -->

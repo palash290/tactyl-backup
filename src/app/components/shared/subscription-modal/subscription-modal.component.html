@@ -1,0 +1,46 @@
+<!-- Trial Expired Modal -->
+<div class="modal fade" id="subscription_modal" tabindex="-1" aria-labelledby="subscription_modalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content ct_trial_modal p-3">
+
+            <div class="modal-header border-0 py-0 text-center justify-content-center">
+                <h5 class="modal-title fw-bold" id="subscription_modalLabel">Plan Expired</h5>
+            </div>
+
+            <div class="modal-body text-center py-2">
+                <p class="mb-3 text-center">
+                    Your plan has expired. Upgrade now to continue using all features.
+                </p>
+
+                <div class="ct_plan_box">
+                    <h6 class="fw-bold"> Gold Package</h6>
+                    <p class="ct_price mb-1">$14.99 / month </p>
+                    <ul class="pricing-list">
+                        <li>Personal task & phase management</li>
+                        <li>Tactyl Compass (priority & action score based)</li>
+                        <li>Notes linked to tasks</li>
+                        <li>Reports & exports (PDF / CSV)</li>
+                        <li>No team collaboration features</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="modal-footer border-0 justify-content-center">
+                <button class="btn ct_outline_btn px-4" data-bs-dismiss="modal">
+                    Maybe Later
+                </button>
+
+                <a routerLink="/pricing-plan" class="btn ct_orange_btn px-4" data-bs-dismiss="modal">
+                    Upgrade Now
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- <div *ngIf="loading">
+      <app-loader />
+</div> -->
